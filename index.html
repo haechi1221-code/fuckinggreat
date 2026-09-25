@@ -1,0 +1,2066 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>박정환 트레이닝 허브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&display=swap">
+<style>
+  :root{
+    color-scheme: light;
+    --plane:#f2f2ef; --surface:#ffffff; --surface-2:#f8f7f4; --surface-3:#eeede8;
+    --ink:#131311; --ink-2:#54534e; --muted:#8a8880;
+    --grid:#e7e6df; --axis:#cdccc3; --hair:rgba(19,19,17,.10);
+    --accent:#1f5fd6; --accent-ink:#ffffff; --accent-soft:rgba(31,95,214,.10);
+    --good:#0a8a0a; --good-soft:rgba(10,138,10,.12);
+    --warn:#c67a12; --warn-soft:rgba(216,137,25,.14);
+    --crit:#c5372f; --crit-soft:rgba(197,55,47,.12);
+    --s-10k:#2a78d6; --s-half:#eb6834; --s-full:#1baf7a; --s-tri:#4a3aa7; --s-cycle:#d6558a;
+    --shadow:0 1px 2px rgba(19,19,17,.05), 0 10px 26px -16px rgba(19,19,17,.20);
+    --r:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --plane:#0b0b0a; --surface:#181816; --surface-2:#201f1d; --surface-3:#2a2926;
+      --ink:#f6f5ef; --ink-2:#c3c2b7; --muted:#908e86;
+      --grid:#2b2b28; --axis:#3a3a36; --hair:rgba(255,255,255,.11);
+      --accent:#5a95f2; --accent-ink:#0b0b0a; --accent-soft:rgba(90,149,242,.16);
+      --good:#40c040; --good-soft:rgba(64,192,64,.16);
+      --warn:#e0a53c; --warn-soft:rgba(224,165,60,.16);
+      --crit:#e56b62; --crit-soft:rgba(229,107,98,.16);
+      --s-10k:#3987e5; --s-half:#e07044; --s-full:#22b985; --s-tri:#9085e9; --s-cycle:#e07aa6;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -18px rgba(0,0,0,.75);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --plane:#0b0b0a; --surface:#181816; --surface-2:#201f1d; --surface-3:#2a2926;
+    --ink:#f6f5ef; --ink-2:#c3c2b7; --muted:#908e86;
+    --grid:#2b2b28; --axis:#3a3a36; --hair:rgba(255,255,255,.11);
+    --accent:#5a95f2; --accent-ink:#0b0b0a; --accent-soft:rgba(90,149,242,.16);
+    --good:#40c040; --good-soft:rgba(64,192,64,.16);
+    --warn:#e0a53c; --warn-soft:rgba(224,165,60,.16);
+    --crit:#e56b62; --crit-soft:rgba(229,107,98,.16);
+    --s-10k:#3987e5; --s-half:#e07044; --s-full:#22b985; --s-tri:#9085e9; --s-cycle:#e07aa6;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -18px rgba(0,0,0,.75);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{background:var(--plane); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo",sans-serif; line-height:1.5;}
+  h1,h2,h3,h4{font-family:"Archivo",system-ui,sans-serif; margin:0; text-wrap:balance; letter-spacing:-.01em;}
+  .tnum{font-variant-numeric:tabular-nums;}
+  .app{max-width:600px; margin:0 auto; min-height:100vh; padding-bottom:76px;}
+
+  .appbar{position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--plane) 86%, transparent);
+    backdrop-filter:saturate(1.4) blur(10px); -webkit-backdrop-filter:saturate(1.4) blur(10px);
+    padding:14px 18px 10px; display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid var(--hair);}
+  .appbar .t .k{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  .appbar .t h1{font-size:20px; font-weight:800; margin-top:1px;}
+  .icon-btn{background:var(--surface); border:1px solid var(--hair); border-radius:11px; color:var(--ink-2); font-size:15px; padding:9px 11px; cursor:pointer; font-family:inherit;}
+  .icon-btn:hover{color:var(--ink);}
+  button{font-family:inherit;}
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  .view{padding:16px 16px 8px; display:none;}
+  .view.active{display:block; animation:fade .18s ease;}
+  @keyframes fade{from{opacity:.4}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){ .view.active{animation:none} }
+
+  .sec-h{font-family:"Archivo"; font-size:12.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--ink);
+    display:flex; align-items:baseline; gap:8px; margin:20px 2px 10px;}
+  .sec-h:first-child{margin-top:4px;}
+  .sec-h .s{font-family:system-ui; font-weight:500; letter-spacing:0; text-transform:none; color:var(--muted); font-size:12px;}
+
+  .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); box-shadow:var(--shadow);}
+  .pad{padding:15px 16px;}
+
+  .dday{display:flex; flex-direction:column; gap:9px;}
+  .race-row{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:13px; background:var(--surface); border:1px solid var(--hair); box-shadow:var(--shadow); position:relative; overflow:hidden;}
+  .race-row::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--rc,var(--accent));}
+  .pri{flex:none; width:30px; height:30px; border-radius:9px; display:grid; place-items:center; font-family:"Archivo"; font-weight:800; font-size:14px; color:#fff; background:var(--rc,var(--accent));}
+  .race-main{min-width:0; flex:1;}
+  .race-main .nm{font-weight:700; font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .race-main .mt{font-size:12px; color:var(--muted); margin-top:1px;}
+  .race-dday{flex:none; text-align:right;}
+  .race-dday .d{font-family:"Archivo"; font-weight:800; font-size:19px; line-height:1;}
+  .race-dday .l{font-size:10.5px; color:var(--muted); font-weight:600;}
+
+  .stats{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+  .stat{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:12px 13px; box-shadow:var(--shadow);}
+  .stat .k{font-size:11px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:5px;}
+  .stat .v{font-family:"Archivo"; font-weight:800; font-size:22px; margin-top:5px; line-height:1;}
+  .stat .v small{font-size:11px; font-weight:600; color:var(--muted); font-family:system-ui;}
+  .stat .n{font-size:11px; color:var(--ink-2); margin-top:5px;}
+  .rank{display:inline-block; font-size:10px; font-weight:700; padding:1px 6px; border-radius:5px; background:var(--accent-soft); color:var(--accent);}
+
+  .goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px;}
+  .goal{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:13px 14px; position:relative; overflow:hidden; box-shadow:var(--shadow);}
+  .goal::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gc,var(--accent));}
+  .goal .gs{font-size:12px; color:var(--muted); font-weight:700;}
+  .goal .gt{font-family:"Archivo"; font-weight:700; font-size:12.5px; color:var(--ink-2); margin-top:2px;}
+  .goal .gv{font-family:"Archivo"; font-weight:800; font-size:23px; margin-top:7px; line-height:1;}
+  .goal .gv small{font-size:11px; font-weight:600; color:var(--muted); font-family:system-ui;}
+  .goal .gap{font-size:12px; margin-top:6px; font-weight:700;}
+  .goal .gap.done{color:var(--good);}
+  .bar{height:6px; border-radius:6px; background:var(--surface-3); margin-top:9px; overflow:hidden;}
+  .bar>i{display:block; height:100%; border-radius:6px; background:var(--gc,var(--accent));}
+  .pill{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;}
+  .pill.g{background:var(--good-soft); color:var(--good);}
+
+  .tgt{padding:14px 15px;}
+  .tgt + .tgt{border-top:1px solid var(--hair);}
+  .tgt .top{display:flex; align-items:center; gap:10px;}
+  .tgt .nm{font-weight:700; font-size:15px;}
+  .tgt .pribadge{flex:none; font-family:"Archivo"; font-weight:800; font-size:11px; color:#fff; border-radius:6px; padding:2px 7px;}
+  .tgt .when{margin-left:auto; font-size:12px; color:var(--muted); font-weight:600;}
+  .tgt .cmp{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:11px;}
+  .mini{background:var(--surface-2); border-radius:10px; padding:9px 11px;}
+  .mini .k{font-size:10.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+  .mini .v{font-family:"Archivo"; font-weight:800; font-size:17px; margin-top:3px;}
+  .mini .vd{font-size:11px; color:var(--muted); font-weight:600; margin-top:2px;}
+  .mini.est .v{color:var(--ink-2);}
+  .tgt .verdict{font-size:12.5px; color:var(--ink-2); margin-top:10px; display:flex; gap:7px; align-items:flex-start;}
+  .tgt .verdict .ic{flex:none;}
+
+  .note{display:flex; gap:9px; align-items:flex-start; padding:12px 14px; border-radius:12px; font-size:13px; line-height:1.5;}
+  .note.warn{background:var(--warn-soft); color:var(--ink);}
+  .note.info{background:var(--accent-soft); color:var(--ink);}
+  .note .ic{flex:none; font-size:15px;}
+  .note b{font-weight:700;}
+
+  .ztbl{width:100%; border-collapse:collapse; font-size:13px;}
+  .ztbl th,.ztbl td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--hair);}
+  .ztbl th{font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); font-weight:700;}
+  .ztbl td.z{font-weight:700;}
+  .ztbl td .zc{display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:7px; vertical-align:middle;}
+  .ztbl td.p{font-family:"Archivo"; font-weight:700; font-variant-numeric:tabular-nums;}
+
+  .week{margin-bottom:12px;}
+  .week .wh{display:flex; align-items:center; gap:10px; padding:13px 15px; cursor:pointer; user-select:none;}
+  .week .wh .wn{font-family:"Archivo"; font-weight:800; font-size:14px;}
+  .week .wh .wd{font-size:12px; color:var(--muted); font-weight:600;}
+  .week .wh .prog{margin-left:auto; font-size:11.5px; color:var(--ink-2); font-weight:700; font-variant-numeric:tabular-nums;}
+  .week .wh .chev{transition:transform .18s; color:var(--muted);}
+  .week.open .wh .chev{transform:rotate(90deg);}
+  .week .wbody{display:none; padding:0 15px 6px;}
+  .week.open .wbody{display:block;}
+  .sess{display:flex; align-items:flex-start; gap:11px; padding:10px 2px; border-top:1px solid var(--hair);}
+  .sess:first-child{border-top:none;}
+  .chk{flex:none; width:24px; height:24px; border-radius:7px; border:2px solid var(--axis); background:var(--surface); cursor:pointer; display:grid; place-items:center; margin-top:1px; color:transparent; font-size:14px; font-weight:900;}
+  .chk.on{background:var(--good); border-color:var(--good); color:#fff;}
+  .chk.pt{background:var(--warn); border-color:var(--warn); color:#fff;}
+  .chk.sk{background:var(--surface-3); border-color:var(--axis); color:var(--ink-2);}
+  .carry-chip{display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--warn-soft); color:var(--ink); margin:3px 4px 0 0;}
+  .memo-box{margin:8px 2px 4px; padding:10px 11px; background:var(--warn-soft); border-radius:11px;}
+  .memo-h{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:6px;}
+  .memo-h.tg{cursor:pointer; display:flex; gap:6px; align-items:baseline;}
+  .memo-h .mchev{margin-left:auto; color:var(--muted); transition:transform .18s;}
+  .memo-box:not(.fold) .memo-h .mchev{transform:rotate(90deg);}
+  .memo-box.fold{background:var(--surface-3);}
+  .memo-box.fold .memo-h{margin-bottom:0;}
+  .memo-box.fold .mb-body{display:none;}
+  .memo-row{display:flex; align-items:center; gap:8px; margin-top:6px;}
+  .memo-lbl{font-size:12px; color:var(--ink-2); font-weight:600; flex:none; width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .memo-inp{flex:1; min-width:0; padding:8px 10px; border-radius:9px; border:1px solid var(--axis); background:var(--surface); color:var(--ink); font-size:14px; font-family:inherit;}
+  .rec-line{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); padding:5px 0; border-top:1px solid var(--hair);}
+  .rec-line>span{flex:1; min-width:0;}
+  .rec-add{margin-top:8px; width:100%; padding:9px; border-radius:9px; border:1px dashed var(--accent); background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:13px; cursor:pointer; font-family:inherit;}
+  .prog-line{font-size:12px; font-weight:700; color:var(--ink-2); padding:5px 0 0;}
+  .rec-mini{padding:5px 10px; border-radius:8px; border:1px solid var(--axis); background:var(--surface); color:var(--ink); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:4px;}
+  .rec-mini.good{border-color:var(--good); color:var(--good);}
+  .week-remain{margin:6px 2px 4px; padding:8px 11px; border-radius:9px; background:var(--surface-3); font-size:12.5px; font-weight:700; color:var(--ink-2);}
+  /* 훈련 달력 */
+  .cal{padding:10px 8px 8px;}
+  .cal-h{display:flex; align-items:center; gap:8px; padding:0 4px 8px;}
+  .cal-h .cal-t{font-family:"Archivo"; font-weight:800; font-size:14px; flex:1; text-align:center;}
+  .cal-h button{padding:5px 10px; border-radius:8px; border:1px solid var(--axis); background:var(--surface); color:var(--ink); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .cal-g{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
+  .cal-dow{font-size:10.5px; font-weight:700; color:var(--muted); text-align:center; padding:2px 0 4px;}
+  .cal-c{min-height:52px; border-radius:8px; background:var(--surface-2,var(--surface-3)); padding:2px 1px 2px 2px; font-size:9.5px; line-height:1.15; cursor:pointer; border:1px solid transparent; overflow:hidden;}
+  .cal-c.mute{opacity:.35;}
+  .cal-c.today{border-color:var(--accent);}
+  .cal-c.sel{background:var(--accent-soft); border-color:var(--accent);}
+  .cal-c .dn{font-weight:800; font-size:11px; color:var(--ink-2);}
+  .cal-c.race .dn::after{content:" 🏁";}
+  .cal-c .ev .km{display:block; color:var(--muted); font-weight:700;}
+  .cal-c .ev{white-space:normal; word-break:keep-all; overflow:hidden; color:var(--ink); font-weight:600; letter-spacing:-.02em; margin-top:1px;}
+  .cal-day{margin-top:8px; padding:8px 6px 2px; border-top:1px solid var(--hair);}
+  .cal-day .dh{font-family:"Archivo"; font-weight:800; font-size:12.5px; margin-bottom:2px;}
+  .cal-row{font-size:12.5px; color:var(--ink-2); padding:3px 0 3px 6px; display:flex; align-items:flex-start; gap:4px;}
+  .cal-row>span:first-child{flex:1; min-width:0;}
+  .row-act{flex:none; display:flex; gap:0;}
+  .row-act .del{padding:1px 5px; font-size:13px;}
+  .sess .st{flex:1; min-width:0; font-size:13.5px;}
+  .sess.done .st{color:var(--muted); text-decoration:line-through;}
+  .sess .st .tag{font-size:11px; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:5px; padding:1px 6px; margin-left:4px;}
+
+  /* load / PMC */
+  .lstat{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px;}
+  .lstat .stat .v{font-size:24px;}
+  .statusbox{display:flex; gap:12px; align-items:center; padding:14px 15px;}
+  .statusbox .big{font-family:"Archivo"; font-weight:800; font-size:16px;}
+  .statusbox .rec{font-size:12.5px; color:var(--ink-2); margin-top:2px;}
+  .statusdot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; padding:2px 4px 8px; font-size:12px; color:var(--ink-2);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:14px; height:3px; border-radius:2px; display:inline-block;}
+  .recent{padding:2px 4px 6px;}
+  .srow{display:flex; align-items:center; gap:10px; padding:9px 4px; border-top:1px solid var(--hair); font-size:13px;}
+  .srow:first-child{border-top:none;}
+  .srow .sd{color:var(--ink-2); font-variant-numeric:tabular-nums; width:64px; flex:none;}
+  .srow .ssp{font-weight:600;}
+  .srow .sl{margin-left:auto; color:var(--muted); font-variant-numeric:tabular-nums;}
+
+  .panel{margin-bottom:16px;}
+  .phead{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:15px 16px 4px;}
+  .dot{width:11px; height:11px; border-radius:50%; flex:none;}
+  .phead h3{font-size:16px; font-weight:700;}
+  .phead .count{font-size:12px; color:var(--muted); font-weight:600;}
+  .phead .pb{margin-left:auto; font-size:12px; color:var(--ink-2); font-weight:600;}
+  .phead .pb b{font-family:"Archivo"; color:var(--ink); font-weight:800;}
+  .chart-wrap{padding:6px 8px 2px;}
+  svg.chart{width:100%; height:auto; display:block; overflow:visible;}
+  .empty{color:var(--muted); font-size:13px; padding:22px 4px; text-align:center; border:1px dashed var(--axis); border-radius:11px; margin:8px 12px;}
+  .tbl-scroll{overflow-x:auto; padding:4px 6px 8px;}
+  table.rec{border-collapse:collapse; width:100%; font-size:13px;}
+  table.rec th,table.rec td{text-align:left; padding:8px 9px; border-bottom:1px solid var(--hair); white-space:nowrap;}
+  table.rec th{font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  table.rec td.num{text-align:right;}
+  .r-time{font-family:"Archivo"; font-weight:700;}
+  .tag-pb{font-size:10px; font-weight:800; color:var(--accent); border:1px solid var(--accent); border-radius:5px; padding:1px 5px;}
+  td .ev{color:var(--ink); font-weight:600;}
+  td .det{color:var(--muted); font-size:11.5px; white-space:normal;}
+  .del{background:none; border:none; color:var(--muted); font-size:15px; padding:3px 7px; border-radius:6px; cursor:pointer;}
+  .del:hover{color:var(--s-cycle); background:var(--hair);}
+
+  .nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:color-mix(in srgb,var(--surface) 92%, transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-top:1px solid var(--hair);
+    display:flex; padding:6px 4px calc(6px + env(safe-area-inset-bottom)); max-width:600px; margin:0 auto;}
+  .nav button{flex:1; background:none; border:none; padding:7px 2px 5px; cursor:pointer; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:3px; border-radius:12px; font-family:inherit;}
+  .nav button .ni{font-size:18px; line-height:1;}
+  .nav button .nl{font-size:10px; font-weight:700;}
+  .nav button.on{color:var(--accent);}
+
+  .fab{position:fixed; right:calc(50% - 300px + 16px); bottom:calc(78px + env(safe-area-inset-bottom)); z-index:45;
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:16px; padding:13px 17px; font-weight:800; font-size:14px;
+    box-shadow:0 8px 22px -8px rgba(31,95,214,.6); cursor:pointer; font-family:"Archivo"; display:none;}
+  @media (max-width:632px){ .fab{right:16px;} }
+  .fab.show{display:block;}
+
+  #tip{position:fixed; pointer-events:none; z-index:70; background:var(--ink); color:var(--plane); padding:7px 9px; border-radius:8px; font-size:12px; line-height:1.35; box-shadow:var(--shadow); opacity:0; transition:opacity .1s; max-width:210px;}
+  #tip b{font-family:"Archivo";}
+  .overlay{position:fixed; inset:0; background:rgba(8,8,7,.55); display:none; align-items:flex-end; justify-content:center; z-index:90;}
+  .overlay.open{display:flex;}
+  @media (min-width:560px){ .overlay{align-items:center;} }
+  .modal{background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-width:480px; padding:20px 18px calc(18px + env(safe-area-inset-bottom)); box-shadow:var(--shadow); border:1px solid var(--hair);}
+  @media (min-width:560px){ .modal{border-radius:20px;} }
+  .modal h3{font-size:18px; font-weight:800; margin-bottom:14px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12px; font-weight:600; color:var(--ink-2); margin-bottom:5px;}
+  .field input,.field select{width:100%; padding:12px 12px; border-radius:11px; border:1px solid var(--axis); background:var(--surface-2); color:var(--ink); font-size:16px; font-family:inherit;}
+  .frow{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .hint{font-size:11.5px; color:var(--muted); margin-top:4px;}
+  .mfoot{display:flex; gap:10px; justify-content:flex-end; margin-top:8px;}
+  .btn-ghost{background:transparent; color:var(--ink-2); border:1px solid var(--hair); padding:11px 14px; font-weight:600; border-radius:11px; cursor:pointer;}
+  .btn-primary{background:var(--accent); color:var(--accent-ink); font-weight:700; padding:11px 16px; border:none; border-radius:11px; cursor:pointer;}
+  .status-note{font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:7px; margin:2px 2px 0;}
+  .status-note .d{width:7px; height:7px; border-radius:50%; background:var(--muted); flex:none;}
+  .status-note.live .d{background:var(--good);}
+  .lead{font-size:13px; color:var(--ink-2); margin:2px 2px 0; line-height:1.5;}
+  .inline-add{background:var(--accent); color:var(--accent-ink); border:none; border-radius:11px; padding:11px 15px; font-weight:800; font-family:"Archivo"; cursor:pointer; font-size:14px; width:100%; margin-top:4px;}
+  .ychips{display:flex; gap:6px; flex-wrap:wrap; padding:10px 12px 4px;}
+  .ychip{border:1px solid var(--hair); background:var(--surface-2); color:var(--ink-2); border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; cursor:pointer; font-family:"Archivo";}
+  .ychip.on{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+  .gbody{font-size:13px; line-height:1.55; color:var(--ink);}
+  .gbody h4{font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:10px 0 3px; font-family:"Archivo";}
+  .gbody p{margin:0 0 6px;}
+  .gbody ul{margin:0 0 6px; padding-left:18px;}
+  .gbody li{margin:2px 0;}
+  .gbody .pc{font-family:"Archivo"; font-weight:700; font-variant-numeric:tabular-nums;}
+  .gbody .warn{background:var(--warn-soft); border-radius:8px; padding:7px 10px; margin-top:6px; font-size:12.5px;}
+</style>
+
+<div class="app">
+  <div class="appbar">
+    <div class="t"><div class="k" id="barKicker">홈 · 대시보드</div><h1 id="barTitle">트레이닝 허브</h1></div>
+    <button class="icon-btn" id="themeBtn" title="테마 전환">◐</button>
+  </div>
+
+  <section class="view active" id="v-home">
+    <div class="status-note" id="statusNote"><span class="d"></span><span id="statusText">불러오는 중…</span></div>
+    <div class="sec-h">다가오는 대회 <span class="s">우선순위순 · D-day</span></div>
+    <div class="dday" id="homeRaces"></div>
+    <div class="sec-h">현재 체력 프로파일 <span class="s">NeumaFiT CPET · InBody</span></div>
+    <div class="stats" id="fitness"></div>
+    <p class="lead" id="fitNote"></p>
+    <div class="sec-h">종목별 최고기록 <span class="s">PB</span></div>
+    <div class="stats" id="pbGrid"></div>
+    <div class="sec-h">AI 코치 <span class="s">추가 비용 없음</span></div>
+    <div class="card pad" style="font-size:13px;line-height:1.55">
+      <div style="font-weight:700;margin-bottom:4px">Claude Cowork에서 이렇게 물어보세요</div>
+      <div style="background:var(--surface-2);border-radius:10px;padding:10px 12px;color:var(--ink-2);margin-bottom:8px">“이 운동 앱 기록을 읽어서 분석해줘”</div>
+      <div style="color:var(--ink-2)">그러면 Claude가 이 앱에 저장된 <b>분석 스냅샷</b>(체력·부하·대회·훈련 현황)을 읽어 컨디션 진단과 다음 훈련을 제안합니다. 앱이 알아서 최신 스냅샷을 저장해 두므로 <b>별도 API·비용이 들지 않습니다.</b></div>
+      <div id="snapNote" class="status-note" style="margin-top:8px"><span class="d"></span><span>스냅샷 준비 중…</span></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-target">
+    <div class="sec-h">목표 대회 <span class="s">목표 vs 기록기반(VDOT) 추정</span></div>
+    <div class="note info" id="vdotNote" style="margin-bottom:12px"><span class="ic">📈</span><div></div></div>
+    <div class="note warn" style="margin-bottom:12px"><span class="ic">⚠️</span><div><b>일정 충돌:</b> 10/3 충주 폰도(토) → 10/4 10K(일) 백투백. <b>이번엔 10K가 A레이스</b>이므로 폰도를 매우 이지/사교 페이스로 타서 다리를 아끼고, 다음 날 10K에 전력. (폰도를 하드하게 타면 A레이스가 손해)</div></div>
+    <div class="card" id="targets"></div>
+    <div class="sec-h">철인 하프코스(70.3) 계산기 <span class="s">CSS·FTP·VDOT → 종합 예상</span></div>
+    <div class="card pad" id="triCalc">
+      <div class="frow">
+        <div class="field"><label for="t400">수영 400m 기록</label><input type="text" id="t400" placeholder="6:40" inputmode="numeric"></div>
+        <div class="field"><label for="t200">수영 200m 기록</label><input type="text" id="t200" placeholder="3:05" inputmode="numeric"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label for="p20">20분 파워(W, 선택)</label><input type="number" id="p20" placeholder="예: 230" inputmode="numeric"></div>
+        <div class="field"><label for="bspd">바이크 평속(km/h)</label><input type="number" id="bspd" placeholder="28" inputmode="decimal" step="0.1"></div>
+      </div>
+      <button class="inline-add" id="triBtn" style="margin-top:2px">계산 · 저장</button>
+      <div id="triOut" style="margin-top:12px"></div>
+    </div>
+    <div class="sec-h">2027 연말 장기 목표 <span class="s">PB 대비 진척</span></div>
+    <div class="goals" id="goals"></div>
+  </section>
+
+  <section class="view" id="v-train">
+    <div class="sec-h">훈련 달력 <span class="s">날짜 탭 → 상세 · 더보기 → 월 전체</span></div>
+    <div id="cal" style="margin-bottom:12px"></div>
+    <div class="sec-h">페이스 존 <span class="s" id="zonesSub">현재 적용 존 · 이력 관리</span></div>
+    <div class="card" style="padding:4px 0"><table class="ztbl" id="zones"></table><div id="zonesHist"></div></div>
+    <div class="sec-h">주간 훈련 계획 (7주, 월~일) <span class="s">10K 피킹 → 하프 → 풀 완주 · 체크하면 저장됨</span></div>
+    <p class="lead" style="margin-bottom:12px"><b>요일 고정 없이 순서(①→⑥)만</b> — 날씨·일정에 맞춰 유동 배치하세요. 대회(폰도·10K·하프·풀)만 날짜 고정. 체크는 수동: 탭 → ✓완료 → ◐부분 → 해제. 체크한 슬롯은 주 하단에서 <b>실제 기록(거리·시간, 심박 선택)</b>을 입력하면 달성률·잔여가 계산되고, 잔여는 <b>소멸</b> 또는 <b>2차 기록</b>으로 처리(자동 이관 없음). 원칙: 하드 사이 1일 이상 이지/휴식, 롱런은 다리 신선할 때, 고강도 주 2회 상한. 사이클은 폰도(10/3)까지, 시즌 마감 후 재개. 우선순위: 10K(A)→하프(B)→폰도→풀(완주).</p>
+    <div id="adaptCard" style="margin-bottom:12px"></div>
+    <div id="atp" style="margin-bottom:12px"></div>
+    <div id="weeks"></div>
+    <div class="sec-h">내가 추가한 훈련 <span class="s">직접 입력 · 체크·삭제 가능</span></div>
+    <button class="inline-add" id="addCustom">＋ 내 훈련 추가</button>
+    <div class="card recent" id="customList" style="margin-top:12px"></div>
+    <div class="sec-h">레이스 데이 페이싱 <span class="s">A레이스 10K 43:00 = 4:18/km</span></div>
+    <div class="card pad" id="pacing"></div>
+  </section>
+
+  <section class="view" id="v-load">
+    <div class="sec-h">오늘 상태 <span class="s">Fitness · Fatigue · Form</span></div>
+    <div class="lstat" id="loadStats"></div>
+    <div class="card" id="statusCard" style="margin-bottom:6px"></div>
+    <p class="lead" id="volNote"></p>
+    <div class="sec-h">이번 주 안전 점검 <span class="s">부하 증가율 · TSB 가드레일</span></div>
+    <div id="safetyCard"></div>
+    <div class="sec-h">유산소 효율 EF <span class="s">속도 ÷ 심박 · 이코노미 추세</span></div>
+    <div id="efCard"></div>
+    <div class="sec-h">가민 컨디션 <span class="s">안정시 심박 · HRV · 수면</span></div>
+    <div class="card pad" id="wellCard"></div>
+    <div class="sec-h">퍼포먼스 관리 차트 <span class="s">최근 26주 · CTL/ATL/TSB</span></div>
+    <div class="card"><div class="legend" id="pmcLegend"></div><div class="chart-wrap" id="pmc"></div></div>
+    <div class="sec-h">세션 기록 <span class="s">삼성헬스 가져오기 또는 직접 입력</span></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <button class="inline-add" id="addSess" style="flex:1; min-width:140px">＋ 세션 직접 기록</button>
+      <button class="inline-add" id="importBtn" style="flex:1; min-width:140px; background:var(--surface-3); color:var(--ink)">↑ 삼성헬스 CSV</button>
+      <button class="inline-add" id="fitBtn" style="flex:1; min-width:140px; background:var(--surface-3); color:var(--ink)">↑ Bryton FIT</button>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+      <button class="inline-add" id="icuSyncBtn" style="flex:2; min-width:160px">⟳ 가민 동기화</button>
+      <button class="inline-add" id="cloudSetBtn" style="flex:1; min-width:100px; background:var(--surface-3); color:var(--ink)">⚙ 연동</button>
+    </div>
+    <p class="lead" id="icuStatus" style="margin-top:8px">불러오는 중…</p>
+    <input type="file" id="samFile" accept=".csv,text/csv" hidden>
+    <input type="file" id="fitFile" accept=".fit,.FIT" hidden>
+    <div class="card recent" id="recentSess" style="margin-top:12px"></div>
+  </section>
+
+  <section class="view" id="v-rec">
+    <div class="sec-h" id="diaryTog" role="button" tabindex="0" aria-expanded="false" aria-controls="diary" style="cursor:pointer">운동 일지 <span class="s">날짜별 · 종목·거리·시간·심박·부하</span><span id="diaryChev" style="margin-left:auto;color:var(--muted);font-size:12px;font-weight:600">펼치기 ›</span></div>
+    <div id="diary" hidden></div>
+    <div class="sec-h">누적 거리 <span class="s">세션 기준 · 종목별 · 월/연도</span></div>
+    <div id="cumul"></div>
+    <div class="sec-h">훈련 기록 <span class="s">대회 외 · 세션에서 자동 감지</span></div>
+    <div id="trainRecords"></div>
+    <div class="sec-h">장비 <span class="s">신발·자전거 누적 km · 교체 알림</span></div>
+    <button class="inline-add" id="addGear">＋ 장비 등록</button>
+    <div id="gearCard" style="margin-top:12px"></div>
+    <div class="sec-h">종목별 기록 <span class="s">아래로 갈수록 빠른 기록 · 점선 = 목표</span></div>
+    <div id="panels"></div>
+  </section>
+
+  <section class="view" id="v-guide">
+    <div class="sec-h">훈련법 가이드 <span class="s">박정환님 페이스 기준 · 탭해서 펼치기</span></div>
+    <p class="lead" style="margin-bottom:12px">각 훈련이 <b>왜·어떻게·얼마나</b> 하는 것인지 정리. 페이스는 현재 속도엔진(VDOT ~48)·CPET(최대심박 196) 기준이며, 기록이 갱신되면 페이스 존 표(훈련 탭)를 우선하세요.</p>
+    <div id="guide"></div>
+  </section>
+
+  <button class="fab" id="fab">＋ 기록 추가</button>
+
+  <nav class="nav" id="nav">
+    <button data-v="home" class="on"><span class="ni">🏠</span><span class="nl">홈</span></button>
+    <button data-v="target"><span class="ni">🎯</span><span class="nl">대회</span></button>
+    <button data-v="train"><span class="ni">📋</span><span class="nl">훈련</span></button>
+    <button data-v="load"><span class="ni">📈</span><span class="nl">부하</span></button>
+    <button data-v="rec"><span class="ni">📊</span><span class="nl">기록</span></button>
+    <button data-v="guide"><span class="ni">📖</span><span class="nl">가이드</span></button>
+  </nav>
+</div>
+
+<div id="tip"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <h3 id="mTitle">기록 추가</h3>
+    <div class="field"><label for="fSport">종목</label>
+      <select id="fSport">
+        <option value="10k">러닝 · 10K</option><option value="half">러닝 · 하프</option>
+        <option value="full">러닝 · 풀코스</option><option value="tri">철인3종</option>
+        <option value="cycle">사이클 · 그란폰도</option>
+      </select></div>
+    <div class="frow">
+      <div class="field"><label for="fDate">날짜</label><input type="date" id="fDate"></div>
+      <div class="field"><label for="fTime">기록</label><input type="text" id="fTime" placeholder="42:55 / 1:35:14" inputmode="numeric"></div>
+    </div>
+    <div class="field"><label for="fEvent">대회명</label><input type="text" id="fEvent" placeholder="예: 서울레이스 하프마라톤"></div>
+    <div class="field"><label for="fDetail">세부기록 <span style="color:var(--muted)">(선택)</span></label>
+      <input type="text" id="fDetail" placeholder="예: 수영 32:17 · 바이크 1:09:31 · 런 45:17">
+      <div class="hint">완주만 남길 땐 기록 칸을 비우고 세부기록에 “완주”라고 적어도 됩니다.</div></div>
+    <div class="mfoot"><button class="btn-ghost" id="cancelBtn">취소</button><button class="btn-primary" id="saveBtn">저장</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="soverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sTitle">
+    <h3 id="sTitle">운동 세션 기록</h3>
+    <div class="frow">
+      <div class="field"><label for="sDate">날짜</label><input type="date" id="sDate"></div>
+      <div class="field"><label for="sSport">종목</label>
+        <select id="sSport"><option value="run">러닝</option><option value="bike">사이클</option><option value="swim">수영</option><option value="strength">근력</option><option value="other">기타</option></select></div>
+    </div>
+    <div id="sLink" class="note info" style="margin-bottom:10px;font-size:12.5px" hidden></div>
+    <div class="frow">
+      <div class="field" id="sKindRow"><label for="sKind">유형</label><select id="sKind"></select></div>
+      <div class="field"><label for="sDur">시간(분)</label><input type="number" id="sDur" placeholder="60" inputmode="numeric" min="1"></div>
+    </div>
+    <div class="frow" id="sRowDist">
+      <div class="field"><label for="sDist" id="sDistLbl">거리(km)</label><input type="number" id="sDist" placeholder="예: 10.0" inputmode="decimal" step="0.1" min="0"></div>
+      <div class="field" id="sCadRow"><label for="sCad">케이던스 <span style="color:var(--muted)">(선택)</span></label><input type="number" id="sCad" placeholder="예: 171" inputmode="numeric" min="100" max="240"></div>
+    </div>
+    <div class="frow" id="sRowSub" hidden>
+      <div class="field" id="sRepsRow" hidden><label for="sReps" id="sRepsLbl">반복 횟수</label><input type="number" id="sReps" placeholder="예: 6" inputmode="numeric" min="0" max="60"></div>
+      <div class="field" id="sStrRow" hidden><label for="sStr" id="sStrLbl">스트라이드 횟수</label><input type="number" id="sStr" placeholder="예: 6" inputmode="numeric" min="0" max="30"></div>
+      <div class="field" id="sLowerRow" hidden><label>하체보강</label><label class="memo-row" style="margin-top:4px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="sLower" style="width:20px;height:20px"> 함께 실시함</label></div>
+    </div>
+    <div class="frow" id="sRowHr">
+      <div class="field"><label for="sMhr">평균 심박 <span style="color:var(--muted)">(선택)</span></label><input type="number" id="sMhr" placeholder="워치 없으면 비움" inputmode="numeric" min="40" max="220"></div>
+      <div class="field"><label for="sMaxhr">최대 심박 <span style="color:var(--muted)">(선택)</span></label><input type="number" id="sMaxhr" placeholder="예: 171" inputmode="numeric" min="40" max="230"></div>
+    </div>
+    <div class="field"><label for="sRpe">강도 RPE (1~10) <span style="color:var(--muted)">— 평균심박이 없을 때 부하 계산에 사용</span></label>
+      <select id="sRpe">
+        <option value="3">3 · 매우 가벼움</option><option value="4">4 · 가벼움(이지)</option>
+        <option value="5" selected>5 · 편안</option><option value="6">6 · 다소 힘듦</option>
+        <option value="7">7 · 템포</option><option value="8">8 · 역치</option>
+        <option value="9">9 · 인터벌/레이스</option><option value="10">10 · 최대</option>
+      </select></div>
+    <div class="field"><label for="sNote">메모 <span style="color:var(--muted)">(선택 · 근력은 여기에 종목·무게·세트)</span></label><input type="text" id="sNote" placeholder="예: 러닝머신 이지런 · 컨디션 좋음"></div>
+    <div class="hint" id="sHint"><b>부하는 평균 심박(TRIMP)</b>으로 계산하고, 심박이 없으면 시간×강도²(RPE)로 계산합니다. 거리를 넣어야 페이스·EF·누적이 정확해집니다.</div>
+    <div class="mfoot"><button class="btn-ghost" id="sCancel">취소</button><button class="btn-primary" id="sSave">저장</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="coverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+    <h3 id="cTitle">내 훈련 추가</h3>
+    <div class="frow">
+      <div class="field"><label for="cDate">날짜</label><input type="date" id="cDate"></div>
+      <div class="field"><label for="cSport">종목</label>
+        <select id="cSport"><option value="run">러닝</option><option value="bike">사이클</option><option value="swim">수영</option><option value="strength">근력</option><option value="brick">브릭</option><option value="other">기타</option></select></div>
+    </div>
+    <div class="field"><label for="cTitle2">훈련 내용</label><input type="text" id="cTitle2" placeholder="예: 이지런 45분 / 수영 CSS 세트 / 브릭 40km+5km"></div>
+    <div class="frow">
+      <div class="field"><label for="cDur">예정 시간(분, 선택)</label><input type="number" id="cDur" placeholder="60" inputmode="numeric" min="1"></div>
+      <div class="field"><label for="cNote">메모(선택)</label><input type="text" id="cNote" placeholder="목표 페이스 등"></div>
+    </div>
+    <div class="hint">제시된 7주 계획과 별개로 내가 정한 훈련을 넣어두고 체크할 수 있어요.</div>
+    <div class="mfoot"><button class="btn-ghost" id="cCancel">취소</button><button class="btn-primary" id="cSave">추가</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="goverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+    <h3 id="gTitle">장비 등록</h3>
+    <div class="frow">
+      <div class="field"><label for="gName">이름</label><input type="text" id="gName" placeholder="예: 페가수스 41 / 로드바이크"></div>
+      <div class="field"><label for="gSport">종목</label>
+        <select id="gSport"><option value="run">러닝(신발)</option><option value="bike">사이클</option><option value="swim">수영</option><option value="other">기타</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label for="gStart">사용 시작일</label><input type="date" id="gStart"></div>
+      <div class="field"><label for="gEnd">사용 종료일 <span style="color:var(--muted)">(선택)</span></label><input type="date" id="gEnd"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label for="gInit">등록 전 누적 km <span style="color:var(--muted)">(선택)</span></label><input type="number" id="gInit" placeholder="0" inputmode="decimal" min="0"></div>
+      <div class="field"><label for="gAlert">교체 알림 km</label><input type="number" id="gAlert" placeholder="700" inputmode="numeric" min="1"></div>
+    </div>
+    <div class="hint">시작일~종료일 사이의 <b>해당 종목 세션 거리</b>가 자동 합산됩니다(FitTrackee의 '종목별 기본 장비' 방식). 신발은 보통 600~800km에서 교체.</div>
+    <div class="mfoot"><button class="btn-ghost" id="gCancel">취소</button><button class="btn-primary" id="gSave">등록</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+  .cl-ovl{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:max(16px,env(safe-area-inset-top));}
+  .cl-box{background:var(--surface,#fff);color:var(--ink,#111);border-radius:14px;padding:18px 18px 16px;width:100%;max-width:420px;max-height:90vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.25);}
+  .cl-box h2{margin:0 0 6px;font-size:18px} .cl-box h3{margin:16px 0 4px;font-size:13.5px} .cl-box p{margin:0 0 8px;font-size:13px;color:var(--muted,#666)}
+  .cl-box label{display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px}
+  .cl-box input{width:100%;box-sizing:border-box;padding:10px 11px;border:1px solid var(--hair,#ccc);border-radius:8px;background:transparent;color:inherit;font:inherit}
+  .cl-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .cl-btn{flex:1;min-width:120px;padding:10px 12px;border-radius:9px;border:1px solid var(--accent,#0b5d6b);background:var(--accent,#0b5d6b);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+  .cl-btn.sec{background:transparent;color:var(--ink,#111);border-color:var(--hair,#ccc)}
+  .cl-err{min-height:18px;margin-top:10px;font-size:12.5px;color:var(--accent,#0b5d6b)}
+</style>
+<script>
+(function(){
+  "use strict";
+  const TODAY=new Date();
+
+  const SPORTS={
+    "10k":{label:"러닝 · 10K",short:"10K",dist:10,cvar:"--s-10k",goalSec:2400,goalLabel:"sub 40:00",kind:"time"},
+    "half":{label:"러닝 · 하프",short:"하프",dist:21.0975,cvar:"--s-half",goalSec:5400,goalLabel:"sub 1:30:00",kind:"time"},
+    "full":{label:"러닝 · 풀코스",short:"풀코스",dist:42.195,cvar:"--s-full",goalSec:12600,goalLabel:"sub 3:30:00",kind:"time"},
+    "tri":{label:"철인3종",short:"철인3종",dist:null,cvar:"--s-tri",goalSec:null,goalLabel:"하프코스(70.3) 완주",kind:"complete",goalNote:"올림픽 완주"},
+    "cycle":{label:"사이클 · 그란폰도",short:"그란폰도",dist:null,cvar:"--s-cycle",goalSec:null,goalLabel:"완주",kind:"complete"},
+  };
+  const ORDER=["10k","half","full","tri","cycle"];
+  // CPET/InBody 절대지표 (퍼센타일은 NeumaFiT 소표본이라 예측 입력엔 미사용)
+  const PHYSIO={ vo2max:53.3, ltPaceSec:295 /* 4:55/km */, maxHR:196, econ:101 };
+
+  const INITIAL=[
+    {id:"r01",date:"2023-04-23",sport:"10k",event:"여의도 벚꽃마라톤",timeSec:3159,detail:""},
+    {id:"r02",date:"2024-06-25",sport:"half",event:"국민행복마라톤",timeSec:7091,detail:""},
+    {id:"r03",date:"2024-11-17",sport:"half",event:"손기정평화마라톤",timeSec:5938,detail:""},
+    {id:"r04",date:"2024-11-23",sport:"10k",event:"제2회 여의도 밤섬마라톤",timeSec:2729,detail:""},
+    {id:"r05",date:"2025-03-16",sport:"full",event:"서울마라톤",timeSec:13790,detail:""},
+    {id:"r06",date:"2025-04-06",sport:"half",event:"더레이스서울",timeSec:5884,detail:""},
+    {id:"r07",date:"2025-10-12",sport:"half",event:"서울레이스",timeSec:5791,detail:""},
+    {id:"r08",date:"2026-03-21",sport:"10k",event:"BULLS RACE",timeSec:2575,detail:""},
+    {id:"r09",date:"2026-04-05",sport:"half",event:"더레이스서울",timeSec:5714,detail:""},
+    {id:"r10",date:"2026-04-26",sport:"half",event:"서울하프마라톤",timeSec:5821,detail:""},
+    {id:"r11",date:"2026-05-10",sport:"tri",event:"제22회 대구광역시장배 전국철인3종(올림픽)",timeSec:9262,detail:"수영 32:17 · 바이크 1:09:31 · 런 45:17"},
+  ];
+
+  const TARGETS=[
+    {pri:1,sp:"10k",name:"런유어웨이 10K",date:"2026-10-04",cat:"10km",goal:"43:00",goalSec:2580,cvar:"--s-10k",verdict:"A레이스. 목표 43:00(4:18/km) — PB 42:55 수준이라 현재 체력으로 현실적. 후반 여유 있으면 PB 도전. 전날 폰도는 매우 이지하게 타서 다리 아끼기.",vico:"🎯"},
+    {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 6일 후 · B레이스. 컨트롤드(4:32~4:38)로 운영, 컨디션 좋으면 sub-1:35.",vico:"↗"},
+    {pri:3,sp:"cycle",name:"충주 메디오 폰도",date:"2026-10-03",cat:"사이클 ~100km*",goal:"완주",goalSec:null,cvar:"--s-cycle",verdict:"10K 전날 → 완주·사교 페이스로 다리 아끼고 보급 연습. 하드하게 타면 다음 날 A레이스 10K가 손해.",vico:"✔"},
+    {pri:4,sp:"full",name:"JTBC 마라톤 풀코스",date:"2026-11-01",cat:"42.195km",goal:"3:40:00",goalSec:13200,cvar:"--s-full",verdict:"목표 3:40:00(5:13/km) — PB 3:49:50 대비 약 10분 단축. 10K 중심 블록이라 롱런·마라톤페이스(MP) 축적이 과제 → 하프 이후 롱런 후반에 MP 5:10~5:15 구간을 넣고, 레이스는 전반 5:15로 보수적 이븐 운영.",vico:"↗"},
+  ];
+
+  const ZONES=[
+    {z:"회복 / 이지",cvar:"--s-full",pace:"6:00~6:40/km",use:"HR 135~150 · 대부분의 러닝(80%)"},
+    {z:"롱런 / 풀완주",cvar:"--s-10k",pace:"5:50~6:20/km",use:"주말 지구력 · 풀 완주 페이스"},
+    {z:"하프 페이스",cvar:"--s-half",pace:"4:30~4:40/km",use:"하프 목표(sub-1:35) 감각"},
+    {z:"템포 / 역치",cvar:"--s-tri",pace:"4:20~4:30/km",use:"젖산역치 · 크루즈 인터벌"},
+    {z:"10K / 인터벌",cvar:"--s-cycle",pace:"4:00~4:15/km",use:"VO₂max · 10K 샤프닝(목표 4:18)"},
+  ];
+
+  /* 주간 계획 = '순서(권장 시퀀스)'. 요일 고정 X — 날씨·일정에 맞춰 유동 배치. 대회만 date로 날짜 고정.
+     spacing 원칙: 하드(퀄리티) 사이 최소 1일 이지/휴식 · 롱런은 다리 신선할 때 · 하드 주 2회 상한. */
+  const WEEKS=[
+    {id:"w1",label:"W1",range:"9/14~9/20",focus:"스피드 재점화 · 폼 드릴 · 순서 유동",sess:[
+      {id:"w1b",t:"① 이지런 40~50분 (회복성 유산소)",tag:"이지"},{id:"w1c",t:"② 인터벌 400m×6 (4:05~4:10) / 조깅 회복 — 주 핵심",tag:"인터벌"},
+      {id:"w1d",t:"③ 이지런 45분 + 하체보강 20분",tag:"이지"},{id:"w1e",t:"④ 이지런 35분 + 스트라이드 6×20초",tag:"폼"},
+      {id:"w1f",t:"⑤ 롱런 90~100분 (~15km, 이지) — 시간 여유 있는 날",tag:"롱런"},{id:"w1g",t:"⑥ 사이클 60~90분 유산소 (폰도 대비)",tag:"사이클"},
+      {id:"w1a",t:"＋ 완전 휴식 1일 (아무 때나)",tag:"휴식"}]},
+    {id:"w2",label:"W2",range:"9/21~9/27",focus:"10K 특이 퀄리티 피크 · 순서 유동",sess:[
+      {id:"w2b",t:"① 이지런 40~50분 (회복성)",tag:"이지"},{id:"w2c",t:"② 크루즈 역치 1km×5 (4:20~4:25) / 조깅 90초 — 주 핵심",tag:"역치"},
+      {id:"w2d",t:"③ 이지런 45분 + 하체보강",tag:"이지"},{id:"w2e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
+      {id:"w2f",t:"⑤ 롱런 100~110분 (~17km)",tag:"롱런"},{id:"w2g",t:"⑥ 사이클 90~120분 (폰도 리허설, 유산소)",tag:"사이클"},
+      {id:"w2a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"w3",label:"W3",range:"9/28~10/4",focus:"테이퍼 + 레이스 주 · 대회는 날짜 고정",sess:[
+      {id:"w3c",t:"① 10K페이스 1km×3 (4:15~4:18) 짧게 + 워밍/쿨 — 주 초반",tag:"샤프너"},{id:"w3b",t:"② 이지런 30분 가볍게 (or 휴식)",tag:"이지"},
+      {id:"w3d",t:"③ 이지런 30분",tag:"이지"},{id:"w3e",t:"④ 레이스 D-2~전날: 완전 휴식 (or 이지 20분 + 스트라이드 4)",tag:"휴식"},
+      {id:"w3f",t:"🚴 [10/3·토] 충주 메디오 폰도 — 매우 이지/사교 페이스, 다리 아끼기·보급 연습",tag:"레이스",date:"2026-10-03"},
+      {id:"w3g",t:"🏃 [10/4·일] 런유어웨이 10K — A레이스 전력 (목표 4:18/km, 43:00)",tag:"레이스",date:"2026-10-04"}]},
+    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 + 하프(B레이스) · 하프만 날짜 고정",sess:[
+      {id:"w4a",t:"① 10K 직후 2~3일: 완전 휴식/회복",tag:"휴식"},{id:"w4b",t:"② 이지런 30~40분 회복",tag:"이지"},
+      {id:"w4c",t:"③ 이지런 40분",tag:"이지"},{id:"w4d",t:"④ 이지런 40분 + 스트라이드 4",tag:"이지"},
+      {id:"w4f",t:"⑤ 하프 전날: 이지 20분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
+      {id:"w4g",t:"🏃 [10/11·일] 서울레이스 하프 — 컨트롤드 (4:32~4:38)",tag:"레이스",date:"2026-10-11"}]},
+    {id:"w5",label:"W5",range:"10/12~10/18",focus:"리커버리 & 지구력 복귀 · 순서 유동",sess:[
+      {id:"w5b",t:"① 이지런 40~50분 (회복성)",tag:"이지"},{id:"w5c",t:"② 이지런 45분",tag:"이지"},
+      {id:"w5d",t:"③ 이지런 50분 + 하체보강",tag:"이지"},{id:"w5e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
+      {id:"w5f",t:"⑤ 롱런 90~110분 (~17km, 편안) — 시간 여유 있는 날",tag:"롱런"},{id:"w5g",t:"⑥ 이지런 40~50분 (회복성)",tag:"이지"},
+      {id:"w5a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"w6",label:"W6",range:"10/19~10/25",focus:"풀 완주용 피크 롱런 · 순서 유동",sess:[
+      {id:"w6b",t:"① 이지런 45~50분 (회복성)",tag:"이지"},{id:"w6c",t:"② 이지런 50분 (+선택 템포 2km)",tag:"이지"},
+      {id:"w6d",t:"③ 이지런 45분 + 하체보강",tag:"이지"},{id:"w6e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
+      {id:"w6f",t:"⑤ 피크 롱런 26~30km · 마지막 8~10km MP(5:10~5:15) · 30~40분마다 보급 — 컨디션 좋은 날",tag:"롱런"},{id:"w6g",t:"⑥ 이지런 30~40분 매우 가볍게 (롱런 회복)",tag:"이지"},
+      {id:"w6a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"w7",label:"W7",range:"10/26~11/1",focus:"테이퍼 + 풀 3:40 · 풀만 날짜 고정",sess:[
+      {id:"w7b",t:"① 이지런 30분 가볍게",tag:"이지"},{id:"w7c",t:"② 이지런 40분 중 마라톤페이스(5:13) 3km 감각",tag:"이지"},
+      {id:"w7d",t:"③ 이지런 30분 + 스트라이드 4",tag:"폼"},{id:"w7f",t:"④ 풀 전날: 이지 20~25분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
+      {id:"w7e",t:"＋ 완전 휴식 (레이스 주 넉넉히)",tag:"휴식"},
+      {id:"w7g",t:"🏆 [11/1·일] JTBC 풀코스 — 목표 3:40:00, 5:10~5:15/km 이븐 (전반 보수적)",tag:"레이스",date:"2026-11-01"}]},
+  ];
+
+  const PACING=[
+    {seg:"0~2km",pace:"4:20~4:22/km",note:"초반 오버페이스 금지 · 몸 열기"},
+    {seg:"2~7km",pace:"4:17~4:19/km",note:"목표 페이스로 리듬 안정"},
+    {seg:"7~10km",pace:"4:12~4:16/km",note:"남은 힘 모두 · 마지막 1km 스퍼트(PB 42:55 도전 구간)"},
+  ];
+
+  const state={records:INITIAL.slice(),sessions:[],imports:[],brytons:[],customs:[],gear:[],calRaces:[],garmins:[],wellness:[],tri:{},db:null,done:new Set(),slot:{},adaptOff:false};
+  function dkey(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+  // 슬롯 상태: 완료/부분/건너뜀. state.slot[id]={status,note}. 수동 완료 = status 'done'.
+  function slotStatusOf(id){ return state.slot[id]?state.slot[id].status:null; }
+  function slotNoteOf(id){ return state.slot[id]?(state.slot[id].note||""):""; }
+  function slotDone(id){ return slotStatusOf(id)==="done"; }
+
+  /* helpers */
+  function pad(n){return String(n).padStart(2,"0");}
+  function fmt(s){if(s==null||s<=0)return"—";s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return h>0?h+":"+pad(m)+":"+pad(x):m+":"+pad(x);}
+  function fmtPace(s,d){if(!d||!s)return"—";const p=s/d,m=Math.floor(p/60),x=Math.round(p%60);return m+":"+pad(x)+"/km";}
+  function parseTime(str){if(!str)return null;const p=str.trim().split(":").map(x=>x.trim());if(p.some(v=>v===""||isNaN(Number(v))))return null;let s=0;if(p.length===3)s=+p[0]*3600+ +p[1]*60+ +p[2];else if(p.length===2)s=+p[0]*60+ +p[1];else if(p.length===1)s=+p[0];else return null;return s>0?s:null;}
+  function shortDate(iso){const[y,m,d]=iso.split("-");return y.slice(2)+"."+ +m+"."+ +d;}
+  function axisDate(iso){const[y,m]=iso.split("-");return y.slice(2)+"."+ +m;}
+  function mdDate(iso){const[,m,d]=iso.split("-");return +m+"/"+ +d;}
+  function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+  function daysTo(iso){return Math.ceil((new Date(iso+"T00:00:00")-TODAY)/86400000);}
+  function bySport(k){return state.records.filter(r=>r.sport===k).slice().sort((a,b)=>a.date<b.date?-1:1);}
+  function pb(recs){const t=recs.filter(r=>r.timeSec>0);return t.length?t.reduce((m,r)=>r.timeSec<m.timeSec?r:m):null;}
+
+  /* ---- VDOT engine ---- */
+  function vdot(distM,sec){const t=sec/60,v=distM/t;
+    const pct=0.8+0.1894393*Math.exp(-0.012778*t)+0.2989558*Math.exp(-0.1932605*t);
+    const vo2=-4.60+0.182258*v+0.000104*v*v; return vo2/pct;}
+  function predict(distM,VD){let lo=(distM/1000)*150,hi=(distM/1000)*640;
+    for(let i=0;i<60;i++){const mid=(lo+hi)/2; if(vdot(distM,mid)>VD)lo=mid; else hi=mid;} return (lo+hi)/2;}
+  function distVDOT(sportKey){const best=pb(bySport(sportKey)); if(!best)return null; return vdot(SPORTS[sportKey].dist*1000,best.timeSec);}
+  function overallVDOT(){let best=null; ["10k","half","full"].forEach(k=>{const v=distVDOT(k); if(v!=null&&(best==null||v>best))best=v;}); return best;}
+
+  /* ---- 다요소 예측 엔진 (기록 + 생리 + 훈련량) ----
+     속도엔진 VDOT(단거리 기록)에서 거리별 지구력 감쇠(훈련량 반영)를 빼고,
+     VO2max를 생리 상한으로 사용. 각 성분을 표시해 검증 가능하게 유지(원칙 10). */
+  function speedVDOT(){let b=null; ["10k","half"].forEach(k=>{const v=distVDOT(k); if(v!=null&&(b==null||v>b))b=v;}); return b!=null?b:overallVDOT();}
+  function ltVDOT(){const d=3600/PHYSIO.ltPaceSec*1000; return vdot(d,3600);} // 젖산역치≈60분 지속 페이스 기반(지구력 지표)
+  function efFromVol(sportKey, vol){ // 지구력 계수 EF∈[0,1] (거리별 기준 볼륨 대비)
+    if(sportKey==="10k") return Math.max(0,Math.min(1, vol.weeklyKm/30));
+    if(sportKey==="half") return Math.max(0,Math.min(1, Math.min(vol.weeklyKm/40, vol.longestRun/18)));
+    return Math.max(0,Math.min(1, Math.min(vol.weeklyKm/55, vol.longestRun/30)));
+  }
+  function runVolume(asOf){ // 러닝 볼륨: 기준일(기본 오늘) 이전 4주 주당 km, 8주 최장 러닝(km)
+    const base=asOf? new Date(asOf+"T00:00:00") : new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate());
+    const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
+    const B=k(base); const c28=new Date(base); c28.setDate(c28.getDate()-28); const c56=new Date(base); c56.setDate(c56.getDate()-56);
+    const K28=k(c28), K56=k(c56); let wk=0, longest=0;
+    allSessions().forEach(s=>{ if(s.sport!=="run"||s.date>B)return; const km=+s.dist||0;
+      if(s.date>=K28) wk+=km; if(s.date>=K56 && km>longest) longest=km; });
+    state.records.forEach(r=>{ if(["10k","half","full"].indexOf(r.sport)<0||r.date>B)return; const km=SPORTS[r.sport].dist;
+      if(r.date>=K28) wk+=km; if(r.date>=K56 && km>longest) longest=km; });
+    return { weeklyKm: wk/4, longestRun: longest };
+  }
+  function speedVDOTNear(dateStr){ // 기준일 ±180일 내 단거리(10K·하프) 최고 VDOT (그 시점의 '속도엔진')
+    const base=new Date(dateStr+"T00:00:00"); let b=null;
+    state.records.forEach(r=>{ if(["10k","half"].indexOf(r.sport)<0||!r.timeSec)return;
+      if(Math.abs((new Date(r.date+"T00:00:00")-base)/86400000)<=180){ const v=vdot(SPORTS[r.sport].dist*1000,r.timeSec); if(b==null||v>b)b=v; } });
+    return b;
+  }
+  function endurancePenalty(sportKey, EF){ // 지구력 계수 EF∈[0,1]에 따른 VDOT 감쇠(거리가 길수록 큼)
+    if(sportKey==="10k") return 0.3*(1-EF);
+    if(sportKey==="half") return 1.5*(1-EF);
+    if(sportKey==="full") return 4+4*(1-EF);
+    return 0;
+  }
+  // 레이스 보정: 실제 최고기록 + 그때의 볼륨(EF)로 개인 편차(corr) 산출.
+  // 감쇠식의 '기울기(볼륨 반응)'는 사전값 유지, '절대 수준'만 실제 레이스에 고정. corr는 [-3,+5] VDOT로 클램프.
+  function raceCalibration(sportKey){
+    const best=pb(bySport(sportKey)); if(!best||!SPORTS[sportKey].dist) return null;
+    const distM=SPORTS[sportKey].dist*1000, vActual=vdot(distM,best.timeSec);
+    const speedThen=speedVDOTNear(best.date); if(speedThen==null) return null;
+    const volThen=runVolume(best.date);
+    if(volThen.weeklyKm<10) return null; // 앵커 시점 실제 훈련 볼륨(주 10km 이상)이 없으면 보정 불가 → 사전값(prior). 레이스 기록 1건만으로는 미적용
+    const efThen=efFromVol(sportKey,volThen);
+    let corr=(speedThen - vActual) - endurancePenalty(sportKey,efThen);
+    corr=Math.max(-3,Math.min(5,corr));
+    return { corr, anchorDate:best.date, vActual:Math.round(vActual*10)/10, speedThen:Math.round(speedThen*10)/10, efThen:Math.round(efThen*100) };
+  }
+  function predictMulti(sportKey){
+    const sp=SPORTS[sportKey]; if(!sp||!sp.dist) return null;
+    const distM=sp.dist*1000, vSpeed=speedVDOT(); if(vSpeed==null) return null;
+    const vRace=distVDOT(sportKey), vol=runVolume(), hasVol=vol.weeklyKm>0.5;
+    const EF=efFromVol(sportKey,vol);
+    const cal=raceCalibration(sportKey), corr=cal?cal.corr:0;
+    // 현실 예측은 '속도엔진'을 넘을 수 없음(그건 별도 VO₂max 상한으로 표시). 음수 보정의 과대추정 방지.
+    const realV = hasVol ? Math.min(vSpeed, vSpeed - (endurancePenalty(sportKey,EF)+corr)) : (vRace!=null?vRace:vSpeed);
+    return { distM, vSpeed, vRace, realV, EF, hasVol, corr, calibrated:!!cal, cal,
+      weeklyKm:vol.weeklyKm, longestRun:vol.longestRun,
+      timeReal:predict(distM,realV), timeCeil:predict(distM,PHYSIO.vo2max), timeRace:(vRace!=null?predict(distM,vRace):null) };
+  }
+
+  /* ---- HOME ---- */
+  function renderHomeRaces(){
+    const el=document.getElementById("homeRaces"); el.innerHTML="";
+    const ALL=TARGETS.concat((state.calRaces||[]).map(r=>({name:r.name,date:r.date,cat:r.cat||"",goal:r.goal||"—",pri:r.pri||9,cvar:"--accent"})));
+    const up=ALL.filter(t=>daysTo(t.date)>=0).sort((a,b)=>(a.pri-b.pri)||(a.date<b.date?-1:1));
+    (up.length?up:ALL.slice().sort((a,b)=>a.pri-b.pri)).forEach(t=>{
+      const d=daysTo(t.date),c=cssv(t.cvar);
+      const row=document.createElement("div"); row.className="race-row"; row.style.setProperty("--rc",c);
+      row.innerHTML='<div class="pri">'+(t.pri<9?t.pri:'·')+'</div><div class="race-main"><div class="nm">'+esc(t.name)+'</div>'+
+        '<div class="mt">'+mdDate(t.date)+' · '+esc(t.cat)+' · 목표 '+esc(t.goal)+'</div></div>'+
+        '<div class="race-dday"><div class="d">'+(d>=0?"D-"+d:"완료")+'</div><div class="l">'+shortDate(t.date)+'</div></div>';
+      el.appendChild(row);});
+  }
+  function renderFitness(){
+    const items=[
+      {k:"VO₂max",v:"53.3",u:"ml/kg/min",n:"상위 30% · 체력나이 23.6세",rank:"상위 30%"},
+      {k:"젖산역치",v:"4:55",u:"/km",n:"상위 16% · 지속력 강점",rank:"상위 16%"},
+      {k:"러닝 이코노미",v:"101",u:"kcal/km",n:"하위권 · 최우선 개선 포인트",rank:null},
+      {k:"최대심박",v:"196",u:"bpm",n:"Fatmax 6:45/km · HR 135~150",rank:null},
+      {k:"체성분",v:"66.4",u:"kg",n:"체지방 21.0% · 골격근 29.3kg",rank:null},
+      {k:"BMI",v:"21.1",u:"",n:"177.4cm · 러너로 양호",rank:null},
+    ];
+    const el=document.getElementById("fitness"); el.innerHTML="";
+    items.forEach(it=>{const d=document.createElement("div"); d.className="stat";
+      d.innerHTML='<div class="k">'+it.k+(it.rank?' <span class="rank">'+it.rank+'</span>':"")+'</div><div class="v">'+it.v+(it.u?' <small>'+it.u+'</small>':"")+'</div><div class="n">'+it.n+'</div>';
+      el.appendChild(d);});
+    document.getElementById("fitNote").textContent="CPET 종합: 심폐·지속력은 좋은데 같은 속도를 남들보다 힘들게 달림 → 지금은 러닝 이코노미(효율) 개선이 가장 효과 큼.";
+  }
+  function renderPB(){
+    const el=document.getElementById("pbGrid"); el.innerHTML="";
+    ORDER.forEach(k=>{const sp=SPORTS[k],best=pb(bySport(k)),c=cssv(sp.cvar);
+      const d=document.createElement("div"); d.className="stat"; d.style.borderLeft="3px solid "+c;
+      d.innerHTML='<div class="k">'+sp.short+'</div><div class="v">'+(best?fmt(best.timeSec):"—")+'</div><div class="n">'+(best?esc(best.event):"기록 없음")+'</div>';
+      el.appendChild(d);});
+  }
+
+  /* ---- TARGETS (VDOT) ---- */
+  function renderTargets(){
+    const ov=overallVDOT(), vSp=speedVDOT(), vol=runVolume();
+    const nd=document.getElementById("vdotNote").querySelector("div");
+    if(ov){ const fv=distVDOT("full");
+      nd.innerHTML='<b>예측 방식:</b> 속도엔진 VDOT ~'+Math.round(vSp)+'(10K·하프 기록)에서 <b>거리·훈련량 지구력 감쇠</b>를 적용하고, <b>VO₂max '+PHYSIO.vo2max+'</b>를 생리 상한으로 사용. '+(fv?('마라톤 기록 VDOT ~'+Math.round(fv)+' — 지구력이 병목. '):'')+(vol.weeklyKm>0.5?('최근 주 '+Math.round(vol.weeklyKm)+'km·최장 '+Math.round(vol.longestRun)+'km 반영.'):'훈련량 데이터가 없어 지금은 기록 기반(세션 import 시 훈련량 반영).');
+    } else nd.textContent="러닝 기록이 쌓이면 예측을 표시합니다.";
+    const el=document.getElementById("targets"); el.innerHTML="";
+    TARGETS.slice().sort((a,b)=>a.pri-b.pri).forEach(t=>{
+      const c=cssv(t.cvar),d=daysTo(t.date);
+      let estHtml, goalHtml, refHtml="";
+      if(t.sp&&SPORTS[t.sp].dist&&t.goalSec){
+        const pm=predictMulti(t.sp), goalV=vdot(SPORTS[t.sp].dist*1000,t.goalSec);
+        goalHtml='<div class="mini"><div class="k">목표</div><div class="v">'+esc(t.goal)+'</div><div class="vd">필요 VDOT ~'+Math.round(goalV)+'</div></div>';
+        estHtml='<div class="mini est"><div class="k">예측 '+(pm&&pm.hasVol?'(훈련량 반영)':'(기록 기반)')+'</div><div class="v">'+(pm?fmt(pm.timeReal):"—")+'</div><div class="vd">VDOT ~'+(pm?Math.round(pm.realV):"—")+'</div></div>';
+        if(pm){ const calTxt=(pm.hasVol&&pm.calibrated)?(' · 레이스보정 '+(pm.corr>=0?'+':'')+pm.corr.toFixed(1)+'VDOT'):'';
+          refHtml='<div class="verdict" style="color:var(--muted);font-size:11.5px"><span class="ic">📊</span><span>생리 상한 <b>'+fmt(pm.timeCeil)+'</b>(VO₂max '+PHYSIO.vo2max+') · 속도엔진 VDOT '+Math.round(pm.vSpeed)+(pm.hasVol?(' · 지구력계수 '+Math.round(pm.EF*100)+'%'):'')+calTxt+'</span></div>'; }
+      } else {
+        goalHtml='<div class="mini"><div class="k">목표</div><div class="v">'+esc(t.goal)+'</div></div>';
+        estHtml='<div class="mini est"><div class="k">현재</div><div class="v">완주 가능</div></div>';
+      }
+      const box=document.createElement("div"); box.className="tgt";
+      box.innerHTML='<div class="top"><span class="pribadge" style="background:'+c+'">'+t.pri+'순위</span><span class="nm">'+esc(t.name)+'</span>'+
+        '<span class="when">'+mdDate(t.date)+' · '+(d>=0?"D-"+d:"완료")+'</span></div>'+
+        '<div class="cmp">'+goalHtml+estHtml+'</div>'+
+        '<div class="verdict"><span class="ic">'+t.vico+'</span><span>'+esc(t.verdict)+'</span></div>'+refHtml;
+      el.appendChild(box);});
+  }
+  function renderGoals(){
+    const el=document.getElementById("goals"); el.innerHTML="";
+    ORDER.forEach(k=>{const sp=SPORTS[k],recs=bySport(k),best=pb(recs),c=cssv(sp.cvar);
+      const card=document.createElement("div"); card.className="goal"; card.style.setProperty("--gc",c); let b="";
+      if(sp.kind==="time"){
+        const gap=best?best.timeSec-sp.goalSec:null,done=gap!=null&&gap<=0; let prog=0;
+        if(recs.length>=2&&best){const worst=recs.reduce((m,r)=>r.timeSec>m.timeSec?r:m);const span=worst.timeSec-sp.goalSec;prog=span>0?Math.max(.04,Math.min(1,(worst.timeSec-best.timeSec)/span)):(done?1:0);}else if(best)prog=done?1:.06;
+        b+='<div class="gs">'+sp.short+'</div><div class="gt">목표 '+sp.goalLabel.replace("sub ","")+'</div>';
+        b+='<div class="gv">'+(best?fmt(best.timeSec):"—")+' <small>'+(best?"PB":"—")+'</small></div>';
+        b+=best?(done?'<div class="gap done">🎉 달성</div>':'<div class="gap">목표까지 -'+fmt(gap)+'</div>'):'<div class="gap" style="color:var(--muted)">기록 없음</div>';
+        b+='<div class="bar"><i style="width:'+Math.round(prog*100)+'%"></i></div>';
+      }else{
+        b+='<div class="gs">'+sp.short+'</div><div class="gt">목표 '+esc(sp.goalLabel)+'</div>';
+        b+='<div class="gv" style="font-size:16px">'+(best?fmt(best.timeSec):"—")+' <small>'+(sp.goalNote?"올림픽 완주":"도전 예정")+'</small></div>';
+        b+=best?'<div class="gap"><span class="pill g">▲ 완주 경험</span></div>':'<div class="gap" style="color:var(--muted)">도전 예정</div>';
+        b+='<div class="bar"><i style="width:'+(best?55:8)+'%"></i></div>';
+      }
+      card.innerHTML=b; el.appendChild(card);});
+  }
+
+  /* ---- TRAINING ---- */
+  /* ---- 존 이력 (GoldenCheetah 'zones with start date'): 과거 세션은 그 시점의 존으로 해석 ---- */
+  const ZONE_HISTORY=[
+    {from:"2026-09-12",label:"10K 우선 시즌 (속도엔진 VDOT ~48)",zones:ZONES},
+    {from:"2026-01-01",label:"풀코스 sub-3:40 프로젝트 (마라톤 VDOT ~40 기준)",zones:[
+      {z:"회복 / 이지",cvar:"--s-full",pace:"6:00~6:40/km",use:"HR 135~150"},
+      {z:"롱런",cvar:"--s-10k",pace:"5:50~6:20/km",use:"지구력"},
+      {z:"마라톤페이스",cvar:"--s-half",pace:"5:10~5:20/km",use:"sub-3:40 감각"},
+      {z:"템포 / 역치",cvar:"--s-tri",pace:"4:50~5:00/km",use:"젖산역치"},
+      {z:"인터벌",cvar:"--s-cycle",pace:"4:10~4:25/km",use:"VO₂max"}]},
+  ];
+  function zonesAt(dateStr){ const d=dateStr||(TODAY.getFullYear()+"-"+pad(TODAY.getMonth()+1)+"-"+pad(TODAY.getDate())); const hit=ZONE_HISTORY.filter(h=>h.from<=d).sort((a,b)=>a.from<b.from?1:-1)[0]; return hit||ZONE_HISTORY[ZONE_HISTORY.length-1]; }
+  function zoneTable(zs){ return '<thead><tr><th>존</th><th>페이스</th><th>용도</th></tr></thead><tbody>'+zs.map(z=>'<tr><td class="z"><span class="zc" style="background:'+cssv(z.cvar)+'"></span>'+z.z+'</td><td class="p">'+z.pace+'</td><td style="color:var(--ink-2)">'+z.use+'</td></tr>').join("")+'</tbody>'; }
+  function renderZones(){
+    const cur=zonesAt();
+    document.getElementById("zones").innerHTML=zoneTable(cur.zones);
+    const sub=document.getElementById("zonesSub"); if(sub) sub.textContent=cur.label+' · 적용 '+shortDate(cur.from)+'~';
+    const hist=document.getElementById("zonesHist"); if(!hist)return;
+    const prev=ZONE_HISTORY.filter(h=>h!==cur).sort((a,b)=>a.from<b.from?1:-1);
+    if(!prev.length){hist.innerHTML="";return;}
+    hist.innerHTML='<div class="week" style="margin:4px 0 0"><div class="wh" style="padding:9px 12px"><span class="wd">이전 존 이력 '+prev.length+'건 (과거 세션 해석용)</span><span class="chev" style="margin-left:auto">›</span></div><div class="wbody" style="padding:0 6px 6px">'+
+      prev.map(h=>'<div style="font-size:12px;color:var(--muted);padding:6px 6px 2px">'+esc(h.label)+' · '+shortDate(h.from)+'~'+'</div><table class="ztbl">'+zoneTable(h.zones)+'</table>').join("")+'</div></div>';
+    hist.querySelector(".wh").addEventListener("click",()=>hist.querySelector(".week").classList.toggle("open"));
+  }
+
+  /* ---- 주간 부하 목표 (TrainingPeaks ATP 층): 페이즈 배수 × (기준 CTL×7) vs 실제 주간 부하 ---- */
+  const ATP_PHASE={w1:["베이스+스피드",1.05],w2:["피크 퀄리티",1.10],w3:["테이퍼+레이스",0.75],w4:["회복+레이스",0.70],w5:["회복·재구축",0.95],w6:["피크 롱런",1.10],w7:["테이퍼+풀",0.65]};
+  function atpTable(){
+    const series=pmc(); if(!series.length) return [];
+    const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
+    const st0=weekStart(WEEKS[0]); const st0k=st0?k(st0):null;
+    let ref=null; if(st0k){ const before=series.filter(p=>p.date<st0k); ref=before.length?before[before.length-1].ctl:null; }
+    if(ref==null) ref=series[series.length-1].ctl;
+    const refWeekly=Math.max(7*ref, 80); // 기준 주간 부하 = CTL×7 (최소 80: 데이터 없을 때 바닥값)
+    const map=dailyLoads();
+    return WEEKS.map(w=>{ const ph=ATP_PHASE[w.id]||["",1], st=weekStart(w); let actual=0;
+      if(st){ for(let i=0;i<7;i++){ const d=new Date(st); d.setDate(d.getDate()+i); actual+=map[k(d)]||0; } }
+      const target=refWeekly*ph[1]; const isCur=st&&(()=>{const e=new Date(st); e.setDate(e.getDate()+6); return TODAY>=st&&TODAY<=e;})();
+      const past=st&&(()=>{const e=new Date(st); e.setDate(e.getDate()+6); return TODAY>e;})();
+      return {id:w.id,label:w.label,range:w.range,phase:ph[0],mult:ph[1],target,actual,pct:Math.round(actual/target*100),isCur,past,refCTL:ref,rrAdj:false}; })
+      .map((r,i,arr)=>{ // R2: Ramp Rate>8이면 '다음 주' 목표 -10%
+        const rr=rampRate(series)||0; const firstFuture=arr.findIndex(x=>!x.past&&!x.isCur);
+        if(!state.adaptOff&&rr>8&&i===firstFuture){ r.target*=0.9; r.mult=Math.round(r.mult*0.9*100)/100; r.pct=Math.round(r.actual/r.target*100); r.rrAdj=true; }
+        return r; });
+  }
+
+  /* ---- 적응형 계획 (룰 엔진): 실제 세션·부하 상태를 반영해 '앞으로의' 항목만 조정. 원문·이유 보존, 토글 가능. ----
+     R1 과피로(TSB) · R2 Ramp Rate · R3 미실행 키세션 보충 · R4 계획 외 고강도 → 주 2회 상한 · R5 주간 부하 초과 · R6 레이스 D-2~당일 보호 */
+  function planKind(s){ const t=s.tag||""; if(t==="레이스")return "race"; if(t==="휴식")return "rest"; if(t==="수영"||t==="사이클")return "cross"; if(t==="롱런")return "long"; if(["인터벌","역치","샤프너"].indexOf(t)>=0)return "hard"; return "easy"; }
+  function sessIntensity(s){ if(+s.mhr>60) return s.mhr/PHYSIO.maxHR; return (+s.rpe||5)/10; }
+  /* 요일 유동 → 주 단위 룰 엔진. '아직 안 한' 슬롯만 조정, 대회(date)·수영·사이클은 그대로. */
+  function adaptPlan(){
+    const adj={}, log=[], remaining=[], carry=[]; if(state.adaptOff) return {adj,log,remaining,carry};
+    const today=dkey(TODAY); const series=pmc(); const last=series.length?series[series.length-1]:{tsb:0}; const tsb=last.tsb; const rr=rampRate(series)||0;
+    const atp=atpTable();
+    const t10=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()); t10.setDate(t10.getDate()+10); const t10k=dkey(t10);
+    const anyCur=WEEKS.some(x=>{const s=weekStart(x),e=weekEnd(x);return s&&TODAY>=s&&TODAY<=e;});
+    WEEKS.forEach(w=>{
+      const st=weekStart(w), en=weekEnd(w); if(!st||dkey(en)<today) return; // 지난 주 제외
+      const stK=dkey(st), enK=dkey(en); const cur=TODAY>=st&&TODAY<=en; const within10=stK<=t10k;
+      const f=planFulfill(w); const kinds={}; w.sess.forEach(s=>kinds[s.id]=planKind(s));
+      const wkRun=allSessions().filter(x=>x.sport==="run"&&x.date>=stK&&x.date<=enK);
+      const hardDone=wkRun.filter(x=>sessIntensity(x)>=0.85).length;
+      const hardCap=(tsb<-10&&tsb>=-30&&within10)?1:2; let hardBudget=Math.max(0,hardCap-hardDone);
+      const row=atp.find(r=>r.id===w.id); const over=cur&&row&&row.target>0&&row.actual>row.target*1.15;
+      const unf=w.sess.filter(s=>!s.date&&kinds[s.id]!=="rest"&&!(slotDone(s.id)||f.has(s.id))&&slotStatusOf(s.id)!=="skip");
+      unf.forEach(s=>{
+        const set=(txt,tag,reason,rule)=>{ adj[s.id]={t:"↔ "+txt,tag,reason,orig:s.t}; log.push({week:w.label,from:s.t,to:txt,reason,rule}); };
+        const k=kinds[s.id];
+        if(k==="hard"){
+          if(tsb<-30&&within10) set("이지런 40분 (강도 강등)","이지","TSB "+Math.round(tsb)+" 과피로 — 고강도 금지","R1");
+          else if(over) set("이지런 35분 (단축)","이지","이번 주 부하 "+row.pct+"% (목표 115% 초과)","R5");
+          else if(hardBudget<=0) set("이지런 40분 (강도 강등)","이지","고강도 주 "+hardCap+"회 상한(이미 "+hardDone+"회 실시)","R4");
+          else hardBudget--;
+        } else if(k==="long"){
+          if(tsb<-30&&within10) set("롱런 60~70분 (−30% 단축)","롱런","TSB "+Math.round(tsb)+" 과피로","R1");
+          else if(rr>8&&within10) set("롱런 −20% 단축","롱런","Ramp Rate +"+rr.toFixed(1)+"/주 (부상 위험)","R2");
+          else if(over) set("롱런 단축(70분)","롱런","이번 주 부하 목표 115% 초과","R5");
+        } else if(k==="easy"){
+          if(over) set("이지런 25~30분 (단축) 또는 휴식","이지","이번 주 부하 목표 115% 초과","R5");
+          else if(tsb<-30&&within10) set("휴식 또는 회복 조깅 20분","휴식","TSB "+Math.round(tsb)+" 과피로","R1");
+        }
+      });
+      // 이번 주(없으면 다가오는 첫 주) 남은 권장 순서
+      if(cur || (!anyCur && stK>today && remaining.length===0)){
+        w.sess.forEach(s=>{ if(kinds[s.id]==="rest"||s.date)return; if(slotDone(s.id))return; const a=adj[s.id]; remaining.push(a?("↔ "+a.t.replace(/^↔ /,"")):s.t); });
+      }
+    });
+    return {adj,log,remaining,carry};
+  }
+  function renderAdapt(res){
+    const el=document.getElementById("adaptCard"); if(!el)return;
+    const series=pmc(); const last=series.length?series[series.length-1]:{tsb:0}; const rr=rampRate(series);
+    const head='<div class="phead"><h3 style="font-size:14px">자동 조정 '+(state.adaptOff?'<span class="tag" style="color:var(--muted);background:var(--surface-3)">꺼짐</span>':'<span class="tag" style="color:var(--good);background:var(--good-soft)">켜짐</span>')+'</h3><span class="count">TSB '+(last.tsb>=0?'+':'')+Math.round(last.tsb)+(rr!=null?(' · RR '+(rr>=0?'+':'')+rr.toFixed(1)):'')+'</span><button class="del" id="adaptToggle" style="margin-left:auto;font-size:12px;color:var(--accent)">'+(state.adaptOff?'켜기':'끄기')+'</button></div>';
+    let body='';
+    if(state.adaptOff) body='<div style="font-size:12.5px;color:var(--muted);padding:0 14px 12px">계획 원문 그대로 표시 중. 켜면 실제 세션·피로도·주간 부하에 따라 남은 항목이 자동 조정됩니다.</div>';
+    else {
+      if(res.log.length) body+='<div style="padding:0 6px 4px">'+res.log.map(l=>'<div style="display:flex;gap:9px;align-items:flex-start;padding:8px 8px;border-top:1px solid var(--hair);font-size:12.5px"><span class="tag" style="flex:none">'+l.rule+'</span><div><div><b>'+esc(l.to)+'</b></div><div style="color:var(--muted);font-size:11.5px;text-decoration:line-through">'+esc(l.from)+'</div><div style="color:var(--ink-2);font-size:11.5px">'+esc(l.reason)+' · '+esc(l.week)+'</div></div></div>').join("")+'</div>';
+      else body+='<div style="font-size:12.5px;color:var(--ink-2);padding:0 14px 8px">✅ 조정 없음 — 피로·부하·실행 상태가 계획 범위 안.</div>';
+      if(res.remaining&&res.remaining.length) body+='<div style="padding:8px 14px 6px;border-top:1px solid var(--hair)"><div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:4px">이번 주 남은 권장 순서 (요일 유동)</div><div style="font-size:12.5px;color:var(--ink-2);line-height:1.7">'+res.remaining.map(esc).join(' &nbsp;›&nbsp; ')+'</div></div>';
+    }
+    el.innerHTML='<div class="card">'+head+body+'<div style="font-size:11px;color:var(--muted);padding:0 14px 10px">체크박스 탭: <b>없음 → 완료(✓) → 부분(◐, 메모) → 없음</b>. 세션은 자동으로 체크되지 않으니 직접 체크하세요. 안전 조정(R1 과피로·R2 Ramp Rate·R5 부하)은 남은 항목에만 적용됩니다.</div></div>';
+    const tg=document.getElementById("adaptToggle"); if(tg) tg.addEventListener("click",toggleAdapt);
+  }
+  async function toggleAdapt(){ state.adaptOff=!state.adaptOff; if(state.db){try{await state.db.doc("settings/plan").set({adaptOff:state.adaptOff});}catch(e){}} renderWeeks(); }
+  function renderATP(){
+    const el=document.getElementById("atp"); if(!el)return; const rows=atpTable(); if(!rows.length){el.innerHTML="";return;}
+    const ref=rows[0].refCTL;
+    el.innerHTML='<div class="card"><div class="phead"><h3 style="font-size:14px">주간 부하 목표 (ATP)</h3><span class="count">기준 CTL '+Math.round(ref)+' → 주 '+Math.round(Math.max(7*ref,80))+' × 페이즈 배수</span></div><div class="tbl-scroll"><table class="ztbl"><thead><tr><th>주</th><th>페이즈</th><th style="text-align:right">목표</th><th style="text-align:right">실제</th><th style="text-align:right">달성</th></tr></thead><tbody>'+
+      rows.map(r=>{ const c=r.pct>=90&&r.pct<=115?'var(--good)':(r.pct>115?'var(--crit)':(r.past?'var(--warn)':'var(--muted)'));
+        return '<tr'+(r.isCur?' style="background:var(--accent-soft)"':'')+'><td class="z">'+r.label+(r.isCur?' ●':'')+'</td><td style="color:var(--ink-2)">'+r.phase+' <span style="color:var(--muted);font-size:11px">×'+r.mult.toFixed(2)+'</span></td><td class="p" style="text-align:right">'+Math.round(r.target)+'</td><td class="p" style="text-align:right">'+(r.actual>0?Math.round(r.actual):'—')+'</td><td class="p" style="text-align:right;color:'+c+'">'+(r.actual>0||r.past?r.pct+'%':'—')+'</td></tr>'; }).join("")+
+      '</tbody></table></div><div style="font-size:11.5px;color:var(--muted);padding:2px 12px 10px">달성 90~115% = 계획대로 · 115%↑ 과부하(강도↓) · 미달은 회복주면 정상. 목표는 계획 시작 시점 CTL에서 자동 산출되며, 세션을 가져오면 실제가 채워집니다.</div></div>';
+  }
+  /* ---- 계획 vs 실행 자동 매칭 (TrainingPeaks 'planned vs completed' 방식) ----
+     각 플랜 항목의 날짜(주 시작일+요일)와 종목을 도출하고, 같은 날 같은 종목 세션이 있으면 자동 완료. 준수율 = 지난 날짜의 비휴식 항목 중 실행된 비율. */
+  const PLAN_YEAR=2026;
+  function weekStart(w){ const m=w.range.match(/^(\d+)\/(\d+)/); return m? new Date(PLAN_YEAR, +m[1]-1, +m[2]) : null; }
+  function weekEnd(w){ const st=weekStart(w); if(!st)return null; const e=new Date(st); e.setDate(e.getDate()+6); return e; }
+  function slotSport(s){ const tag=s.tag||""; if(tag==="수영")return "swim"; if(tag==="사이클")return "bike"; if(tag==="휴식")return "rest"; if(tag==="레이스")return s.t.indexOf("🚴")>=0?"bike":"run"; return "run"; }
+  function findSlot(id){ for(const w of WEEKS){ const s=w.sess.find(x=>x.id===id); if(s) return s; } return null; }
+  /* ---- 종목별 유형 · 이모지 · 라벨 ----
+     러닝: 이지런/롱런/인터벌/템포/스트라이드/레이스/기타 · 사이클(실외만): 업힐/지구력/레이스 · 수영: 레슨/야외/자유 · 근력: 유형 없음(메모) */
+  const SESS_KINDS={
+    run:{easy:"이지런",long:"롱런",interval:"인터벌",tempo:"템포",stride:"스트라이드",race:"레이스",other:"기타"},
+    bike:{endurance:"지구력",uphill:"업힐",commute:"출퇴근",race:"레이스"},
+    swim:{free:"자유",lesson:"레슨",open:"야외"} };
+  const SPORT_EMOJI={run:"🏃🏽‍♂️",bike:"🚴🏽‍♀️",swim:"🏊🏽‍♂️",strength:"🏋🏽‍♂️",hike:"🥾",other:"🤸🏽‍♂️"};
+  const SPORT_KO={run:"러닝",bike:"사이클",swim:"수영",strength:"근력",hike:"하이킹",other:"기타"};
+  // 슬롯 태그 → 러닝 유형
+  function slotKind(s){ const t=s.tag||""; if(t==="이지")return "easy"; if(t==="폼")return "easy"; if(t==="롱런")return "long"; if(t==="인터벌"||t==="역치"||t==="샤프너")return "interval"; if(t==="레이스")return "race"; return null; }
+  // 세션 라벨: 유형 → 연결 슬롯 → 거리 추정
+  function sessKindLabel(s){
+    const K=SESS_KINDS[s.sport]; if(s.sport==="strength"){ const sl=s.slot&&findSlot(s.slot); return (s.lower||(sl&&/하체보강/.test(sl.t)))?"하체":"근력"; }
+    if(!K) return SPORT_KO[s.sport]||s.sport;
+    if(s.kind&&K[s.kind]) return K[s.kind];
+    if(s.slot){ const sl=findSlot(s.slot); const k=sl&&slotKind(sl); if(k&&K[k]) return K[k]; }
+    if(s.sport==="run") return (+s.dist>=12)?"롱런":"이지런";
+    if(s.sport==="bike") return ((+s.dist||0)<=10||(+s.durationMin||0)<=20)?"출퇴근":"지구력"; // 유형 미지정 라이딩(임포트 등): 10km 이하 또는 20분 이하 = 출퇴근
+    if(s.sport==="swim") return "자유"; return "";
+  }
+  function sessEmoji(s){ return SPORT_EMOJI[s.sport]||"•"; }
+  function fmtDist(s){ if(!(+s.dist>0)) return ""; return s.sport==="swim"?(Math.round(s.dist*1000)+"m"):((Math.round(s.dist*100)/100)+"km"); }
+  /* ---- 슬롯 목표 수치화 ----
+     main: {reps} | {km,min} | {min} — 반복(인터벌·역치)은 횟수, 이지·롱런은 거리(없으면 분→추정km), 사이클은 시간(하한)
+     sub: {kind:'stride',n} | {kind:'lower',n:1} */
+  function parseTarget(s){
+    const sp=slotSport(s); if(sp==="rest"||s.tag==="레이스") return null;
+    const t=s.t.replace(/^[①-⑦＋]\s*/,""); const T={sport:sp,main:null,sub:null,text:t.split(" — ")[0]};
+    let m;
+    const MIN_RE=/(\d+)(?:~(\d+))?분(?!마다)/;
+    if((m=t.match(/(\d+(?:\.\d+)?)\s*(m|km)\s*[×x]\s*(\d+)/))){ T.main={reps:+m[3], unit:m[1]+m[2]}; }
+    else if((m=t.match(/~\s*(\d+(?:\.\d+)?)\s*km/))){ T.main={km:+m[1]}; const mm=t.match(MIN_RE); if(mm) T.main.min=+mm[1]; }
+    else if((m=t.match(MIN_RE))){ T.main={min:+m[1]};
+      if(sp==="run"){ const mid=(+m[1]+(m[2]?+m[2]:+m[1]))/2; T.main.km=Math.round(mid/6.34*10)/10; T.main.kmEst=true; } } // 6:20/km 보수적 추정 (enrichSlot과 동일)
+    else if((m=t.match(/(\d+(?:\.\d+)?)\s*(?:~\s*\d+(?:\.\d+)?)?\s*km/))){ T.main={km:+m[1]}; }
+    if((m=t.match(/스트라이드\s*(\d+)/))) T.sub={kind:"stride",n:+m[1]};
+    else if(/하체보강/.test(t)) T.sub={kind:"lower",n:1};
+    if(!T.main&&!T.sub) return null; return T;
+  }
+  const EASY_PACE_MIN=6.17; // km→분 환산(이지 6:10/km)
+  // 달성률·잔여 계산 (연결 기록 합계 vs 목표). 상태 변경은 하지 않음(수동).
+  function slotProgress(s){
+    const T=parseTarget(s); if(!T) return null;
+    const recs=allSessions().filter(x=>x.slot===s.id);
+    const same=recs.filter(x=>x.sport===T.sport);
+    const km=Math.round(same.reduce((a,r)=>a+(+r.dist||0),0)*100)/100, min=same.reduce((a,r)=>a+(+r.durationMin||0),0);
+    const reps=same.reduce((a,r)=>a+(+r.reps||0),0), strides=same.reduce((a,r)=>a+(+r.strides||0),0);
+    const lower=recs.some(r=>r.sport==="strength"||+r.lower>0);
+    const P={T,recs,km,min,reps,strides,lower,mainPct:null,mainTxt:"",remain:[],full:true};
+    if(T.main){
+      if(T.main.reps){ P.mainPct=reps/T.main.reps; P.mainTxt="반복 "+reps+"/"+T.main.reps; if(reps<T.main.reps) P.remain.push("반복 "+(T.main.reps-reps)+"회"); }
+      else if(T.main.km){ const kmPct=km/T.main.km, minPct=T.main.min?min/T.main.min:0; P.mainPct=Math.max(kmPct,minPct);
+        if(km>0||!T.main.min){ P.mainTxt=km+"/"+T.main.km+"km"+(T.main.kmEst?"(추정)":""); const r=Math.round((T.main.km-km)*10)/10; if(kmPct<0.999&&minPct<0.999&&r>0.05) P.remain.push((T.sport==="run"?"이지 ":"")+r+"km(≈"+Math.round(r*EASY_PACE_MIN)+"분)"); }
+        else { P.mainTxt=min+"/"+T.main.min+"분"; if(min<T.main.min) P.remain.push((T.main.min-min)+"분"); } }
+      else if(T.main.min){ P.mainPct=min/T.main.min; P.mainTxt=min+"/"+T.main.min+"분"; if(min<T.main.min) P.remain.push((T.main.min-min)+"분"); }
+      if(P.mainPct!=null&&P.mainPct<0.999) P.full=false;
+    }
+    if(T.sub){
+      if(T.sub.kind==="stride"){ P.subTxt="스트라이드 "+strides+"/"+T.sub.n; if(strides<T.sub.n){ P.remain.push("스트라이드 "+(T.sub.n-strides)+"회"); P.full=false; } }
+      else { P.subTxt="하체보강 "+(lower?"✓":"미실시"); if(!lower){ P.remain.push("하체보강"); P.full=false; } }
+    }
+    // 잔여 소멸 힌트: 주항목 잔여 ≤20%이고 보조항목 완료면 '소멸 무방'(단일 기준, 종목 구분 없음)
+    P.minor=(!P.full&&P.mainPct!=null&&P.mainPct>=0.8&&(!T.sub||(T.sub.kind==="stride"?strides>=T.sub.n:lower)));
+    return P;
+  }
+  function planItemMeta(w,s){ return {date:s.date||null, sport:slotSport(s), race:!!s.date}; }
+  function planItemMetaUnused(){}
+  // 자동 체크 OFF (사용자 요청): 세션으로 슬롯을 자동 완료하지 않음. 완료/부분은 수동 체크만.
+  function planFulfill(w){ return new Set(); }
+  function isDone(w,s,fulfill){ return slotDone(s.id)||(fulfill||planFulfill(w)).has(s.id); }
+  // 이지/폼/롱런 슬롯에 페이스·거리 힌트 자동 부가(거리 표기 없을 때만)
+  function enrichSlot(txt, tag){
+    if(/km|\/km/.test(txt)) return txt;
+    const m=txt.match(/(\d+)(?:~(\d+))?분/); if(!m) return txt;
+    const midMin=(+m[1]+(m[2]?+m[2]:+m[1]))/2; let label,pLo,pHi;
+    if(tag==="이지"||tag==="폼"){ label="6:00~6:20/km"; pLo=6.0; pHi=6.34; }
+    else if(tag==="롱런"){ label="5:50~6:20/km"; pLo=5.84; pHi=6.34; }
+    else return txt;
+    const km=Math.round(midMin/pHi*10)/10; return txt+" · "+label+" (~"+km+"km)";
+  }
+  function planCompliance(weeks){
+    const today=dkey(TODAY); let due=0, hit=0;
+    (weeks||WEEKS).forEach(w=>{ const st=weekStart(w); if(!st||dkey(st)>today) return; const f=planFulfill(w);
+      w.sess.forEach(s=>{ if(slotSport(s)==="rest")return; if(s.date&&s.date>today) return; due++; if(isDone(w,s,f)) hit++; }); });
+    return {due, hit, pct: due?Math.round(hit/due*100):null};
+  }
+  // 펼침 상태(세션 중 유지): 기본값 — 끝난 주차 접기, 완료(✓) 슬롯 실제기록 접기. 사용자가 누르면 그 상태 유지.
+  const foldState={};
+  function isOpen(key,def){ return (key in foldState)?foldState[key]:def; }
+  function renderWeeks(){
+    const wrap=document.getElementById("weeks"); if(!wrap)return; wrap.innerHTML="";
+    const today=dkey(TODAY);
+    const res=adaptPlan(); const ADJ=res.adj;
+    WEEKS.forEach((w,i)=>{
+      const f=planFulfill(w);
+      const total=w.sess.length, done=w.sess.filter(s=>isDone(w,s,f)).length;
+      const comp=planCompliance([w]);
+      const st=weekStart(w), en=weekEnd(w), isCur=st&&TODAY>=st&&TODAY<=en, isPast=en&&dkey(en)<today;
+      const card=document.createElement("div"); const wkKey="wk:"+w.label; card.className="week card"+(isOpen(wkKey,!isPast&&(isCur||i<2))?" open":"");
+      let head='<div class="wh"><span class="wn">'+w.label+(isCur?' <span class="tag">이번 주</span>':'')+'</span><span class="wd">'+w.range+' · '+esc(w.focus)+'</span><span class="prog">'+done+'/'+total+(comp.due?(' · 준수 '+comp.pct+'%'):'')+'</span><span class="chev">›</span></div>';
+      let body='<div class="wbody">';
+      w.sess.forEach(s=>{const stat=slotStatusOf(s.id); const on=stat==="done";
+        const missed=isPast&&!on&&stat!=="partial"&&slotSport(s)!=="rest"&&!s.date;
+        const glyph=stat==="done"?"✓":stat==="partial"?"◐":"";
+        const chkc=stat==="done"?"chk on":stat==="partial"?"chk pt":"chk";
+        const a=ADJ[s.id]; const txt=a?a.t:enrichSlot(s.t,s.tag), tag=a?a.tag:s.tag;
+        const badge=(stat==="partial")?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">부분</span>':'';
+        body+='<div class="sess'+(on?" done":"")+'"><button class="'+chkc+'" data-sess="'+s.id+'" aria-label="상태 변경">'+glyph+'</button><div class="st">'+esc(txt)+(tag?' <span class="tag">'+esc(tag)+'</span>':"")+badge+(a?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">조정</span>':'')+(missed?' <span class="tag" style="color:var(--muted);background:var(--surface-3)">미완료</span>':'')+
+          (a?'<div style="font-size:11.5px;color:var(--muted);margin-top:2px"><s>'+esc(a.orig)+'</s> · '+esc(a.reason)+'</div>':'')+'</div></div>';});
+      // 완료(✓)·부분(◐) 슬롯: 주차 하단에 실제 기록 목록 + 달성률·잔여 + 2택(소멸 / 2차 기록) + 메모
+      const weekRemain=[];
+      w.sess.forEach(s=>{ const st=slotStatusOf(s.id); if(st!=="done"&&st!=="partial")return;
+        const short=s.t.replace(/^[①-⑦＋]\s*/,"").split(" — ")[0].slice(0,24);
+        const P=slotProgress(s); const recs=(P?P.recs:allSessions().filter(x=>x.slot===s.id)).slice().sort((a,b)=>a.date<b.date?-1:1);
+        const waived=!!(state.slot[s.id]&&state.slot[s.id].waived);
+        let prog="";
+        if(P){
+          const parts=[]; if(P.mainPct!=null) parts.push("달성 "+Math.min(999,Math.round(P.mainPct*100))+"% ("+P.mainTxt+")"); if(P.subTxt) parts.push(P.subTxt);
+          prog='<div class="prog-line">'+esc(parts.join(" · "))+'</div>';
+          if(P.full){ prog+='<div class="prog-line" style="color:var(--good)">목표 달성'+(st==="partial"?'':' ✓')+'</div>'+(st==="partial"?'<button class="rec-mini good" data-fin="'+esc(s.id)+'">✓ 완료로 변경</button>':''); }
+          else if(recs.length){
+            if(waived) prog+='<div class="prog-line" style="color:var(--muted)">잔여 소멸됨 ('+esc(P.remain.join(" · "))+') <button class="rec-mini" data-unwaive="'+esc(s.id)+'">되돌리기</button></div>';
+            else { prog+='<div class="prog-line" style="color:var(--warn)">잔여: '+esc(P.remain.join(" · "))+(P.minor?' <span style="color:var(--muted)">— 잔여 ≤20%, 소멸해도 무방</span>':'')+'</div>'+
+              '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><button class="rec-mini" data-waive="'+esc(s.id)+'">잔여 소멸</button>'+
+              (P.T.sub&&P.T.sub.kind==="lower"&&!P.lower?'<button class="rec-mini" data-recslot="'+esc(s.id)+'" data-recwk="'+esc(w.label)+'" data-recsport="strength" data-rectext="'+esc(short)+'">＋ 하체보강(근력) 기록</button>':'')+'</div>';
+              if(st==="partial") weekRemain.push.apply(weekRemain,P.remain); }
+          }
+        }
+        const recOpen=isOpen("rec:"+s.id, st!=="done");
+        body+='<div class="memo-box'+(recOpen?'':' fold')+'" data-mbox="'+esc(s.id)+'"><div class="memo-h tg" data-mtog="'+esc(s.id)+'"><span>'+(st==="done"?"✓":"◐")+' '+esc(short)+' — 실제 기록'+(P&&P.km>0?(' · 합계 '+P.km+'km'):'')+(recs.length?(' · '+recs.length+'건'):'')+'</span><span class="mchev">›</span></div><div class="mb-body">'+
+          recs.map(r=>'<div class="rec-line"><span>'+shortDate(r.date)+' · '+sessEmoji(r)+sessKindLabel(r)+(fmtDist(r)?(' '+fmtDist(r)):'')+' · '+(+r.durationMin||0)+'분'+(+r.reps>0?(' · 반복 '+r.reps):'')+(+r.strides>0?(' · 스트라이드 '+r.strides+'회'):'')+(+r.lower>0?' · 하체보강':'')+(+r.mhr>60?(' · '+r.mhr+'bpm'):'')+' · 부하 '+Math.round(sessLoad(r))+(r.note?(' · 📝'+esc(r.note)):'')+'</span><button class="del" data-sedit="'+esc(r.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-rdel="'+esc(r.id)+'" aria-label="삭제">✕</button></div>').join("")+
+          prog+
+          '<label class="memo-row"><span class="memo-lbl">메모</span><input class="memo-inp" data-note="'+esc(s.id)+'" value="'+esc(slotNoteOf(s.id))+'" placeholder="컨디션·특이사항"></label>'+
+          '<button class="rec-add" data-recslot="'+esc(s.id)+'" data-recwk="'+esc(w.label)+'" data-recsport="'+slotSport(s)+'" data-rectext="'+esc(short)+'">'+(recs.length?'＋ 2차 기록 추가 (잔여분 실시)':'＋ 실제 기록 입력 (거리·시간 · 심박 선택)')+'</button>'+
+          '</div></div>'; });
+      if(weekRemain.length) body+='<div class="week-remain">이번 주 잔여: '+esc(weekRemain.join(" · "))+' <span style="color:var(--muted)">— 다른 날 실시 후 해당 슬롯에 2차 기록</span></div>';
+      body+='</div>'; card.innerHTML=head+body;
+      card.querySelector(".wh").addEventListener("click",e=>{if(e.target.closest(".chk"))return; card.classList.toggle("open"); foldState[wkKey]=card.classList.contains("open");});
+      wrap.appendChild(card);});
+    wrap.querySelectorAll(".chk").forEach(b=>b.addEventListener("click",()=>toggleSess(b.getAttribute("data-sess"))));
+    wrap.querySelectorAll("[data-mtog]").forEach(t=>t.addEventListener("click",()=>{ const id=t.getAttribute("data-mtog"), box=t.closest(".memo-box"); box.classList.toggle("fold"); foldState["rec:"+id]=!box.classList.contains("fold"); }));
+    wrap.querySelectorAll(".memo-inp").forEach(inp=>{ inp.addEventListener("change",()=>saveSlotNote(inp.getAttribute("data-note"),inp.value)); inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.blur();}); });
+    wrap.querySelectorAll("[data-recslot]").forEach(b=>b.addEventListener("click",()=>openSessForSlot(b.getAttribute("data-recslot"),b.getAttribute("data-recwk"),b.getAttribute("data-recsport"),b.getAttribute("data-rectext"))));
+    wrap.querySelectorAll(".del[data-rdel]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-rdel"))));
+    wrap.querySelectorAll("[data-sedit]").forEach(b=>b.addEventListener("click",()=>openSessEdit(b.getAttribute("data-sedit"))));
+    wrap.querySelectorAll("[data-waive]").forEach(b=>b.addEventListener("click",()=>setSlotWaived(b.getAttribute("data-waive"),true)));
+    wrap.querySelectorAll("[data-unwaive]").forEach(b=>b.addEventListener("click",()=>setSlotWaived(b.getAttribute("data-unwaive"),false)));
+    wrap.querySelectorAll("[data-fin]").forEach(b=>b.addEventListener("click",()=>setSlotStatus(b.getAttribute("data-fin"),"done")));
+    if(typeof renderATP==="function") renderATP();
+    if(typeof renderAdapt==="function") renderAdapt(res);
+  }
+  function renderPacing(){
+    document.getElementById("pacing").innerHTML=PACING.map(p=>'<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;width:78px;flex:none">'+p.seg+'</div><div><div style="font-family:Archivo;font-weight:700">'+p.pace+'</div><div style="font-size:12px;color:var(--ink-2)">'+esc(p.note)+'</div></div></div>').join("")+'<div style="font-size:12.5px;color:var(--ink-2);margin-top:10px">🎯 A레이스. <b>폴백:</b> 5km 지점에서 힘들면 4:22/km로 안정시켜 43:30 전후 확보. · 풀코스(11/1)는 목표 3:40 → 5:13/km 이븐: 하프까지 5:15로 보수적, 30km 이후 여유 있으면 5:08~5:10.</div>';
+  }
+
+  /* ---- LOAD / PMC ---- */
+  /* ---- 부하(스트레스) 계산 ----
+     1순위 TRIMP zonal (GoldenCheetah 계수: Z1 .50 · Z2 .92 · Z3 1.17 · Z4 1.33 · Z5 2.00, %HRmax 55/65/75/85/95 지점을 선형보간)
+       — 세션에 평균심박이 있으면 시간(분)×k(%HRmax). 세션 평균HR만 있으므로 존 체류 대신 평균HR 존으로 근사.
+     2순위 RPE 폴백: 시간×(RPE/10)²×1.6 (심박 없는 수동 입력). 두 척도는 60분 Z2~Z3에서 비슷한 크기(≈55~70)가 되도록 맞춤. */
+  const TRIMP_K=[[0.55,0.50],[0.65,0.92],[0.75,1.17],[0.85,1.33],[0.95,2.00]];
+  function trimpK(pct){ if(pct<=TRIMP_K[0][0]) return TRIMP_K[0][1]*Math.max(0.3,pct/TRIMP_K[0][0]);
+    for(let i=1;i<TRIMP_K.length;i++){ const [p0,k0]=TRIMP_K[i-1],[p1,k1]=TRIMP_K[i]; if(pct<=p1) return k0+(k1-k0)*(pct-p0)/(p1-p0); }
+    return TRIMP_K[TRIMP_K.length-1][1]; }
+  function trimpLoad(durationMin, mhr){ return (+durationMin||0)*trimpK(Math.min(1.05, mhr/PHYSIO.maxHR)); }
+  function loadMethod(s){ return (+s.mhr>60)?"TRIMP":"RPE"; }
+  function sessLoad(s){
+    if(+s.mhr>60) return trimpLoad(s.durationMin, +s.mhr);
+    if(s.load!=null&&s.load!==""&&!(+s.mhr>60)) return +s.load;
+    return (+s.durationMin||0)*Math.pow((+s.rpe||5)/10,2)*1.6; }
+  function _dupMatch(a,b){ return a.date===b.date && a.sport===b.sport && Math.abs((+a.durationMin||0)-(+b.durationMin||0))<3; }
+  // 우선순위: 브라이튼(수동 입력) > 직접 기록 세션 > 삼성헬스(자동). 겹치면 삼성 라이딩을 제외해 브라이튼을 우선 반영.
+  // 출퇴근 라이딩은 훈련이 아님 → 부하·누적·통계에서 제외(일지·달력에는 '훈련 제외'로 표시만)
+  function isCommute(s){ return s.sport==="bike"&&s.kind!=="race"&&sessKindLabel(s)==="출퇴근"; }
+  function allSessions(){ return allSessionsRaw().filter(s=>!isCommute(s)); }
+  function allSessionsRaw(){
+    const bry=state.brytons.slice();
+    const man=state.sessions.slice();
+    const sam=state.imports.filter(s=>!bry.some(b=>_dupMatch(b,s)));
+    // 가민(Intervals.icu): 같은 날 같은 종목을 직접 기록했으면 그날 그 종목은 직접 기록 우선(이중 계산 방지), Bryton과 겹치는 라이딩도 제외
+    const manDay=new Set(man.map(s=>s.date+"|"+s.sport));
+    const gar=(state.garmins||[]).filter(g=>!manDay.has(g.date+"|"+g.sport)&&!bry.some(b=>_dupMatch(b,g)));
+    const garDay=new Set(gar.map(s=>s.date+"|"+s.sport));
+    const sam2=sam.filter(s=>!garDay.has(s.date+"|"+s.sport));
+    return bry.concat(man, gar, sam2);
+  }
+  function dailyLoads(){
+    const map={};
+    // 대회는 최대 노력 ≈ Z5 TRIMP(k≈1.9). 같은 날 삼성 세션과 겹치면 이중 계산이 될 수 있어, 그 날 러닝 세션이 있으면 대회 부하는 생략.
+    const sessDays=new Set(allSessions().filter(s=>s.sport==="run").map(s=>s.date));
+    state.records.forEach(r=>{if(r.timeSec>0&&!sessDays.has(r.date)){const l=(r.timeSec/60)*1.9; map[r.date]=(map[r.date]||0)+l;}});
+    allSessions().forEach(s=>{const l=sessLoad(s); map[s.date]=(map[s.date]||0)+l;});
+    return map;
+  }
+  function pmc(){
+    const map=dailyLoads(); const keys=Object.keys(map);
+    const end=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate());
+    let start;
+    if(keys.length){start=new Date(Math.min.apply(null,keys.map(k=>+new Date(k+"T00:00:00"))));}
+    else {start=new Date(end); start.setDate(start.getDate()-1);}
+    const s42=1-Math.exp(-1/42), s7=1-Math.exp(-1/7);
+    let ctl=0,atl=0; const out=[];
+    for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+      const key=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+      const load=map[key]||0; ctl+=(load-ctl)*s42; atl+=(load-atl)*s7;
+      out.push({date:key,load:load,ctl:ctl,atl:atl,tsb:ctl-atl});
+    }
+    return out;
+  }
+  function statusOf(tsb){
+    if(tsb>10)return{t:"매우 신선",c:cssv("--good"),r:"완전히 회복됨. 레이스나 고강도 세션에 적합."};
+    if(tsb>5)return{t:"신선 · 컨디션 좋음",c:cssv("--good"),r:"질 좋은 훈련 가능. 키 세션 배치하기 좋음."};
+    if(tsb>=-10)return{t:"균형 · 훈련 가능",c:cssv("--accent"),r:"정상 훈련 범위. 계획대로 진행."};
+    if(tsb>=-30)return{t:"피로 누적 · 주의",c:cssv("--warn"),r:"고강도 줄이고 이지런·회복을 섞으세요."};
+    return{t:"과피로 · 회복 필요",c:cssv("--crit"),r:"오늘은 휴식 또는 아주 가벼운 회복 조깅만."};
+  }
+  function renderLoad(){
+    const series=pmc(); const today=series[series.length-1]||{ctl:0,atl:0,tsb:0};
+    const ls=document.getElementById("loadStats");
+    const cards=[["Fitness (CTL)",today.ctl,"--s-10k","장기 부하 · 체력"],["Fatigue (ATL)",today.atl,"--s-half","단기 부하 · 피로"],["Form (TSB)",today.tsb,"--s-tri","준비도 = CTL−ATL"]];
+    ls.innerHTML=cards.map(c=>'<div class="stat" style="border-left:3px solid '+cssv(c[2])+'"><div class="k">'+c[0]+'</div><div class="v">'+(c[1]>=0&&c[0].indexOf("Form")>=0?"+":"")+Math.round(c[1])+'</div><div class="n">'+c[3]+'</div></div>').join("");
+    const st=statusOf(today.tsb);
+    document.getElementById("statusCard").innerHTML='<div class="statusbox"><span class="statusdot" style="background:'+st.c+'"></span><div><div class="big" style="color:'+st.c+'">'+st.t+'</div><div class="rec">'+st.r+'</div></div></div>';
+    renderSafety(series);
+    renderEF();
+    // legend
+    document.getElementById("pmcLegend").innerHTML=
+      '<span><i style="background:'+cssv("--s-10k")+'"></i>Fitness</span><span><i style="background:'+cssv("--s-half")+'"></i>Fatigue</span><span><i style="background:'+cssv("--s-tri")+'"></i>Form</span>';
+    document.getElementById("pmc").innerHTML=pmcChart(series);
+    // weekly volume (last 28 days, combined)
+    const cut=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()-28);
+    const cutKey=cut.getFullYear()+"-"+pad(cut.getMonth()+1)+"-"+pad(cut.getDate());
+    const recent=allSessions().filter(s=>s.date>=cutKey);
+    const vn=document.getElementById("volNote");
+    if(recent.length){
+      const hrs=recent.reduce((a,s)=>a+(+s.durationMin||0),0)/60;
+      const km=recent.reduce((a,s)=>a+(+s.dist||0),0);
+      vn.innerHTML='최근 4주 <b>'+recent.length+'회</b> · <b>'+hrs.toFixed(1)+'시간</b>'+(km>0?' · <b>'+Math.round(km)+'km</b>':'')+' (주 '+(recent.length/4).toFixed(1)+'회꼴)'+(state.imports.length?' · 삼성헬스 반영됨':'');
+    } else vn.textContent="";
+    // recent sessions (manual + imported)
+    const rs=document.getElementById("recentSess");
+    const SP={run:"러닝",bike:"사이클",swim:"수영",strength:"근력",hike:"하이킹",other:"기타"};
+    const bryList=state.brytons.slice();
+    const merged=state.sessions.map(s=>Object.assign({_t:"m"},s))
+      .concat(state.imports.filter(s=>!bryList.some(b=>_dupMatch(b,s))).map(s=>Object.assign({_t:"s"},s)))
+      .concat(bryList.map(s=>Object.assign({_t:"b"},s)));
+    const list=merged.sort((a,b)=>a.date<b.date?1:(a.date>b.date?-1:0)).slice(0,10);
+    if(!list.length){ rs.innerHTML='<div class="empty" style="margin:6px">세션이 없어요. 삼성헬스 CSV·Bryton FIT을 가져오거나 직접 기록하면 피로도(ATL)에 실시간 반영됩니다.</div>'; }
+    else{ rs.innerHTML=list.map(s=>{const load=Math.round(sessLoad(s));
+      const meta=s._t==="m"?((+s.durationMin||0)+'분'+(+s.mhr>60?('·'+s.mhr+'bpm'):('·RPE'+(+s.rpe||5)))+(s.dist>0?('·'+s.dist+'km'):'')):((+s.durationMin||0)+'분'+(s.mhr?('·'+s.mhr+'bpm'):'')+(s.dist>0?('·'+s.dist+'km'):'')+(s.power>0?('·'+s.power+'W'):''));
+      const tag=s._t==="m"?'<button class="del" data-sid="'+esc(s.id)+'" aria-label="삭제">✕</button>':'<span style="width:22px;flex:none;text-align:center;color:var(--muted);font-size:10px;font-weight:700">'+(s._t==="b"?"B":"S")+'</span>';
+      return '<div class="srow"><span class="sd">'+shortDate(s.date)+'</span><span class="ssp">'+(SP[s.sport]||s.sport)+'</span><span style="color:var(--muted);font-size:12px">'+meta+(s.note?(' · <span style="color:var(--ink-2)">📝'+esc(s.note)+'</span>'):'')+'</span><span class="sl">부하 '+load+'</span>'+tag+'</div>';}).join("")
+      + ((state.imports.length||state.brytons.length)?'<div style="font-size:11.5px;color:var(--muted);padding:8px 4px 4px">S=삼성('+state.imports.length+') · B=Bryton('+state.brytons.length+')</div><div style="display:flex;gap:8px">'+(state.imports.length?'<button class="del" id="clearImp" style="font-size:12px;color:var(--muted);padding:2px 6px">삼성 지우기</button>':'')+(state.brytons.length?'<button class="del" id="clearBry" style="font-size:12px;color:var(--muted);padding:2px 6px">Bryton 지우기</button>':'')+'</div>':''); }
+    rs.querySelectorAll(".del[data-sid]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-sid"))));
+    const ci=document.getElementById("clearImp"); if(ci)ci.addEventListener("click",clearImports);
+    const cb=document.getElementById("clearBry"); if(cb)cb.addEventListener("click",clearBryton);
+    if(typeof renderCumul==="function") renderCumul();
+    if(typeof renderDiary==="function") renderDiary();
+    if(typeof renderCal==="function") renderCal();
+    if(typeof renderTrainRecords==="function") renderTrainRecords();
+    if(typeof renderGear==="function") renderGear();
+    if(typeof renderWeeks==="function") renderWeeks(); // 세션 변동 → 계획 자동 매칭 갱신
+    scheduleSnapshot();
+  }
+  function pmcChart(series){
+    const win=182; const data=series.slice(-win);
+    if(data.length<2||data.every(d=>d.ctl<0.5&&d.atl<0.5&&Math.abs(d.tsb)<0.5))
+      return '<div class="empty">부하 데이터가 아직 적습니다 · 세션을 기록하면 곡선이 그려집니다</div>';
+    const W=360,H=200,L=34,R=40,T=14,B=22,pw=W-L-R,ph=H-T-B;
+    const all=data.flatMap(d=>[d.ctl,d.atl,d.tsb]); let vmax=Math.max.apply(null,all),vmin=Math.min.apply(null,all);
+    const padv=Math.max(5,(vmax-vmin)*0.1); vmax+=padv; vmin-=padv; if(vmax===vmin)vmax=vmin+10;
+    const x=i=>L+i*(pw/(data.length-1)), y=v=>T+(vmax-v)/(vmax-vmin)*ph;
+    let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="CTL ATL TSB 추이">';
+    for(let i=0;i<=3;i++){const gv=vmin+(vmax-vmin)*i/3,gy=y(gv);
+      s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy.toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssv("--grid")+'" stroke-width="1"/>';
+      s+='<text x="'+(L-6)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="'+cssv("--muted")+'" style="font-variant-numeric:tabular-nums">'+Math.round(gv)+'</text>';}
+    if(vmin<0&&vmax>0){const zy=y(0);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+zy.toFixed(1)+'" y2="'+zy.toFixed(1)+'" stroke="'+cssv("--axis")+'" stroke-width="1" stroke-dasharray="3 3"/>';}
+    function line(key,color,w){let d="";data.forEach((pt,i)=>{d+=(i?"L":"M")+x(i).toFixed(1)+" "+y(pt[key]).toFixed(1)+" ";});
+      return '<path d="'+d.trim()+'" fill="none" stroke="'+color+'" stroke-width="'+w+'" stroke-linejoin="round"/>';}
+    s+=line("tsb",cssv("--s-tri"),1.5)+line("ctl",cssv("--s-10k"),2.5)+line("atl",cssv("--s-half"),2);
+    const last=data[data.length-1];
+    [["ctl","--s-10k"],["atl","--s-half"]].forEach(p=>{const py=y(last[p[0]]);
+      s+='<circle cx="'+x(data.length-1).toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+cssv(p[1])+'"/>';
+      s+='<text x="'+(W-R+5)+'" y="'+(py+3.5).toFixed(1)+'" font-size="10" font-weight="700" fill="'+cssv(p[1])+'" style="font-variant-numeric:tabular-nums">'+Math.round(last[p[0]])+'</text>';});
+    // month ticks
+    let lastM=null; data.forEach((pt,i)=>{const m=pt.date.slice(0,7); if(m!==lastM&&i%26===0){lastM=m; s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9" fill="'+cssv("--muted")+'">'+(+pt.date.split("-")[1])+'월</text>';}});
+    return s+'</svg>';
+  }
+
+  /* ---- RECORDS ---- */
+  function chartSVG(recs,sp){
+    const color=cssv(sp.cvar),times=recs.filter(r=>r.timeSec>0);
+    if(!times.length)return '<div class="empty">아직 기록이 없습니다 · 목표 '+esc(sp.goalLabel)+'</div>';
+    const W=360,H=190,L=48,R=58,T=22,B=30,pw=W-L-R,ph=H-T-B;
+    const vals=times.map(r=>r.timeSec),goal=sp.goalSec;
+    let vmax=Math.max.apply(null,vals),vmin=Math.min.apply(null,vals); if(goal)vmin=Math.min(vmin,goal);
+    const padv=Math.max(30,(vmax-vmin)*0.18); vmax+=padv; vmin=Math.max(0,vmin-padv); if(vmax===vmin)vmax=vmin+60;
+    const x=i=>times.length===1?L+pw/2:L+i*(pw/(times.length-1)),y=v=>T+(vmax-v)/(vmax-vmin)*ph;
+    let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(sp.short)+' 기록 추이">';
+    for(let i=0;i<=4;i++){const gv=vmin+(vmax-vmin)*i/4,gy=y(gv);
+      s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy.toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssv("--grid")+'" stroke-width="1"/>';
+      s+='<text x="'+(L-8)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+cssv("--muted")+'" style="font-variant-numeric:tabular-nums">'+fmt(gv)+'</text>';}
+    if(goal){const gy=y(goal);
+      s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy.toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssv("--good")+'" stroke-width="1.5" stroke-dasharray="5 4"/>';
+      s+='<text x="'+(W-R+6)+'" y="'+(gy+3.5).toFixed(1)+'" font-size="10" font-weight="700" fill="'+cssv("--good")+'">목표 '+fmt(goal)+'</text>';}
+    if(times.length>1){let d="";times.forEach((r,i)=>{d+=(i?"L":"M")+x(i).toFixed(1)+" "+y(r.timeSec).toFixed(1)+" ";});
+      s+='<path d="'+d.trim()+'" fill="none" stroke="'+color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';}
+    const bestSec=Math.min.apply(null,vals);
+    times.forEach((r,i)=>{const px=x(i),py=y(r.timeSec),isPB=r.timeSec===bestSec;
+      s+='<text x="'+px.toFixed(1)+'" y="'+(py-11).toFixed(1)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="'+cssv("--ink-2")+'" style="font-variant-numeric:tabular-nums">'+fmt(r.timeSec)+'</text>';
+      s+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+(isPB?6:4.5)+'" fill="'+(isPB?color:cssv("--surface"))+'" stroke="'+color+'" stroke-width="2.5"/>';
+      s+='<text x="'+px.toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="9.5" fill="'+cssv("--muted")+'" style="font-variant-numeric:tabular-nums">'+axisDate(r.date)+'</text>';
+      s+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="15" fill="transparent" class="hit" data-ev="'+esc(r.event)+'" data-dt="'+shortDate(r.date)+'" data-tm="'+fmt(r.timeSec)+'"'+(sp.dist?' data-pc="'+fmtPace(r.timeSec,sp.dist)+'"':"")+'/>';});
+    return s+'</svg>';
+  }
+  function tableHTML(recs,sp){
+    if(!recs.length)return '<div class="empty">기록 추가로 첫 기록을 남겨보세요.</div>';
+    const best=pb(recs),rows=recs.slice().sort((a,b)=>a.date<b.date?1:-1);
+    let h='<div class="tbl-scroll"><table class="rec"><thead><tr><th>날짜</th><th>대회</th><th class="num">기록</th>'+(sp.dist?'<th class="num">페이스</th>':'<th>세부</th>')+'<th></th></tr></thead><tbody>';
+    rows.forEach(r=>{const isPB=best&&r.id===best.id;
+      h+='<tr><td class="tnum" style="color:var(--ink-2)">'+shortDate(r.date)+'</td><td><span class="ev">'+esc(r.event)+'</span>'+(isPB?' <span class="tag-pb">PB</span>':"")+'</td>'+
+        '<td class="num r-time">'+(r.timeSec>0?fmt(r.timeSec):"<span style='color:var(--muted)'>완주</span>")+'</td>'+
+        (sp.dist?'<td class="num tnum" style="color:var(--ink-2)">'+(r.timeSec>0?fmtPace(r.timeSec,sp.dist):"—")+'</td>':'<td class="det">'+(r.detail?esc(r.detail):"—")+'</td>')+
+        '<td class="num"><button class="del" data-id="'+esc(r.id)+'" aria-label="삭제">✕</button></td></tr>';});
+    return h+'</tbody></table></div>';
+  }
+  function renderPanels(){
+    const wrap=document.getElementById("panels"); wrap.innerHTML="";
+    ORDER.forEach(k=>{const sp=SPORTS[k],recs=bySport(k),best=pb(recs),c=cssv(sp.cvar);
+      const p=document.createElement("section"); p.className="panel card";
+      p.innerHTML='<div class="phead"><span class="dot" style="background:'+c+'"></span><h3>'+sp.label+'</h3><span class="count">'+recs.length+'회</span><span class="pb">'+(best?'PB <b>'+fmt(best.timeSec)+'</b>':'목표 '+esc(sp.goalLabel))+'</span></div><div class="chart-wrap">'+chartSVG(recs,sp)+'</div>'+tableHTML(recs,sp);
+      wrap.appendChild(p);});
+    wireHits(); wireDeletes();
+  }
+
+  /* ---- 훈련법 가이드 (탭) ---- */
+  const GUIDE=[
+    {id:"g-principle",title:"훈련 원칙 — 무리하지 않게",tag:"원칙",open:true,html:
+      '<h4>강도 배분</h4><p><b>80/20 폴라라이즈드</b>: 전체 러닝의 ~80%는 이지, ~20%만 고강도(템포·역치·인터벌·레이스). 이지가 느릴수록 좋은 게 아니라 <b>이지는 이지답게</b>, 고강도는 확실히.</p>'+
+      '<h4>상한선</h4><ul><li>고강도 세션 <b>주 2회 상한</b> (수 퀄리티 + 토 롱런의 빠른 마무리 정도)</li><li>주간 볼륨 증가 <b>+10% 이내</b></li><li>부하 탭 TSB가 −10 아래면 고강도 1회로 제한, −30 아래면 회복만</li></ul>'+
+      '<h4>주간 순서 (요일 고정 없음)</h4><p>① 이지 → ② 퀄리티(인터벌/역치) → ③ 이지+하체보강 → ④ 이지+스트라이드 → ⑤ 롱런 → ⑥ 사이클(폰도 전까지, 이후 이지런) + 휴식 1일. <b>하드 다음 날은 반드시 이지/휴식</b>. 수영은 현재 계획에서 제외(기록은 가능).</p>'+
+      '<div class="warn">⚠️ 이코노미(효율)가 CPET상 약점 → 스트라이드·언덕·하체보강을 "옵션"이 아니라 "루틴"으로.</div>'},
+    {id:"g-easy",title:"Easy Run / Recovery Run",tag:"이지",html:
+      '<h4>목적</h4><p>유산소 기반·모세혈관·미토콘드리아·지방대사. 러닝의 뼈대(80%). 리커버리는 하드 다음 날 <b>더 짧고 더 느리게</b> 도는 변형.</p>'+
+      '<h4>방법</h4><ul><li>페이스 <span class="pc">6:00~6:40/km</span> · HR 135~150 · 코로 숨쉬며 대화 가능</li><li>이지런 40~50분, 리커버리 25~35분</li><li>느려도 괜찮음 — 빨라지면 목적이 사라짐(주간 부하만 올림)</li></ul>'+
+      '<h4>빈도</h4><p>주 2~3회(목·금·일). "이지런 ×3"은 서로 다른 날 3번.</p>'},
+    {id:"g-long",title:"Long Run · LSD · 프로그레션",tag:"롱런",html:
+      '<h4>목적</h4><p>지구력·지방대사·근지구력·정신적 대비. 풀코스 완주의 핵심.</p>'+
+      '<h4>변형 3가지</h4><ul><li><b>LSD(Long Slow Distance)</b>: 전 구간 <span class="pc">5:50~6:20/km</span> 편안하게. 기본형.</li><li><b>프로그레션</b>: 앞 2/3 롱런 페이스 → 마지막 1/3 점점 올려 하프페이스 근처까지.</li><li><b>MP 마무리</b>: 마지막 5~8km를 마라톤 목표페이스(3:40 목표면 <span class="pc">5:10~5:15</span>)로.</li></ul>'+
+      '<h4>방법</h4><ul><li>90~150분, 주 1회(토). 피크 롱런 26~30km(풀 3주 전)</li><li>30~40분마다 탄수(젤/음료) 보급 연습 — 레이스 리허설</li><li>다음 날(일)은 이지런 30~40분 매우 가볍게(연속 러닝 = 지구력 자극)</li></ul>'+
+      '<div class="warn">10K가 A레이스인 이번 시즌엔 롱런을 늘리지 않음(15~17km). 풀은 완주 목표.</div>'},
+    {id:"g-stride",title:"스트라이드 (Strides)",tag:"폼",html:
+      '<h4>목적</h4><p>러닝 이코노미·신경근 협응·폼 교정. <b>속도훈련이 아님</b>. CPET상 이코노미 약점이라 특히 중요.</p>'+
+      '<h4>방법</h4><ul><li><b>이지런 끝에 붙여서</b> 20초 부드럽게 가속(최고속의 ~90%까지 매끄럽게, 전력 아님) → 60~90초 걷기/조깅 회복</li><li>6회면 이지런 뒤 약 8~10분 추가 · 레이스 전 셰이크아웃엔 4회</li><li>포인트: 케이던스 높이고, 발이 몸 아래 착지(오버스트라이드 금지), 상체 릴랙스</li></ul>'+
+      '<div class="warn">❗ 스트라이드만 6회 하고 끝나는 독립 세션이 아님. "이지런 + 끝에 스트라이드"가 그날의 한 세션.</div>'},
+    {id:"g-thr",title:"Tempo / Threshold (역치)",tag:"역치",html:
+      '<h4>목적</h4><p>젖산역치 페이스를 끌어올림 — 10K·하프 기록의 가장 효율적 자극. "편안하게 힘든" 강도.</p>'+
+      '<h4>두 형태</h4><ul><li><b>템포(지속형)</b>: 워밍업 15분 → <span class="pc">4:20~4:30/km</span>로 20~30분 지속 → 쿨다운 10분</li><li><b>크루즈 인터벌</b>: 1km×5 (또는 5~8분×3~4) @ <span class="pc">4:20~4:25</span>, 사이 60~90초 조깅. 지속형보다 페이스 유지가 쉬움</li></ul>'+
+      '<h4>빈도·주의</h4><ul><li>주 1회(수). 인터벌 주와 번갈아</li><li>페이스가 빨라지면 인터벌이 됨 → 마지막 반복도 첫 반복과 같은 페이스여야 정답</li><li>하프 페이스(<span class="pc">4:30~4:40</span>) 템포는 하프 리허설로 좋음</li></ul>'},
+    {id:"g-int",title:"Interval (VO₂max 인터벌)",tag:"인터벌",html:
+      '<h4>목적</h4><p>최대산소섭취량 자극 + 10K 페이스 감각. 짧고 강함.</p>'+
+      '<h4>방법</h4><ul><li>워밍업 15분(끝에 스트라이드 3~4회) 필수</li><li><b>400m×6~8</b> @ <span class="pc">4:05~4:10/km</span> · 회복 200m 조깅(≈90초)</li><li><b>1km×4~5</b> @ <span class="pc">4:10~4:15</span> · 회복 2~3분 조깅</li><li><b>10K 특이</b>: 1km×3 @ 목표페이스 <span class="pc">4:18</span> (레이스 주 샤프너, 짧게)</li><li>쿨다운 10분</li></ul>'+
+      '<h4>빈도·주의</h4><ul><li>주 1회 이내(수). 역치와 번갈아 → 고강도 합계 주 2회 상한</li><li>본 세트 총량은 3~5km. 더 하면 회복이 더 오래 걸려 손해</li><li>TSB 나쁘면 이지로 강등</li></ul>'},
+    {id:"g-fartlek",title:"Fartlek (파틀렉)",tag:"파틀렉",html:
+      '<h4>목적</h4><p>비구조 속도놀이. 시계 없이 감각으로 강도를 오가며 템포~인터벌 자극을 부담 없이. 인터벌이 부담될 때 대체.</p>'+
+      '<h4>방법</h4><ul><li>이지런 중간에 "다음 전봇대까지 빠르게, 그 다음 두 개는 천천히" 식으로 1~3분 빠름/1~3분 느림 반복 × 6~10</li><li>총 40~50분. 빠른 구간은 템포~10K 감각, 느린 구간은 이지</li></ul>'},
+    {id:"g-hill",title:"Hill Training (언덕)",tag:"언덕",html:
+      '<h4>목적</h4><p>파워·근력·러닝 이코노미. 스피드 훈련의 "안전한 버전"(충격 적음). <b>이코노미 약점 보완에 최적</b>.</p>'+
+      '<h4>방법</h4><ul><li><b>숏힐</b>: 4~6% 경사 100~150m(20~30초) 힘차게 × 6~10, 내려오며 걷기 회복. 폼(무릎 들기·팔치기) 집중</li><li><b>롱힐</b>: 6~8% 3~5분 템포 감각 × 3~4, 조깅 회복</li><li>워밍업 15분 후, 이지런 대신 격주로</li></ul>'+
+      '<div class="warn">언덕 다음 날은 종아리·아킬레스 부하 → 이지/휴식.</div>'},
+    {id:"g-tt",title:"TT (Time Trial) · Race",tag:"테스트",html:
+      '<h4>목적</h4><p>TT = 혼자 하는 최대 노력 자가검사. 체력(VDOT) 재측정·페이스 존 갱신용. Race = 실제 경기.</p>'+
+      '<h4>TT 방법</h4><ul><li>거리: <b>5K 또는 3K</b>가 실용적(회복 빠름). 10K TT는 레이스 대체급이라 신중히</li><li>워밍업 15~20분(스트라이드 포함) → 전력 → 쿨다운 10분</li><li>평지·바람 적은 날·컨디션 좋은 날(TSB +)에. 6~8주마다 1회</li><li>결과는 기록 탭에 대회 기록처럼 입력 → 예측·페이스 존 자동 갱신</li></ul>'+
+      '<h4>레이스 전 루틴</h4><ul><li>3일 전부터 볼륨↓ 강도 유지(짧게), 전날 셰이크아웃 20분+스트라이드 4</li><li>2~3일 전 탄수 비중↑·수분 · 당일 새 장비 금지</li></ul>'},
+    {id:"g-str",title:"하체 보강 (근력)",tag:"보강",html:
+      '<h4>목적</h4><p>이코노미·부상 예방·후반 버티는 힘. 주 2회 20분이면 충분.</p>'+
+      '<h4>메뉴</h4><ul><li>스쿼트 / 런지 / 힙힌지(루마니안 데드리프트·힙브릿지) / 카프레이즈 / 한다리 밸런스 / 플랭크</li><li>각 2~3세트 × 10~15회, 무겁지 않게 폼 위주. 러닝 끝(목)에 붙이거나 별도</li><li>하드 세션 전날은 피함</li></ul>'},
+    {id:"g-swim",title:"수영 (옵션 크로스트레이닝)",tag:"수영",html:
+      '<div class="warn">현재 계획에서는 수영을 러닝으로 대체함(요청 반영). 아래는 철인 대비·회복용으로 넣고 싶을 때 참고. 수영을 하면 세션 기록에 남기면 부하·누적에 반영됩니다.</div>'+
+      '<h4>목적</h4><p>비충격 유산소·회복·상체. 러닝 다리를 쉬게 하면서 심폐를 유지. 철인 대비.</p>'+
+      '<h4>세션 예시(60분)</h4><ul><li>워밍업 300m 이지 + 드릴 200m(캐치업·사이드킥)</li><li>본세트 <b>유산소</b>: 100m×10, 20초 휴식, 일정 페이스 / 또는 <b>CSS</b>: 200m×5, 30초 휴식</li><li>쿨다운 200m</li></ul>'+
+      '<h4>테스트</h4><p>400m·200m 전력 기록을 대회 탭 계산기에 넣으면 CSS(임계 수영속도)와 1.9km 예상이 계산됨.</p>'},
+    {id:"g-zones",title:"페이스 존 요약 (현재 기준)",tag:"존",html:
+      '<ul><li>회복/이지 <span class="pc">6:00~6:40</span> · HR 135~150</li><li>롱런/풀완주 <span class="pc">5:50~6:20</span></li><li>하프 페이스 <span class="pc">4:30~4:40</span></li><li>템포/역치 <span class="pc">4:20~4:30</span></li><li>10K/인터벌 <span class="pc">4:00~4:15</span> (10K 목표 4:18)</li></ul>'+
+      '<p style="color:var(--muted);font-size:12px">기록이 갱신되면 훈련 탭의 페이스 존이 우선. 폰도 이후 사이클은 시즌 종료.</p>'},
+  ];
+  function renderGuide(){
+    const wrap=document.getElementById("guide"); if(!wrap)return; wrap.innerHTML="";
+    GUIDE.forEach(g=>{
+      const card=document.createElement("div"); card.className="week card"+(g.open?" open":"");
+      card.innerHTML='<div class="wh"><span class="wn">'+esc(g.title)+'</span><span class="wd"><span class="tag">'+esc(g.tag)+'</span></span><span class="chev" style="margin-left:auto">›</span></div><div class="wbody"><div class="gbody" style="padding-bottom:8px">'+g.html+'</div></div>';
+      card.querySelector(".wh").addEventListener("click",()=>card.classList.toggle("open"));
+      wrap.appendChild(card);});
+  }
+
+  /* ---- 누적 거리 (월/연도 · 종목별) ---- */
+  const CSPORT=[["run","러닝"],["bike","사이클"],["swim","수영"],["hike","하이킹"]];
+  function cumulData(){
+    const by={};
+    allSessions().forEach(s=>{ const km=+s.dist||0; if(!km||!s.date)return; const y=s.date.slice(0,4), m=s.date.slice(5,7), sp=s.sport;
+      by[y]=by[y]||{total:{},months:{}}; by[y].total[sp]=(by[y].total[sp]||0)+km;
+      by[y].months[m]=by[y].months[m]||{}; by[y].months[m][sp]=(by[y].months[m][sp]||0)+km; });
+    return by;
+  }
+  function k1(v){return v>0?(Math.round(v*10)/10).toLocaleString("ko-KR",{maximumFractionDigits:1}):"—";}
+  function renderCumul(){
+    const el=document.getElementById("cumul"); if(!el)return;
+    const by=cumulData(), years=Object.keys(by).sort();
+    if(!years.length){ el.innerHTML='<div class="card"><div class="empty" style="margin:8px">세션(삼성헬스 CSV·Bryton FIT·직접 입력)이 있으면 종목별 누적 거리를 월·연도로 집계합니다.</div></div>'; return; }
+    if(!state.cumYear||!by[state.cumYear]) state.cumYear=years[years.length-1];
+    const sports=CSPORT.filter(c=>years.some(y=>(by[y].total[c[0]]||0)>0));
+    const head='<thead><tr><th>구분</th>'+sports.map(c=>'<th style="text-align:right">'+c[1]+'</th>').join("")+'<th style="text-align:right">합계</th></tr></thead>';
+    // 연도별
+    let yt='<table class="ztbl">'+head+'<tbody>';
+    years.slice().reverse().forEach(y=>{ const t=by[y].total; const sum=sports.reduce((a,c)=>a+(t[c[0]]||0),0);
+      yt+='<tr><td class="z">'+y+'</td>'+sports.map(c=>'<td class="p" style="text-align:right">'+k1(t[c[0]]||0)+'</td>').join("")+'<td class="p" style="text-align:right">'+k1(sum)+'</td></tr>'; });
+    yt+='</tbody></table>';
+    // 월별(선택 연도)
+    const Y=state.cumYear, ms=by[Y].months; const tot={}; let mt='<table class="ztbl">'+head+'<tbody>';
+    for(let i=1;i<=12;i++){ const mm=pad(i), row=ms[mm]||{}; const sum=sports.reduce((a,c)=>a+(row[c[0]]||0),0);
+      sports.forEach(c=>tot[c[0]]=(tot[c[0]]||0)+(row[c[0]]||0));
+      mt+='<tr'+(sum?'':' style="opacity:.55"')+'><td class="z">'+i+'월</td>'+sports.map(c=>'<td class="p" style="text-align:right">'+k1(row[c[0]]||0)+'</td>').join("")+'<td class="p" style="text-align:right">'+k1(sum)+'</td></tr>'; }
+    const ysum=sports.reduce((a,c)=>a+(tot[c[0]]||0),0);
+    mt+='<tr style="background:var(--surface-2)"><td class="z">'+Y+' 합계</td>'+sports.map(c=>'<td class="p" style="text-align:right">'+k1(tot[c[0]]||0)+'</td>').join("")+'<td class="p" style="text-align:right">'+k1(ysum)+'</td></tr></tbody></table>';
+    el.innerHTML='<div class="card" style="margin-bottom:12px"><div class="phead"><h3 style="font-size:14px">연도별 누적 (km)</h3></div><div class="tbl-scroll">'+yt+'</div></div>'+
+      '<div class="card"><div class="phead"><h3 style="font-size:14px">월별 누적 (km)</h3></div><div class="ychips">'+years.slice().reverse().map(y=>'<button class="ychip'+(y===Y?' on':'')+'" data-y="'+y+'">'+y+'</button>').join("")+'</div><div class="tbl-scroll">'+mt+'</div>'+
+      '<div style="font-size:11.5px;color:var(--muted);padding:4px 12px 10px">세션 데이터 기준(삼성헬스·Bryton·직접 입력, 중복 제거). 대회 기록은 삼성헬스에 이미 포함되므로 별도 합산하지 않음.</div></div>';
+    el.querySelectorAll(".ychip").forEach(b=>b.addEventListener("click",()=>{state.cumYear=b.getAttribute("data-y");renderCumul();}));
+  }
+
+  /* ---- 훈련 기록 자동 감지 (FitTrackee 'records' 방식: 종목별 최장거리·최장시간·최고평속) ---- */
+  function renderTrainRecords(){
+    const el=document.getElementById("trainRecords"); if(!el)return;
+    const SP={run:"러닝",bike:"사이클",swim:"수영"}; const out=[];
+    ["run","bike","swim"].forEach(sp=>{
+      const ss=allSessions().filter(s=>s.sport===sp&&+s.durationMin>0);
+      if(!ss.length) return;
+      const withD=ss.filter(s=>+s.dist>0);
+      const longest=withD.length?withD.reduce((m,s)=>+s.dist>+m.dist?s:m):null;
+      const longestT=ss.reduce((m,s)=>+s.durationMin>+m.durationMin?s:m);
+      const fast=withD.filter(s=>+s.dist>=(sp==="swim"?0.5:3)&&+s.durationMin>=10).reduce((m,s)=>{const v=+s.dist/(+s.durationMin/60); return (!m||v>m.v)?{v,s}:m;},null);
+      const speedTxt=fast?(sp==="run"?fmtPace(fast.s.durationMin*60,fast.s.dist)+' ('+fast.s.dist+'km)':sp==="swim"?(Math.round(fast.s.durationMin*60/(fast.s.dist*10))+'초/100m'):(fast.v.toFixed(1)+' km/h')):"—";
+      out.push('<div class="stat" style="border-left:3px solid '+cssv(sp==="run"?"--s-10k":sp==="bike"?"--s-cycle":"--s-tri")+'"><div class="k">'+SP[sp]+' 최장 거리</div><div class="v">'+(longest?(+longest.dist).toFixed(1)+' <small>km</small>':"—")+'</div><div class="n">'+(longest?shortDate(longest.date):"")+'</div></div>');
+      out.push('<div class="stat"><div class="k">'+SP[sp]+' 최장 시간</div><div class="v">'+fmt(longestT.durationMin*60)+'</div><div class="n">'+shortDate(longestT.date)+'</div></div>');
+      out.push('<div class="stat"><div class="k">'+SP[sp]+' 최고 '+(sp==="run"?"페이스":"평속")+'</div><div class="v" style="font-size:18px">'+speedTxt+'</div><div class="n">'+(fast?shortDate(fast.s.date):"")+'</div></div>');
+    });
+    el.innerHTML=out.length?'<div class="stats">'+out.join("")+'</div>':'<div class="card"><div class="empty" style="margin:8px">세션이 쌓이면 종목별 최장거리·최장시간·최고평속을 자동으로 찾아 표시합니다.</div></div>';
+  }
+
+  /* ---- 장비 (신발·자전거) 누적 km — 종목별 기간 기반 자동 합산 ---- */
+  function gearKm(g){ const end=g.endDate||"9999-12-31"; return (+g.initialKm||0)+allSessions().filter(s=>s.sport===g.sport&&s.date>=g.startDate&&s.date<=end).reduce((a,s)=>a+(+s.dist||0),0); }
+  function renderGear(){
+    const el=document.getElementById("gearCard"); if(!el)return;
+    const list=state.gear.slice().sort((a,b)=>(a.endDate?1:0)-(b.endDate?1:0)||(a.startDate<b.startDate?1:-1));
+    if(!list.length){ el.innerHTML='<div class="card"><div class="empty" style="margin:8px">러닝화·자전거를 등록하면 세션 거리가 자동 합산되고 교체 시점을 알려줍니다.</div></div>'; return; }
+    const SP={run:"러닝",bike:"사이클",swim:"수영",other:"기타"};
+    el.innerHTML='<div class="card recent">'+list.map(g=>{ const km=gearKm(g), alert=+g.alertKm||0, pct=alert?Math.min(100,km/alert*100):0, over=alert&&km>=alert, near=alert&&!over&&km>=alert*0.85;
+      return '<div style="padding:11px 6px;border-top:1px solid var(--hair)">'+
+        '<div style="display:flex;align-items:center;gap:8px"><b>'+esc(g.name)+'</b><span style="font-size:11px;color:var(--muted)">'+SP[g.sport]+' · '+shortDate(g.startDate)+(g.endDate?('~'+shortDate(g.endDate)+' (퇴역)'):'~')+'</span>'+
+        '<span style="margin-left:auto;font-family:Archivo;font-weight:800">'+Math.round(km)+'<small style="color:var(--muted);font-weight:600"> / '+(alert||"—")+' km</small></span></div>'+
+        (alert?('<div class="bar" style="margin-top:7px"><i style="width:'+pct.toFixed(0)+'%;background:'+(over?'var(--crit)':near?'var(--warn)':'var(--good)')+'"></i></div>'):'')+
+        '<div style="display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12px">'+(over?'<span style="color:var(--crit);font-weight:700">⚠️ 교체 권장 거리 도달</span>':near?'<span style="color:var(--warn);font-weight:700">곧 교체 시점(85%)</span>':'<span style="color:var(--muted)">정상</span>')+
+        '<span style="margin-left:auto"></span>'+(g.endDate?'':'<button class="del" data-gret="'+esc(g.id)+'" style="font-size:12px">퇴역</button>')+'<button class="del" data-gdel="'+esc(g.id)+'" aria-label="삭제">✕</button></div></div>'; }).join("")+'</div>';
+    el.querySelectorAll("[data-gdel]").forEach(b=>b.addEventListener("click",()=>removeGear(b.getAttribute("data-gdel"))));
+    el.querySelectorAll("[data-gret]").forEach(b=>b.addEventListener("click",()=>retireGear(b.getAttribute("data-gret"))));
+  }
+  async function addGear(g){ if(state.db){try{await state.db.collection("gear").add(g);return;}catch(e){alert("저장 실패.");return;}} g.id="local-"+Date.now(); state.gear.push(g); renderGear(); }
+  async function removeGear(id){ const g=state.gear.find(x=>x.id===id); if(!g||!confirm("‘"+g.name+"’ 장비를 삭제할까요?"))return;
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("gear/"+id).delete();}catch(e){}} else {state.gear=state.gear.filter(x=>x.id!==id);renderGear();} }
+  async function retireGear(id){ const g=state.gear.find(x=>x.id===id); if(!g)return; const today=new Date().toISOString().slice(0,10);
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("gear/"+id).update({endDate:today});}catch(e){}} else {g.endDate=today;renderGear();} }
+
+  /* ---- 운동 일지 (날짜별) ---- */
+  function renderDiary(){
+    const el=document.getElementById("diary"); if(!el)return;
+    const list=allSessionsRaw().slice().sort((a,b)=>a.date<b.date?1:(a.date>b.date?-1:0)).slice(0,80);
+    if(!list.length){ el.innerHTML='<div class="card"><div class="empty" style="margin:8px">세션을 기록하거나 삼성헬스/Bryton을 가져오면 날짜별 운동 일지가 여기에 쌓입니다.</div></div>'; return; }
+    const groups={}; list.forEach(s=>{(groups[s.date]=groups[s.date]||[]).push(s);});
+    const dates=Object.keys(groups).sort((a,b)=>a<b?1:-1);
+    el.innerHTML='<div class="card recent">'+dates.map(d=>'<div style="padding:8px 4px;border-top:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;font-size:12.5px">'+shortDate(d)+'</div>'+groups[d].map(diaryRow).join("")+'</div>').join("")+'</div>';
+    wireRowActs(el);
+  }
+  // 일지 한 줄: 🏃🏽‍♂️이지런 · 4.5km · 30분 · 6:40/km · ST 4회 · 159bpm · 부하 38 · 📝메모 · [W1 ④]
+  function diaryRow(s){
+    const km=fmtDist(s)?(' · '+fmtDist(s)):''; const hr=+s.mhr>60?(' · '+s.mhr+'bpm'):''; const pace=(+s.dist>0&&+s.durationMin>0&&s.sport==="run")?(' · '+fmtPace(s.durationMin*60,s.dist)):'';
+    const ex=(+s.reps>0?(' · 반복 '+s.reps):'')+(+s.strides>0?(' · 스트라이드 '+s.strides+'회'):'')+(+s.lower>0?' · 하체보강':'');
+    const link=s.slot?(' <span class="tag" style="font-size:10.5px">'+esc(s.wk||"")+' '+esc((findSlot(s.slot)||{t:""}).t.slice(0,1))+'</span>'):'';
+    const manual=!!s.id; // 직접 입력 세션만 수정·삭제 (삼성/브라이튼 임포트는 제외)
+    const btns=manual?('<span class="row-act"><button class="del" data-sedit="'+esc(s.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-sdel="'+esc(s.id)+'" aria-label="삭제" title="삭제">✕</button></span>'):'';
+    const cm=isCommute(s)?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">훈련 제외</span>':'';
+    return '<div class="cal-row'+(cm?'" style="opacity:.6':'')+'"><span>'+sessEmoji(s)+esc(sessKindLabel(s))+km+' · '+(+s.durationMin||0)+'분'+pace+ex+hr+' · 부하 '+Math.round(sessLoad(s))+(s.note?(' · 📝'+esc(s.note)):'')+link+cm+'</span>'+btns+'</div>';
+  }
+  // diaryRow를 넣은 컨테이너에 수정·삭제 버튼 연결
+  function wireRowActs(el){ if(!el)return;
+    el.querySelectorAll("[data-sedit]").forEach(b=>b.addEventListener("click",()=>openSessEdit(b.getAttribute("data-sedit"))));
+    el.querySelectorAll("[data-sdel]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-sdel")))); }
+
+  /* ---- 훈련 달력 (훈련 탭 상단) ----
+     훈련한 날: 종목 이모지 + 분류(🏃🏽‍♂️이지런 · 🚴🏽‍♀️지구력 · 🏊🏽‍♂️레슨 · 🏋🏽‍♂️하체). 대회일 🏁. 날짜 탭 → 그 날 상세, 더보기 → 월 전체 날짜별 상세. */
+  const calState={ym:TODAY.getFullYear()*100+(TODAY.getMonth()+1), sel:null, more:false};
+  function raceDates(){ const m={}; WEEKS.forEach(w=>w.sess.forEach(s=>{ if(s.date) m[s.date]=s.t; })); return m; }
+  // 달력 셀: 같은 날 같은 종목 여러 세션이면 가장 긴 거리 세션의 분류 + (복합) + 합계 거리(거리 없으면 합계 시간)
+  // 대표 세션 = 고강도 유형 우선(레이스 > 인터벌 > 템포 > 롱런 > 이지런 …), 같은 등급이면 긴 거리
+  const KIND_RANK={"레이스":9,"인터벌":8,"템포":7,"업힐":6,"롱런":5,"지구력":4,"야외":4,"레슨":3,"자유":3,"하체":3,"이지런":2,"스트라이드":1,"기타":1,"근력":2,"출퇴근":0};
+  function kindRank(s){ const r=KIND_RANK[sessKindLabel(s)]; return r==null?1:r; }
+  function calCellItems(list){
+    const by={}, order=[]; list.forEach(s=>{ if(!by[s.sport]){by[s.sport]=[];order.push(s.sport);} by[s.sport].push(s); });
+    const train=list.filter(s=>!isCommute(s)), com=list.filter(isCommute);
+    list=train;
+    const out=order.filter(sp=>by[sp].some(s=>!isCommute(s))).map(sp=>{ const g=by[sp].filter(s=>!isCommute(s)); if(g.length===1) return sessEmoji(g[0])+esc(sessKindLabel(g[0]))+((sp==="run"&&+g[0].dist>0)?('<span class="km">'+(+g[0].dist).toFixed(1)+' km</span>'):'');
+      const top=g.slice().sort((a,b)=>(kindRank(b)-kindRank(a))||((+b.dist||0)-(+a.dist||0))||((+b.durationMin||0)-(+a.durationMin||0)))[0];
+      const km=g.reduce((a,s)=>a+(+s.dist||0),0), mn=g.reduce((a,s)=>a+(+s.durationMin||0),0);
+      return sessEmoji(top)+esc(sessKindLabel(top))+'(복합)<span class="km">'+(km>0?(km.toFixed(1)+' km'):(Math.round(mn)+'분'))+'</span>'; });
+    if(com.length) out.push('<span style="color:var(--muted)">'+sessEmoji(com[0])+'출퇴근'+(com.length>1?('×'+com.length):'')+'</span>');
+    return out;
+  }
+  function renderCal(){
+    const el=document.getElementById("cal"); if(!el) return;
+    const y=Math.floor(calState.ym/100), mo=calState.ym%100;
+    const first=new Date(y,mo-1,1), last=new Date(y,mo,0), todayK=dkey(TODAY);
+    const byDate={}; allSessions().forEach(s=>{ if(s.date&&s.date.slice(0,7)===(y+"-"+pad(mo))) (byDate[s.date]=byDate[s.date]||[]).push(s); });
+    const races=raceDates(); const calRaces={}; (state.calRaces||[]).forEach(r=>{ (calRaces[r.date]=calRaces[r.date]||[]).push(r); });
+    const startOff=(first.getDay()+6)%7; // 월요일 시작
+    let g='<div class="cal-g">'+["월","화","수","목","금","토","일"].map(d=>'<div class="cal-dow">'+d+'</div>').join("");
+    for(let i=0;i<startOff;i++){ const d=new Date(y,mo-1,1-startOff+i); g+='<div class="cal-c mute"><div class="dn">'+d.getDate()+'</div></div>'; }
+    for(let d=1; d<=last.getDate(); d++){
+      const k=y+"-"+pad(mo)+"-"+pad(d); const list=byDate[k]||[];
+      const cls="cal-c"+(k===todayK?" today":"")+(calState.sel===k?" sel":"")+((races[k]||calRaces[k])?" race":"");
+      g+='<div class="'+cls+'" data-cal="'+k+'"><div class="dn">'+d+'</div>'+(calRaces[k]||[]).map(r=>'<div class="ev" style="color:var(--accent)">'+esc(r.name.slice(0,8))+'</div>').join("")+(it=>it.slice(0,3).map(t=>'<div class="ev">'+t+'</div>').join("")+(it.length>3?'<div class="ev" style="color:var(--muted)">+'+(it.length-3)+'</div>':''))(calCellItems(list))+'</div>';
+    }
+    const tail=(7-((startOff+last.getDate())%7))%7; for(let i=1;i<=tail;i++) g+='<div class="cal-c mute"><div class="dn">'+i+'</div></div>';
+    g+='</div>';
+    const nDays=Object.values(byDate).filter(l=>l.some(s=>!isCommute(s))).length, nSess=Object.values(byDate).reduce((a,l)=>a+l.filter(s=>!isCommute(s)).length,0);
+    let html='<div class="card cal"><div class="cal-h"><button data-calnav="-1" aria-label="이전 달">‹</button><div class="cal-t">'+y+'년 '+mo+'월 <span style="font-size:11.5px;color:var(--muted);font-weight:600">· 훈련 '+nDays+'일 · '+nSess+'회</span></div><button data-calnav="1" aria-label="다음 달">›</button><button data-calmore="1">'+(calState.more?"접기":"더보기")+'</button></div>'+g;
+    const raceRow=r=>'<div class="cal-row"><span>🏁 <b>'+esc(r.name)+'</b>'+(r.cat?(' · '+esc(r.cat)):'')+(r.goal?(' · 목표 '+esc(r.goal)):'')+(r.pri?(' · '+r.pri+'순위'):'')+'</span><span class="row-act"><button class="del" data-crdel="'+esc(r.id)+'" aria-label="대회 삭제" title="삭제">✕</button></span></div>';
+    const raceForm=d=>(calState.addRace===d)?('<div class="cal-rform" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0 4px">'+
+        '<input id="crName" placeholder="대회명 (예: 춘천마라톤)" style="grid-column:1/-1">'+
+        '<select id="crCat"><option>5km</option><option>10km</option><option>하프 21.1km</option><option>풀 42.195km</option><option>철인 올림픽</option><option>철인 70.3</option><option>그란폰도</option><option>메디오폰도</option><option>기타</option></select>'+
+        '<input id="crGoal" placeholder="목표 (예: 1:35:00·완주)">'+
+        '<select id="crPri"><option value="">우선순위</option><option value="1">1순위</option><option value="2">2순위</option><option value="3">3순위</option><option value="4">4순위</option><option value="5">5순위</option></select>'+
+        '<div style="display:flex;gap:6px"><button class="rec-mini good" data-crsave="'+d+'">저장</button><button class="rec-mini" data-crcancel="1">취소</button></div></div>')
+      :('<button class="rec-mini" data-cradd="'+d+'" style="margin:4px 0 2px">＋ 이 날 대회 추가</button>');
+    const detail=d=>'<div class="cal-day"><div class="dh">'+shortDate(d)+(races[d]?(' <span class="tag">🏁 '+esc(races[d].replace(/^[^\]]*\]\s*/,"").split(" — ")[0])+'</span>'):'')+'</div>'+(calRaces[d]||[]).map(raceRow).join("")+(byDate[d]||[]).map(diaryRow).join("")+((byDate[d]||[]).length||(calRaces[d]||[]).length?'':'<div class="cal-row" style="color:var(--muted)">기록 없음</div>')+raceForm(d)+'</div>';
+    if(calState.more){ const ds=Object.keys(Object.assign({},byDate,calRaces)).sort((a,b)=>a<b?1:-1); html+=ds.length?ds.map(detail).join(""):'<div class="cal-day"><div class="cal-row" style="color:var(--muted)">이 달 기록 없음</div></div>'; }
+    else if(calState.sel&&calState.sel.slice(0,7)===(y+"-"+pad(mo))) html+=detail(calState.sel);
+    html+='</div>'; el.innerHTML=html;
+    el.querySelectorAll("[data-calnav]").forEach(b=>b.addEventListener("click",()=>{ let yy=Math.floor(calState.ym/100), mm=calState.ym%100+ +b.getAttribute("data-calnav"); if(mm<1){mm=12;yy--;} if(mm>12){mm=1;yy++;} calState.ym=yy*100+mm; calState.sel=null; renderCal(); }));
+    el.querySelector("[data-calmore]").addEventListener("click",()=>{ calState.more=!calState.more; renderCal(); });
+    el.querySelectorAll("[data-cradd]").forEach(b=>b.addEventListener("click",()=>{ calState.addRace=b.getAttribute("data-cradd"); renderCal(); const n=document.getElementById("crName"); if(n)n.focus(); }));
+    el.querySelectorAll("[data-crcancel]").forEach(b=>b.addEventListener("click",()=>{ calState.addRace=null; renderCal(); }));
+    el.querySelectorAll("[data-crsave]").forEach(b=>b.addEventListener("click",()=>{ const name=(document.getElementById("crName").value||"").trim(); if(!name){alert("대회명을 입력해주세요.");return;}
+      addCalRace({date:b.getAttribute("data-crsave"),name,cat:document.getElementById("crCat").value,goal:(document.getElementById("crGoal").value||"").trim(),pri:+document.getElementById("crPri").value||null,ts:Date.now()}); }));
+    el.querySelectorAll("[data-crdel]").forEach(b=>b.addEventListener("click",()=>removeCalRace(b.getAttribute("data-crdel"))));
+    el.querySelectorAll("[data-cal]").forEach(c=>c.addEventListener("click",()=>{ const k=c.getAttribute("data-cal"); calState.sel=(calState.sel===k)?null:k; calState.more=false; calState.addRace=null; renderCal(); }));
+    wireRowActs(el);
+  }
+  // 달력에서 추가한 대회 (db cal_races) — 달력 🏁 + 홈 대회 목록에 함께 표시
+  async function addCalRace(r){ calState.addRace=null; if(state.db){try{await state.db.collection("cal_races").add(r);return;}catch(e){alert("저장 실패.");return;}} r.id="local-"+Date.now(); state.calRaces.push(r); renderCal(); renderHomeRaces(); }
+  async function removeCalRace(id){ const r=state.calRaces.find(x=>x.id===id); if(!r||!confirm("대회를 삭제할까요?\n"+r.date+" "+r.name))return;
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("cal_races/"+id).delete();}catch(e){alert("삭제 실패.");}} else {state.calRaces=state.calRaces.filter(x=>x.id!==id); renderCal(); renderHomeRaces();} }
+  // 기록 탭 운동 일지: 기본 접힘, 제목을 누르면 펼침/접기
+  function bindDiaryToggle(){ const t=document.getElementById("diaryTog"), d=document.getElementById("diary"), c=document.getElementById("diaryChev"); if(!t||!d||t._b)return; t._b=1;
+    const tog=()=>{ d.hidden=!d.hidden; t.setAttribute("aria-expanded",String(!d.hidden)); c.textContent=d.hidden?"펼치기 ›":"접기 ⌄"; };
+    t.addEventListener("click",tog); t.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); tog(); } }); }
+  function renderAll(){ bindDiaryToggle();renderHomeRaces();renderFitness();renderPB();renderTargets();renderGoals();renderZones();renderWeeks();renderCustom();renderPacing();renderLoad();renderPanels();renderTri();renderGuide();renderCumul();renderTrainRecords();renderGear();renderDiary();renderCal();}
+
+  /* interactions */
+  const tip=document.getElementById("tip");
+  function wireHits(){document.querySelectorAll(".hit").forEach(el=>{el.style.cursor="pointer";
+    el.addEventListener("mousemove",e=>{let h="<b>"+el.getAttribute("data-tm")+"</b> · "+el.getAttribute("data-dt")+"<br>"+el.getAttribute("data-ev");if(el.getAttribute("data-pc"))h+="<br><span style='opacity:.75'>"+el.getAttribute("data-pc")+"</span>";tip.innerHTML=h;tip.style.opacity="1";tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)+"px";tip.style.top=(e.clientY+14)+"px";});
+    el.addEventListener("mouseleave",()=>tip.style.opacity="0");});}
+  function wireDeletes(){document.querySelectorAll("#panels .del").forEach(b=>b.addEventListener("click",()=>{const id=b.getAttribute("data-id"),r=state.records.find(x=>x.id===id);if(!r)return;if(confirm("‘"+r.event+"’ 기록을 삭제할까요?"))removeRecord(id);}));}
+
+  async function addRecord(rec){if(state.db){try{await state.db.collection("races").add(rec);return;}catch(e){alert("저장 실패.");return;}}rec.id="local-"+Date.now();state.records.push(rec);renderAll();}
+  async function removeRecord(id){if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("races/"+id).delete();return;}catch(e){alert("삭제 실패.");return;}}state.records=state.records.filter(r=>r.id!==id);renderAll();}
+  async function addSession(s){if(state.db){try{await state.db.collection("sessions").add(s);return;}catch(e){alert("저장 실패.");return;}}s.id="local-"+Date.now();state.sessions.push(s);renderLoad();}
+  async function updateSession(id,s){ if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("sessions/"+id).set(s);return;}catch(e){alert("저장 실패.");return;}}
+    const i=state.sessions.findIndex(x=>x.id===id); if(i>=0){ s.id=id; state.sessions[i]=s; } renderLoad(); }
+  async function removeSession(id){ const r=state.sessions.find(x=>x.id===id); const lbl=r?(shortDate(r.date)+" "+sessEmoji(r)+sessKindLabel(r)+(fmtDist(r)?(" "+fmtDist(r)):"")+" · "+(+r.durationMin||0)+"분"):"이 세션";
+    if(!confirm("정말 삭제할까요?\n"+lbl+"\n(되돌릴 수 없음)"))return;if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("sessions/"+id).delete();return;}catch(e){alert("삭제 실패.");return;}}state.sessions=state.sessions.filter(s=>s.id!==id);renderLoad();}
+  // 탭 순환: 없음 → 완료 → 부분 → 건너뜀 → 없음. 부분·건너뜀은 잔여 메모(선택) 입력.
+  // 탭 순환: 없음 → 완료(✓) → 부분(◐) → 없음. 부분이면 주차 하단 메모칸이 나타남(팝업 없음).
+  async function toggleSess(id){
+    const cur=slotStatusOf(id);
+    const nx = (cur==null)?"done":(cur==="done"?"partial":null);
+    await setSlotStatus(id,nx);
+  }
+  function slotDoc(id){ const v=state.slot[id]; return {status:v.status,note:v.note||"",waived:!!v.waived,ts:Date.now()}; }
+  // 상태 변경(수동). 메모·잔여소멸 플래그는 유지, 기록(sessions.slot)은 상태와 무관하게 남음 → 부분→완료 전환 시 누락 없음
+  async function setSlotStatus(id,nx){
+    const prev=state.slot[id]||{};
+    if(nx==null){ delete state.slot[id]; } else { state.slot[id]={status:nx,note:prev.note||"",waived:!!prev.waived}; }
+    renderWeeks();
+    if(state.db){try{ if(nx==null) await state.db.doc("plan/"+id).delete(); else await state.db.doc("plan/"+id).set(slotDoc(id)); }catch(e){}}
+  }
+  // 잔여 소멸(2택 중 하나): 상태는 그대로(◐ 유지), 잔여 계산에서 제외
+  async function setSlotWaived(id,on){ if(!state.slot[id])return; state.slot[id].waived=!!on; renderWeeks();
+    if(state.db){try{ await state.db.doc("plan/"+id).set(slotDoc(id)); }catch(e){}} }
+  // 메모 저장(재렌더 없이 — 입력 포커스 유지)
+  async function saveSlotNote(id,note){ if(!state.slot[id])return; state.slot[id].note=note;
+    if(state.db){try{ await state.db.doc("plan/"+id).set(slotDoc(id)); }catch(e){}} }
+
+  /* Samsung Health CSV import */
+  function splitCSV(line){const out=[];let cur="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++;}else q=!q;}else if(c===','&&!q){out.push(cur);cur="";}else cur+=c;}out.push(cur);return out;}
+  function parseSamsung(text){
+    const lines=text.split(/\r?\n/); if(lines.length<3) return null;
+    if(lines[0].indexOf("com.samsung.shealth.exercise")<0) return null;
+    const hdr=splitCSV(lines[1]); const ix={}; hdr.forEach((h,i)=>ix[h.trim()]=i);
+    const P="com.samsung.health.exercise.";
+    const need=[P+"exercise_type",P+"start_time",P+"duration"];
+    if(need.some(k=>ix[k]===undefined)) return null;
+    const TYPE={"1002":"run","11007":"bike","14001":"swim","15005":"hike"},DEF={run:6,bike:5,swim:5,hike:5},out=[];
+    for(let li=2;li<lines.length;li++){ if(!lines[li])continue; const r=splitCSV(lines[li]);
+      const sp=TYPE[r[ix[P+"exercise_type"]]]; if(!sp)continue;
+      const durMs=parseFloat(r[ix[P+"duration"]])||0; if(durMs<300000)continue;
+      const st=r[ix[P+"start_time"]]; if(!st)continue;
+      const dist=parseFloat(r[ix[P+"distance"]])||0, mhr=parseFloat(r[ix[P+"mean_heart_rate"]])||0, mn=durMs/60000;
+      const rpe=mhr>60?Math.min(1,mhr/196)*10:DEF[sp];
+      out.push({date:st.slice(0,10),sport:sp,durationMin:Math.round(mn*10)/10,load:Math.round(mn*Math.pow(rpe/10,2)*1.6),mhr:Math.round(mhr),dist:Math.round(dist/10)/100,src:st});
+    }
+    return out;
+  }
+  async function importSamsung(file){
+    let text; try{text=await file.text();}catch(e){alert("파일을 읽지 못했어요.");return;}
+    const parsed=parseSamsung(text);
+    if(parsed===null){alert("삼성헬스 운동 CSV가 아닌 것 같아요.\ncom.samsung.shealth.exercise... 파일을 선택해주세요.");return;}
+    if(!parsed.length){alert("가져올 운동(러닝/사이클/수영/하이킹)이 없습니다.");return;}
+    const merged=state.imports.slice(), seen=new Set(merged.map(s=>s.src)); let added=0;
+    parsed.forEach(s=>{if(!seen.has(s.src)){merged.push(s);seen.add(s.src);added++;}});
+    merged.sort((a,b)=>a.src<b.src?-1:1);
+    if(state.db){try{await state.db.doc("imports/samsung").set({sessions:merged,updated:new Date().toISOString().slice(0,10),source:"samsung_health_export"});}catch(e){alert("저장 실패 — 데이터가 너무 많을 수 있어요.");return;}}
+    else{state.imports=merged;renderLoad();}
+    alert("가져오기 완료 ✓\n신규 "+added+"건 추가 (전체 "+merged.length+"건)");
+  }
+  async function clearImports(){ if(!confirm("가져온 삼성헬스 세션을 모두 지울까요? (대회 기록·직접 입력 세션은 유지)"))return;
+    if(state.db){try{await state.db.doc("imports/samsung").delete();}catch(e){}}else{state.imports=[];renderLoad();}}
+
+  /* Bryton FIT import — self-contained binary decoder (no external lib) */
+  function fitSessions(buf){
+    const dv=new DataView(buf), n=buf.byteLength; if(n<14) return [];
+    const hs=dv.getUint8(0), dataSize=dv.getUint32(4,true);
+    if(String.fromCharCode(dv.getUint8(8),dv.getUint8(9),dv.getUint8(10),dv.getUint8(11))!==".FIT") return [];
+    let pos=hs; const end=Math.min(hs+dataSize,n), defs={}, out=[], EPOCH=631065600;
+    while(pos<end){
+      const h=dv.getUint8(pos); pos++;
+      if(h&0x80){ const d=defs[(h>>5)&0x3]; if(!d)break; for(const f of d.fields) pos+=f.sz; continue; }
+      const isDef=h&0x40, dev=h&0x20, lt=h&0x0F;
+      if(isDef){ pos++; const arch=dv.getUint8(pos); pos++; const gmn=dv.getUint16(pos,arch===0); pos+=2; const nf=dv.getUint8(pos); pos++; const fields=[];
+        for(let i=0;i<nf;i++){ fields.push({fdn:dv.getUint8(pos),sz:dv.getUint8(pos+1),bt:dv.getUint8(pos+2)&0x1F,arch}); pos+=3; }
+        if(dev){ const ndf=dv.getUint8(pos); pos++; for(let i=0;i<ndf;i++){ fields.push({fdn:-1,sz:dv.getUint8(pos+1),bt:13,arch}); pos+=3; } }
+        defs[lt]={gmn,fields};
+      } else { const d=defs[lt]; if(!d)break; const vals={};
+        for(const f of d.fields){ const b=[]; for(let k=0;k<f.sz;k++) b.push(dv.getUint8(pos+k)); pos+=f.sz; vals[f.fdn]={b,bt:f.bt,le:f.arch===0}; }
+        if(d.gmn===18){ const num=fn=>{ const v=vals[fn]; if(!v)return null; const b=v.b;
+            if(v.bt===0||v.bt===1||v.bt===2) return b[0];
+            if(v.bt===3||v.bt===4) return v.le? b[0]|(b[1]<<8) : b[1]|(b[0]<<8);
+            if(v.bt===5||v.bt===6) return v.le? (b[0]|(b[1]<<8)|(b[2]<<16)+(b[3]*16777216)) : (b[3]|(b[2]<<8)|(b[1]<<16)+(b[0]*16777216));
+            return null; };
+          out.push({sport:num(5),start:num(2)!=null?num(2):num(253),timer:num(8),dist:num(9),avghr:num(16),cal:num(11),avgpw:num(20),avgcad:num(18),asc:num(22)}); }
+      }
+    }
+    return out.map(s=>({...s,startUnix:s.start!=null&&s.start!==0xFFFFFFFF?s.start+EPOCH:null}));
+  }
+  async function importFit(file){
+    let buf; try{buf=await file.arrayBuffer();}catch(e){alert("파일을 읽지 못했어요.");return;}
+    let sess; try{sess=fitSessions(buf);}catch(e){sess=[];}
+    const SP={1:"run",2:"bike",5:"swim"};
+    const rides=sess.filter(s=>s.startUnix&&s.timer).map(s=>{ const d=new Date(s.startUnix*1000);
+      const date=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); const mn=Math.round(s.timer/1000/60*10)/10;
+      const mhr=(s.avghr&&s.avghr<250)?s.avghr:0, rpe=mhr>60?Math.min(1,mhr/196)*10:5;
+      return {date,sport:SP[s.sport]||"bike",durationMin:mn,load:Math.round(mn*Math.pow(rpe/10,2)*1.6),mhr,
+        dist:s.dist?Math.round(s.dist/100/10)/100:0,power:(s.avgpw&&s.avgpw<65535)?s.avgpw:0,cad:(s.avgcad&&s.avgcad<255)?s.avgcad:0,src:"bryton:"+s.startUnix}; });
+    if(!rides.length){alert("FIT에서 라이딩 세션을 찾지 못했어요. Bryton .fit 파일이 맞는지 확인해주세요.");return;}
+    const merged=state.brytons.slice(), seen=new Set(merged.map(s=>s.src));
+    let added=0,skip=0;
+    rides.forEach(r=>{ if(seen.has(r.src)){skip++;return;} merged.push(r);seen.add(r.src);added++; });  // 브라이튼끼리만 중복 제외; 삼성과 겹쳐도 브라이튼 우선 반영
+    if(added&&state.db){try{await state.db.doc("imports/bryton").set({sessions:merged,updated:new Date().toISOString().slice(0,10)});}catch(e){alert("저장 실패.");return;}}
+    else if(added){state.brytons=merged;renderLoad();}
+    alert("Bryton FIT 가져오기 ✓\n신규 "+added+"건 추가 (삼성헬스와 겹치는 라이딩은 브라이튼 기록을 우선 반영)"+(skip?(" · 이미 있음 "+skip+"건"):""));
+  }
+  async function clearBryton(){ if(!confirm("가져온 Bryton 세션을 모두 지울까요?"))return;
+    if(state.db){try{await state.db.doc("imports/bryton").delete();}catch(e){}}else{state.brytons=[];renderLoad();}}
+
+  /* ---- 내가 추가한 훈련 (custom plan) ---- */
+  const CSP={run:"러닝",bike:"사이클",swim:"수영",strength:"근력",brick:"브릭",other:"기타"};
+  function renderCustom(){
+    const el=document.getElementById("customList"); if(!el)return;
+    const list=state.customs.slice().sort((a,b)=>a.date<b.date?-1:(a.date>b.date?1:0));
+    if(!list.length){ el.innerHTML='<div class="empty" style="margin:6px">아직 없어요. “＋ 내 훈련 추가”로 내가 정한 훈련을 넣고 체크하세요.</div>'; return; }
+    const today=TODAY.getFullYear()+"-"+pad(TODAY.getMonth()+1)+"-"+pad(TODAY.getDate());
+    el.innerHTML=list.map(c=>{
+      const past=c.date<today&&!c.done;
+      return '<div class="sess'+(c.done?" done":"")+'" style="padding:10px 6px">'+
+        '<button class="chk'+(c.done?" on":"")+'" data-cid="'+esc(c.id)+'" aria-label="완료">✓</button>'+
+        '<div class="st"><div><b style="color:var(--ink-2);font-size:12px">'+shortDate(c.date)+'</b> · '+(CSP[c.sport]||c.sport)+(c.durationMin?' · '+c.durationMin+'분':'')+(past?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">지남</span>':'')+'</div>'+
+        '<div>'+esc(c.title)+(c.note?' <span style="color:var(--muted);font-size:12px">— '+esc(c.note)+'</span>':'')+'</div></div>'+
+        '<button class="del" data-cdel="'+esc(c.id)+'" aria-label="삭제">✕</button></div>';}).join("");
+    el.querySelectorAll("[data-cid]").forEach(b=>b.addEventListener("click",()=>toggleCustom(b.getAttribute("data-cid"))));
+    el.querySelectorAll("[data-cdel]").forEach(b=>b.addEventListener("click",()=>removeCustom(b.getAttribute("data-cdel"))));
+  }
+  async function addCustom(c){ if(state.db){try{await state.db.collection("custom_plan").add(c);return;}catch(e){alert("저장 실패.");return;}} c.id="local-"+Date.now(); state.customs.push(c); renderCustom(); }
+  async function toggleCustom(id){ const c=state.customs.find(x=>x.id===id); if(!c)return; const done=!c.done;
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("custom_plan/"+id).update({done});}catch(e){}} else {c.done=done;renderCustom();} }
+  async function removeCustom(id){ const c=state.customs.find(x=>x.id===id); if(!c||!confirm("‘"+c.title+"’ 훈련을 삭제할까요?"))return;
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("custom_plan/"+id).delete();}catch(e){}} else {state.customs=state.customs.filter(x=>x.id!==id);renderCustom();} }
+
+  /* ---- 이번 주 안전 점검 (부하 램프 + TSB 가드레일) ---- */
+  function renderSafety(series){
+    const el=document.getElementById("safetyCard"); if(!el)return;
+    const map=dailyLoads(); const sum=(from,to)=>{let s=0;for(let d=new Date(from);d<=to;d.setDate(d.getDate()+1)){const k=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());s+=map[k]||0;}return s;};
+    const t0=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate());
+    const a1=new Date(t0);a1.setDate(a1.getDate()-6); const b1=new Date(t0);b1.setDate(b1.getDate()-7); const b0=new Date(t0);b0.setDate(b0.getDate()-13);
+    const cur=sum(a1,t0), prev=sum(b0,b1);
+    const ramp=prev>0?((cur-prev)/prev*100):null;
+    const last=series&&series.length?series[series.length-1]:{tsb:0};
+    const rows=[];
+    if(ramp==null) rows.push(['ℹ️','최근 7일 부하 '+Math.round(cur)+' — 이전 7일 데이터가 없어 증가율은 다음 주부터 계산돼요.']);
+    else if(ramp>10) rows.push(['⚠️','최근 7일 부하 <b>+'+Math.round(ramp)+'%</b> (상한 +10%) — 남은 세션은 강도·양을 낮추세요.']);
+    else if(ramp<-30) rows.push(['ℹ️','최근 7일 부하 '+Math.round(ramp)+'% — 회복 주/테이퍼가 아니면 볼륨이 급감했어요.']);
+    else rows.push(['✅','최근 7일 부하 '+(ramp>=0?'+':'')+Math.round(ramp)+'% — 안전한 증가 범위(≤10%).']);
+    if(last.tsb<-30) rows.push(['🛑','TSB '+Math.round(last.tsb)+' 과피로 — 오늘은 휴식 또는 회복 조깅만. 고강도 세션은 이지로 강등.']);
+    else if(last.tsb<-10) rows.push(['⚠️','TSB '+Math.round(last.tsb)+' 피로 누적 — 이번 주 고강도는 1회로 제한하고 이지런 위주.']);
+    else rows.push(['✅','TSB '+(last.tsb>=0?'+':'')+Math.round(last.tsb)+' — 훈련 가능 범위.']);
+    // Ramp Rate(GoldenCheetah RR): 7일간 CTL 증가량. 급등=부상 위험, 급락=테이퍼/이탈.
+    const rr=rampRate(series);
+    if(rr!=null){
+      if(rr>8) rows.push(['🛑','Ramp Rate <b>+'+rr.toFixed(1)+'/주</b> (CTL 급등, 권장 ≤5~8) — 부상 위험. 다음 주는 유지 또는 감량.']);
+      else if(rr>5) rows.push(['⚠️','Ramp Rate +'+rr.toFixed(1)+'/주 — 상한 근처. 한 주 더 올리지 말고 유지.']);
+      else if(rr<-5) rows.push(['ℹ️','Ramp Rate '+rr.toFixed(1)+'/주 — CTL 하락 중(테이퍼·회복이면 정상).']);
+      else rows.push(['✅','Ramp Rate '+(rr>=0?'+':'')+rr.toFixed(1)+'/주 — 안전한 체력 상승 속도.']);
+    }
+    el.innerHTML='<div class="card" style="padding:6px 14px">'+rows.map(r=>'<div style="display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--hair);font-size:13px"><span style="flex:none">'+r[0]+'</span><span>'+r[1]+'</span></div>').join("")+'</div>';
+  }
+  function rampRate(series){ if(!series||series.length<8) return null; const n=series.length; return series[n-1].ctl - series[n-8].ctl; }
+
+  /* ---- 유산소 효율 EF (속도 ÷ 심박) — GoldenCheetah Efficiency Factor의 러닝판 ----
+     EF = (m/min) / bpm. 같은 심박에 더 빠르면 EF↑ = 유산소 효율·이코노미 개선. 유산소 강도(60~85% HRmax) 러닝만 사용해 날씨·강도 노이즈 축소. */
+  function efSessions(){
+    return allSessions().filter(s=>s.sport==="run"&&+s.mhr>60&&+s.dist>=3&&+s.durationMin>=20&&(s.mhr/PHYSIO.maxHR)>=0.60&&(s.mhr/PHYSIO.maxHR)<=0.85)
+      .map(s=>({date:s.date, ef:((+s.dist*1000)/(+s.durationMin))/(+s.mhr)})).sort((a,b)=>a.date<b.date?-1:1);
+  }
+  function renderEF(){
+    const el=document.getElementById("efCard"); if(!el)return;
+    const list=efSessions();
+    if(list.length<3){ el.innerHTML='<div class="card"><div class="empty" style="margin:8px">평균심박·거리가 있는 유산소 러닝(60~85% HRmax)이 3회 이상 쌓이면 EF 추세를 표시합니다. 삼성헬스 CSV를 가져오면 자동 계산돼요.</div></div>'; return; }
+    const byM={}; list.forEach(x=>{const m=x.date.slice(0,7); (byM[m]=byM[m]||[]).push(x.ef);});
+    const months=Object.keys(byM).sort().slice(-12);
+    const pts=months.map(m=>({m, ef:byM[m].reduce((a,b)=>a+b,0)/byM[m].length, n:byM[m].length}));
+    const t0=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()); const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
+    const d28=new Date(t0); d28.setDate(d28.getDate()-28); const d112=new Date(t0); d112.setDate(d112.getDate()-112);
+    const rec=list.filter(x=>x.date>=k(d28)), prev=list.filter(x=>x.date>=k(d112)&&x.date<k(d28));
+    const avg=a=>a.length?a.reduce((s,x)=>s+x.ef,0)/a.length:null;
+    const r=avg(rec), p=avg(prev), chg=(r&&p)?((r-p)/p*100):null;
+    const bestM=pts.reduce((m,x)=>x.ef>m.ef?x:m,pts[0]);
+    const tiles='<div class="lstat" style="margin:0 0 6px">'+
+      '<div class="stat" style="border-left:3px solid '+cssv("--s-full")+'"><div class="k">최근 4주 EF</div><div class="v">'+(r?r.toFixed(2):"—")+'</div><div class="n">'+rec.length+'회 · m/min/bpm</div></div>'+
+      '<div class="stat" style="border-left:3px solid '+cssv("--s-10k")+'"><div class="k">이전 12주 대비</div><div class="v" style="color:'+(chg==null?'var(--ink)':(chg>=0?'var(--good)':'var(--warn)'))+'">'+(chg==null?"—":((chg>=0?"+":"")+chg.toFixed(1)+"%"))+'</div><div class="n">'+(p?('기준 '+p.toFixed(2)):'데이터 부족')+'</div></div>'+
+      '<div class="stat" style="border-left:3px solid '+cssv("--s-tri")+'"><div class="k">최고 월</div><div class="v">'+bestM.ef.toFixed(2)+'</div><div class="n">'+bestM.m+'</div></div></div>';
+    el.innerHTML='<div class="card"><div style="padding:12px 12px 0">'+tiles+'</div><div class="chart-wrap">'+efChart(pts)+'</div>'+
+      '<div style="font-size:11.5px;color:var(--muted);padding:2px 12px 10px">EF↑ = 같은 심박에 더 빠름(이코노미·유산소 기반 개선). 월 평균으로 보되 더위·언덕·피로는 EF를 낮추니 계절 비교는 참고만. CPET상 약점인 이코노미의 <b>직접 추적 지표</b>.</div></div>';
+  }
+  function efChart(pts){
+    if(pts.length<2) return '';
+    const W=360,H=150,L=36,R=14,T=14,B=24,pw=W-L-R,ph=H-T-B;
+    let vmax=Math.max.apply(null,pts.map(p=>p.ef)), vmin=Math.min.apply(null,pts.map(p=>p.ef)); const padv=Math.max(0.03,(vmax-vmin)*0.2); vmax+=padv; vmin-=padv;
+    const x=i=>L+i*(pw/(pts.length-1)), y=v=>T+(vmax-v)/(vmax-vmin)*ph, col=cssv("--s-full");
+    let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="EF 월별 추세">';
+    for(let i=0;i<=3;i++){const gv=vmin+(vmax-vmin)*i/3,gy=y(gv); s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy.toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssv("--grid")+'"/><text x="'+(L-6)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="'+cssv("--muted")+'">'+gv.toFixed(2)+'</text>';}
+    let d=""; pts.forEach((p,i)=>{d+=(i?"L":"M")+x(i).toFixed(1)+" "+y(p.ef).toFixed(1)+" ";});
+    s+='<path d="'+d.trim()+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round"/>';
+    pts.forEach((p,i)=>{ s+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(p.ef).toFixed(1)+'" r="3.5" fill="'+col+'"/>'+
+      ((i%Math.ceil(pts.length/6)===0||i===pts.length-1)?'<text x="'+x(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9" fill="'+cssv("--muted")+'">'+p.m.slice(2).replace("-",".")+'</text>':''); });
+    return s+'</svg>';
+  }
+
+  /* ---- 철인 70.3 계산기 (CSS·FTP·VDOT) ---- */
+  function triCompute(){
+    const t400=parseTime(document.getElementById("t400").value.trim()), t200=parseTime(document.getElementById("t200").value.trim());
+    const p20=+document.getElementById("p20").value||0, bspd=+document.getElementById("bspd").value||28;
+    const out=document.getElementById("triOut"); const parts=[];
+    let swim=null, css=null;
+    if(t400&&t200&&t400>t200){ css=200/(t400-t200); const per100=100/css; swim=(1900/css)*Math.pow(1.04,(1900-400)/1000);
+      parts.push('<div><b>CSS</b> '+css.toFixed(2)+' m/s (100m '+fmt(per100)+') → 1.9km 수영 예상 <b>'+fmt(swim)+'</b></div>'); }
+    else parts.push('<div style="color:var(--muted)">수영: 400m·200m 기록을 넣으면 CSS와 1.9km 예상이 계산돼요.</div>');
+    const bike=90/bspd*3600; parts.push('<div><b>바이크</b> 90km @ '+bspd+'km/h → <b>'+fmt(bike)+'</b>'+(p20?(' · FTP 추정 '+Math.round(p20*0.95)+'W'):'')+'</div>');
+    const ov=overallVDOT(); const hv=distVDOT("half")||ov; const run=hv?predict(21097.5,hv)*1.06:null;  // 브릭 후 러닝 ~6% 저하 가정
+    parts.push(run?'<div><b>러닝</b> 21.1km (하프 VDOT '+Math.round(hv)+', 브릭 저하 6%) → <b>'+fmt(run)+'</b></div>':'<div style="color:var(--muted)">러닝: 하프/10K 기록이 있으면 예상이 계산돼요.</div>');
+    const t1=240,t2=180;
+    if(swim&&run){ const total=swim+t1+bike+t2+run; parts.push('<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--hair)"><b>70.3 종합 예상 ≈ '+fmt(total)+'</b> <span style="color:var(--muted);font-size:12px">(T1 4분·T2 3분 포함 · 컷오프 8:30 대비 완주 여유 확인)</span></div>'); }
+    out.innerHTML=parts.join("");
+    return {t400:document.getElementById("t400").value.trim(),t200:document.getElementById("t200").value.trim(),p20,bspd};
+  }
+  function renderTri(){ const t=state.tri||{}; if(t.t400)document.getElementById("t400").value=t.t400; if(t.t200)document.getElementById("t200").value=t.t200; if(t.p20)document.getElementById("p20").value=t.p20; if(t.bspd)document.getElementById("bspd").value=t.bspd; triCompute(); }
+  async function triSave(){ const v=triCompute(); if(state.db){try{await state.db.doc("tri/inputs").set(v);}catch(e){}} else state.tri=v; }
+
+  /* ---- 코워크 분석용 스냅샷 (AI 코치, 무비용) ----
+     앱이 파생 지표를 한 문서(analysis/snapshot)에 정리해 두면,
+     사용자가 Cowork에서 "이 앱 기록 읽어서 분석해줘"라고 할 때 Claude가 그 문서만 읽어 분석한다. */
+  function buildSnapshot(){
+    const series=pmc(); const last=series.length?series[series.length-1]:{ctl:0,atl:0,tsb:0};
+    const st=statusOf(last.tsb);
+    const cut=new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()-28);
+    const cutKey=cut.getFullYear()+"-"+pad(cut.getMonth()+1)+"-"+pad(cut.getDate());
+    const recent=allSessions().filter(s=>s.date>=cutKey);
+    const ov=overallVDOT();
+    const pbObj={}; ORDER.forEach(k=>{const b=pb(bySport(k)); if(b)pbObj[k]={time:fmt(b.timeSec),sec:b.timeSec,event:b.event,date:b.date};});
+    const races=TARGETS.slice().sort((a,b)=>a.pri-b.pri).map(t=>{
+      let est=null,goalV=null,curV=null,est_ceiling=null,endurance_pct=null,basis=null;
+      let cal_corr=null;
+      if(t.sp&&SPORTS[t.sp]&&SPORTS[t.sp].dist&&t.goalSec){const dm=SPORTS[t.sp].dist*1000;const pm=predictMulti(t.sp);
+        goalV=Math.round(vdot(dm,t.goalSec));
+        if(pm){ est=fmt(pm.timeReal); curV=Math.round(pm.realV); est_ceiling=fmt(pm.timeCeil);
+          endurance_pct=pm.hasVol?Math.round(pm.EF*100):null; cal_corr=pm.calibrated?+pm.corr.toFixed(1):null;
+          basis=(pm.hasVol?"기록+생리+훈련량":"기록 기반(훈련량 데이터 부족)")+(pm.calibrated?"+레이스보정":""); }}
+      return {name:t.name,date:t.date,d_day:daysTo(t.date),priority:t.pri,cat:t.cat,
+        goal:t.goal,est,est_ceiling_vo2max:est_ceiling,goal_vdot:goalV,current_vdot:curV,endurance_pct,race_calibration_vdot:cal_corr,basis,verdict:t.verdict};});
+    const planTotal=WEEKS.reduce((a,w)=>a+w.sess.length,0);
+    const planDone=WEEKS.reduce((a,w)=>{const f=planFulfill(w);return a+w.sess.filter(s=>isDone(w,s,f)).length;},0);
+    const comp=planCompliance();
+    const customsPending=state.customs.filter(c=>!c.done).map(c=>({date:c.date,sport:c.sport,title:c.title}));
+    return {
+      updated:new Date().toISOString(),
+      note:"박정환 러닝·철인3종 트레이닝 허브 스냅샷. Cowork에서 이 문서를 읽어 컨디션 진단·다음 훈련을 제안하세요.",
+      athlete:{name:"박정환", vo2max:53.3, lt_pace:"4:55/km", running_economy:"101 kcal/km(하위권)",
+        max_hr:196, fatmax:"6:45/km", weight_kg:66.4, body_fat_pct:21.0, note_cpet:"심폐·지속력 우수, 러닝 이코노미가 병목 — 효율 개선 최우선"},
+      running_vdot:{overall:ov?Math.round(ov*10)/10:null, speed_engine:Math.round(speedVDOT()*10)/10,
+        marathon:distVDOT("full")?Math.round(distVDOT("full")*10)/10:null, vo2max_ceiling:PHYSIO.vo2max,
+        lt_endurance_vdot:Math.round(ltVDOT()*10)/10,
+        run_volume_4wk_km:Math.round(runVolume().weeklyKm), longest_run_8wk_km:Math.round(runVolume().longestRun),
+        prediction_model:"속도엔진 VDOT(단거리 기록)에서 거리별 지구력 감쇠(훈련량 EF 반영)를 빼 예측, VO₂max를 상한으로. LT 4:55는 보수적(≈VDOT 41)이라 마라톤 지구력 지표로만 사용",
+        gap_note:"속도엔진 VDOT와 마라톤 VDOT 격차 = 지구력(롱런 볼륨) 개선 여지"},
+      pb:pbObj,
+      training_load:{ctl:Math.round(last.ctl*10)/10, atl:Math.round(last.atl*10)/10, tsb:Math.round(last.tsb*10)/10,
+        status:st.t, recommendation:st.r, scale:"TRIMP zonal(평균HR 기반, GC 계수 .50/.92/1.17/1.33/2.00 선형보간) 우선, 심박 없으면 RPE 폴백(시간×(RPE/10)²×1.6). 대회=분×1.9(같은 날 러닝 세션 있으면 생략)"},
+      volume_4wk:{sessions:recent.length, hours:Math.round(recent.reduce((a,s)=>a+(+s.durationMin||0),0)/60*10)/10,
+        km:Math.round(recent.reduce((a,s)=>a+(+s.dist||0),0)), by_sport:(()=>{const o={};recent.forEach(s=>o[s.sport]=(o[s.sport]||0)+1);return o;})()},
+      total_sessions:allSessions().length,
+      goals_2027:{"10k":"sub 40:00","half":"sub 1:30","full":"sub 3:30","triathlon":"하프코스(70.3) 완주","cycle":"그란폰도 완주"},
+      target_races:races,
+      priority_order:"1)10K(10/4, A레이스) 2)하프(10/11) 3)폰도(10/3) 4)풀(11/1, 3:40). 이전의 풀코스 1순위에서 반전됨.",
+      schedule_conflict:"10/3 폰도(토)→10/4 10K(일) 백투백: 10K가 A레이스이므로 폰도는 매우 이지/사교 페이스로 다리 아끼고 10K 전력. 10K(10/4)→하프(10/11) 6일: 회복 후 하프는 컨트롤드. 풀(11/1)은 4순위·목표 3:40(5:13/km). 10K 중심 블록 특성상 롱런·MP 축적이 과제 → 하프 이후 롱런 후반 MP 구간으로 보완.",
+      plan_progress:{done:planDone, total:planTotal, compliance:{due:comp.due, hit:comp.hit, pct:comp.pct, note:"지난 날짜의 비휴식 항목 중 수동 체크(✓)된 비율"}},
+      weekly_targets:(typeof atpTable==="function")?atpTable().map(r=>({week:r.label,range:r.range,phase:r.phase,target_load:Math.round(r.target),actual_load:Math.round(r.actual),pct:r.pct,rr_adjusted:r.rrAdj})):null,
+      plan_model:"주간은 순서(권장 시퀀스)만, 요일 고정 없음(유동). 대회만 날짜 고정. 체크는 수동(✓완료/◐부분). 슬롯별 기록(sessions.slot) 합계로 달성률·잔여 계산, 잔여는 소멸 또는 2차 기록(자동 이관 없음).",
+      plan_adjustments:(typeof adaptPlan==="function")?(function(){const a=adaptPlan(); return {enabled:!state.adaptOff, items:a.log.map(l=>({week:l.week,rule:l.rule,from:l.from,to:l.to,reason:l.reason})), remaining_this_week:a.remaining, carryover:(a.carry||[]).map(c=>({week:c.week,status:c.status,item:c.text,note:c.note})), rules:"주 단위 — R1 TSB<-30 고강도→이지·롱런-30% / TSB -10~-30 고강도 주1회 · R2 RR>8 롱런-20%·다음주 목표-10% · R4 고강도 주2회 상한(계획외 포함) · R5 주간부하>목표115% 단축 · R6 대회(날짜) 보호"};})():null,
+      custom_plan_pending:customsPending,
+      tri_inputs:state.tri||{},
+      safety_rule:"주간 부하 증가 +10% 상한, TSB<-10 고강도 1회 제한, TSB<-30 회복만",
+      data_source_policy:"가민 포러너 265 → Intervals.icu → 앱 자동 동기화(2026-09 이후 기본). 같은 날 같은 종목을 직접 기록했으면 직접 기록 우선. Bryton FIT 라이딩 우선. 삼성헬스는 과거 기록(가져오기 완료분)",
+      wellness_recent:(state.wellness||[]).slice(-14),
+      garmin_sessions:(state.garmins||[]).length,
+    };
+  }
+  let _snapTimer=null, _snapLast="";
+  function scheduleSnapshot(){
+    if(!state.db) return;
+    clearTimeout(_snapTimer);
+    _snapTimer=setTimeout(async ()=>{
+      try{
+        const snap=buildSnapshot(); const j=JSON.stringify(snap);
+        if(j===_snapLast) return; _snapLast=j;
+        await state.db.doc("analysis/snapshot").set(snap);
+        const n=document.getElementById("snapNote"); if(n){n.classList.add("live"); n.querySelector("span:last-child").textContent="분석 스냅샷 최신 상태 — 코워크에서 바로 분석 요청 가능";}
+      }catch(e){}
+    }, 3500);
+  }
+
+  /* tabs */
+  const KICK={home:["홈 · 대시보드","트레이닝 허브"],target:["대회 · 목표","레이스 플랜"],train:["훈련","7주 피킹 플랜"],load:["부하 · 컨디션","트레이닝 로드"],rec:["기록","레이스 로그 · 누적"],guide:["가이드","훈련법 가이드"]};
+  function switchView(v){
+    document.querySelectorAll(".view").forEach(s=>s.classList.remove("active"));
+    document.getElementById("v-"+v).classList.add("active");
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-v")===v));
+    document.getElementById("barKicker").textContent=KICK[v][0];
+    document.getElementById("barTitle").textContent=KICK[v][1];
+    const fab=document.getElementById("fab");
+    fab.classList.toggle("show",v==="rec"); if(v==="rec")fab.textContent="＋ 기록 추가";
+    scrollTo({top:0,behavior:"instant"});
+  }
+  document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>switchView(b.getAttribute("data-v"))));
+
+  /* race modal */
+  const overlay=document.getElementById("overlay");
+  function openModal(){document.getElementById("fDate").value=new Date().toISOString().slice(0,10);["fEvent","fTime","fDetail"].forEach(id=>document.getElementById(id).value="");overlay.classList.add("open");}
+  function closeModal(){overlay.classList.remove("open");}
+  document.getElementById("fab").addEventListener("click",openModal);
+  document.getElementById("cancelBtn").addEventListener("click",closeModal);
+  overlay.addEventListener("click",e=>{if(e.target===overlay)closeModal();});
+  document.getElementById("saveBtn").addEventListener("click",()=>{
+    const sport=fSport.value,date=fDate.value,event=fEvent.value.trim(),timeStr=fTime.value.trim(),detail=fDetail.value.trim();
+    if(!date){alert("날짜를 입력해주세요.");return;}if(!event){alert("대회명을 입력해주세요.");return;}
+    const timeSec=parseTime(timeStr);if(timeStr&&timeSec===null){alert("기록 형식 확인: 42:55 또는 1:35:14");return;}
+    addRecord({date,sport,event,timeSec:timeSec||0,detail});closeModal();});
+
+  /* session modal */
+  const sov=document.getElementById("soverlay");
+  let sessLink=null; // {slotId, wk, target} — 계획 슬롯에서 연 경우
+  let sessEdit=null; // 수정 중인 세션 id (null이면 신규)
+  const $s=id=>document.getElementById(id);
+  function clearSessFields(){["sDur","sMhr","sMaxhr","sDist","sCad","sNote","sReps","sStr"].forEach(id=>$s(id).value=""); $s("sLower").checked=false;}
+  // 종목별 유형 옵션 채우기 + 필드 표시/숨김. 러닝: 거리km·케이던스·유형 / 사이클(실외): 거리km·유형 / 수영: 거리m·유형 / 근력: 시간+메모만
+  function syncSessFields(){
+    const sport=$s("sSport").value, kinds=SESS_KINDS[sport]||null, sel=$s("sKind"), prev=sel.value;
+    sel.innerHTML=kinds?Object.keys(kinds).map(k=>'<option value="'+k+'">'+kinds[k]+'</option>').join(""):'<option value="">—</option>';
+    if(kinds&&kinds[prev]) sel.value=prev;
+    $s("sKindRow").hidden=!kinds;
+    const hasDist=(sport==="run"||sport==="bike"||sport==="swim"||sport==="other");
+    $s("sRowDist").hidden=!hasDist; $s("sCadRow").hidden=(sport!=="run");
+    $s("sDistLbl").textContent=sport==="swim"?"거리(m)":"거리(km)"; $s("sDist").placeholder=sport==="swim"?"예: 1500":"예: 10.0"; $s("sDist").step=sport==="swim"?"50":"0.1";
+    // 보조 항목: 연결 슬롯 목표(반복/스트라이드/하체보강) 또는 유형(인터벌/스트라이드)에 따라 표시
+    const T=sessLink&&sessLink.target; const kind=sel.value;
+    const showReps=sport==="run"&&((T&&T.main&&T.main.reps)||kind==="interval"||kind==="tempo");
+    const showStr=sport==="run"&&((T&&T.sub&&T.sub.kind==="stride")||kind==="stride");
+    const showLower=(sport==="run")&&T&&T.sub&&T.sub.kind==="lower";
+    $s("sRepsRow").hidden=!showReps; $s("sStrRow").hidden=!showStr; $s("sLowerRow").hidden=!showLower; $s("sRowSub").hidden=!(showReps||showStr||showLower);
+    $s("sRepsLbl").textContent="반복 횟수"+(T&&T.main&&T.main.reps?(" (목표 "+T.main.reps+")"):""); $s("sStrLbl").textContent="스트라이드 횟수"+(T&&T.sub&&T.sub.kind==="stride"?(" (목표 "+T.sub.n+")"):"");
+    $s("sHint").innerHTML=sport==="bike"?'실외 라이딩만. <b>10km 이하 또는 20분 이하는 자동으로 출퇴근</b>(훈련 제외·부하 미반영)으로 분류(레이스 제외). 부하는 평균심박(TRIMP), 없으면 RPE.':sport==="strength"?'근력은 <b>시간 + 메모</b>만 기록합니다(예: 스쿼트 60kg 5×5 · 런지 · 카프). 부하는 시간×RPE로 계산.':'<b>부하는 평균 심박(TRIMP)</b>으로 계산하고, 심박이 없으면 시간×강도²(RPE)로 계산합니다. 거리를 넣어야 페이스·EF·누적이 정확해집니다.';
+  }
+  $s("sSport").addEventListener("change",syncSessFields); $s("sKind").addEventListener("change",syncSessFields);
+  function openSess(){sessEdit=null;$s("sTitle").textContent="운동 세션 기록";sessLink=null;$s("sLink").hidden=true;$s("sDate").value=new Date().toISOString().slice(0,10);clearSessFields();$s("sSport").value="run";syncSessFields();sov.classList.add("open");}
+  // 슬롯에서 열기: sport 지정 가능(하체보강 → strength). 유형은 슬롯 태그로 자동 선택.
+  // 기존 기록 수정: 모달에 값 채우고 저장 시 같은 문서 갱신(슬롯 연결 유지)
+  function openSessEdit(id){
+    const r=state.sessions.find(x=>x.id===id); if(!r){alert("직접 입력한 세션만 수정할 수 있어요.");return;}
+    sessEdit=id; $s("sTitle").textContent="기록 수정";
+    const slot=r.slot?findSlot(r.slot):null; sessLink=r.slot?{slotId:r.slot, wk:r.wk||"", target:slot?parseTarget(slot):null}:null;
+    clearSessFields(); $s("sDate").value=r.date||new Date().toISOString().slice(0,10); $s("sSport").value=SPORT_KO[r.sport]?r.sport:"other"; syncSessFields();
+    if(r.kind&&SESS_KINDS[r.sport]&&SESS_KINDS[r.sport][r.kind]){ $s("sKind").value=r.kind; syncSessFields(); }
+    $s("sDur").value=r.durationMin||""; $s("sRpe").value=String(r.rpe||5); $s("sMhr").value=r.mhr||""; $s("sMaxhr").value=r.maxhr||""; $s("sCad").value=r.cad||""; $s("sNote").value=r.note||"";
+    $s("sDist").value=r.dist?(r.sport==="swim"?Math.round(r.dist*1000):r.dist):"";
+    if(r.reps){ $s("sRepsRow").hidden=false; $s("sRowSub").hidden=false; $s("sReps").value=r.reps; }
+    if(r.strides){ $s("sStrRow").hidden=false; $s("sRowSub").hidden=false; $s("sStr").value=r.strides; }
+    if(r.lower){ $s("sLowerRow").hidden=false; $s("sRowSub").hidden=false; $s("sLower").checked=true; }
+    const ln=$s("sLink"); if(sessLink){ ln.hidden=false; ln.innerHTML='📋 계획 연결 유지: <b>'+esc(sessLink.wk)+' · '+esc(slot?slot.t.replace(/^[①-⑦＋]\s*/,"").split(" — ")[0].slice(0,24):r.slot)+'</b> — 날짜·수치를 고친 뒤 저장'; } else ln.hidden=true;
+    sov.classList.add("open"); $s("sDate").focus();
+  }
+  function openSessForSlot(slotId, wkLabel, sport, slotText){
+    sessEdit=null; $s("sTitle").textContent="운동 세션 기록";
+    const slot=findSlot(slotId); const T=slot?parseTarget(slot):null;
+    sessLink={slotId, wk:wkLabel, target:T}; $s("sDate").value=new Date().toISOString().slice(0,10);
+    $s("sSport").value=(sport==="bike"||sport==="swim"||sport==="strength")?sport:"run"; clearSessFields(); syncSessFields();
+    if(slot&&$s("sSport").value==="run"){ const k=slotKind(slot); if(k) $s("sKind").value=k; syncSessFields(); }
+    const ln=$s("sLink"); ln.hidden=false; ln.innerHTML='📋 계획 연결: <b>'+esc(wkLabel)+' · '+esc(slotText)+'</b> — '+(sport==="strength"?'하체보강 실시 시간·메모를 입력하세요':'실제 수행한 거리·시간을 입력하세요 (심박은 선택)');
+    sov.classList.add("open"); ($s("sRowDist").hidden?$s("sDur"):$s("sDist")).focus();
+  }
+  function closeSess(){sov.classList.remove("open"); sessLink=null; sessEdit=null; $s("sLink").hidden=true;}
+  document.getElementById("addSess").addEventListener("click",openSess);
+  document.getElementById("sCancel").addEventListener("click",closeSess);
+  sov.addEventListener("click",e=>{if(e.target===sov)closeSess();});
+  document.getElementById("sSave").addEventListener("click",()=>{
+    const date=$s("sDate").value,sport=$s("sSport").value,dur=+$s("sDur").value,rpe=+$s("sRpe").value;
+    const mhr=+$s("sMhr").value||0, maxhr=+$s("sMaxhr").value||0, cad=+$s("sCad").value||0, note=$s("sNote").value.trim();
+    let dist=+$s("sDist").value||0; if(sport==="swim") dist=dist/1000; // 수영은 m 입력 → km 저장
+    if(!date||!dur||dur<=0){alert("날짜와 시간(분)을 입력해주세요.");return;}
+    const s={date,sport,durationMin:dur,rpe}; if(mhr>40)s.mhr=mhr; if(maxhr>40)s.maxhr=maxhr; if(dist>0)s.dist=Math.round(dist*1000)/1000; if(cad>0&&sport==="run")s.cad=cad; if(note)s.note=note;
+    let kind=$s("sKind").value; if(sport==="bike"&&kind!=="race"&&((dist>0&&dist<=10)||(dur>0&&dur<=20))) kind="commute"; // 규칙: 10km 이하 또는 20분 이하 라이딩 = 출퇴근(훈련 제외)
+    if(kind&&!$s("sKindRow").hidden) s.kind=kind;
+    if(!$s("sRepsRow").hidden&&+$s("sReps").value>0) s.reps=+$s("sReps").value;
+    if(!$s("sStrRow").hidden&&+$s("sStr").value>0) s.strides=+$s("sStr").value;
+    if(!$s("sLowerRow").hidden&&$s("sLower").checked) s.lower=1;
+    if(sessLink){ s.slot=sessLink.slotId; s.wk=sessLink.wk; }
+    if(sessEdit) updateSession(sessEdit,s); else addSession(s);
+    closeSess();});
+  document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("samFile").click());
+  document.getElementById("samFile").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f)importSamsung(f);e.target.value="";});
+  document.getElementById("fitBtn").addEventListener("click",()=>document.getElementById("fitFile").click());
+  document.getElementById("fitFile").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f)importFit(f);e.target.value="";});
+
+  /* custom training modal */
+  const cov=document.getElementById("coverlay");
+  function openCustom(){document.getElementById("cDate").value=new Date().toISOString().slice(0,10);["cTitle2","cDur","cNote"].forEach(id=>document.getElementById(id).value="");cov.classList.add("open");document.getElementById("cTitle2").focus();}
+  function closeCustom(){cov.classList.remove("open");}
+  document.getElementById("addCustom").addEventListener("click",openCustom);
+  document.getElementById("cCancel").addEventListener("click",closeCustom);
+  cov.addEventListener("click",e=>{if(e.target===cov)closeCustom();});
+  document.getElementById("cSave").addEventListener("click",()=>{
+    const date=document.getElementById("cDate").value,sport=document.getElementById("cSport").value,title=document.getElementById("cTitle2").value.trim();
+    const dur=+document.getElementById("cDur").value||0,note=document.getElementById("cNote").value.trim();
+    if(!date){alert("날짜를 입력해주세요.");return;} if(!title){alert("훈련 내용을 입력해주세요.");return;}
+    addCustom({date,sport,title,durationMin:dur,note,done:false,ts:Date.now()});closeCustom();});
+  document.getElementById("triBtn").addEventListener("click",triSave);
+
+  /* gear modal */
+  const gov=document.getElementById("goverlay");
+  function openGear(){document.getElementById("gStart").value=new Date().toISOString().slice(0,10);["gName","gEnd","gInit"].forEach(id=>document.getElementById(id).value="");document.getElementById("gAlert").value=document.getElementById("gSport").value==="run"?700:"";gov.classList.add("open");document.getElementById("gName").focus();}
+  function closeGear(){gov.classList.remove("open");}
+  document.getElementById("addGear").addEventListener("click",openGear);
+  document.getElementById("gCancel").addEventListener("click",closeGear);
+  gov.addEventListener("click",e=>{if(e.target===gov)closeGear();});
+  document.getElementById("gSport").addEventListener("change",e=>{const a=document.getElementById("gAlert"); if(!a.value||["700","3000"].indexOf(a.value)>=0) a.value=e.target.value==="run"?700:e.target.value==="bike"?3000:"";});
+  document.getElementById("gSave").addEventListener("click",()=>{
+    const name=document.getElementById("gName").value.trim(),sport=document.getElementById("gSport").value,startDate=document.getElementById("gStart").value,endDate=document.getElementById("gEnd").value||null;
+    const initialKm=+document.getElementById("gInit").value||0, alertKm=+document.getElementById("gAlert").value||0;
+    if(!name){alert("장비 이름을 입력해주세요.");return;} if(!startDate){alert("사용 시작일을 입력해주세요.");return;}
+    addGear({name,sport,startDate,endDate,initialKm,alertKm,ts:Date.now()});closeGear();});
+
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeSess();closeCustom();closeGear();}});
+
+  document.getElementById("icuSyncBtn").addEventListener("click",()=>icuSync(true));
+  document.getElementById("cloudSetBtn").addEventListener("click",()=>openCloudSettings());
+  document.getElementById("themeBtn").addEventListener("click",()=>{const cur=document.documentElement.getAttribute("data-theme");const dark=cur?cur==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",dark?"light":"dark");renderAll();});
+
+  /* ===== GitHub Pages 판 — 클라우드(Supabase) + 가민(Intervals.icu) 연동 =====
+     · db: claude.ai 전용 저장소 대신 Supabase 'docs' 표(collection·id·data)에 같은 구조로 저장
+     · 로그인: Supabase 이메일·비밀번호 (내 계정 데이터만 읽고 쓰도록 RLS로 보호)
+     · 가민: 워치 → 가민 커넥트 → Intervals.icu(자동) → 앱이 열릴 때 API로 읽어 imports/garmin에 저장
+     · 키 보관: Supabase 주소·공개키와 Intervals.icu API 키는 이 기기(localStorage)에만 저장 */
+  const CONFIG={SUPABASE_URL:"",SUPABASE_ANON_KEY:""}; // 비워 두면 첫 실행 때 화면에서 입력
+  const LS={get:k=>{try{return localStorage.getItem(k);}catch(e){return null;}},set:(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}},del:k=>{try{localStorage.removeItem(k);}catch(e){}}};
+  function ovl(html){ const o=document.createElement("div"); o.className="cl-ovl"; o.innerHTML='<div class="cl-box" role="dialog" aria-modal="true">'+html+'</div>'; document.body.appendChild(o); const f=o.querySelector("input"); if(f)setTimeout(()=>f.focus(),50); return o; }
+  function showSetup(){ return new Promise(res=>{
+    const o=ovl('<h2>클라우드 연결 (처음 한 번)</h2><p>Supabase 프로젝트의 Settings → API(또는 Data API)에서 복사해 넣으세요. 이 기기에만 저장됩니다.</p>'+
+      '<label for="clUrl">Project URL</label><input id="clUrl" placeholder="https://xxxx.supabase.co" autocomplete="off">'+
+      '<label for="clKey">anon public 키</label><input id="clKey" placeholder="eyJ… 또는 sb_publishable_…" autocomplete="off">'+
+      '<div class="cl-err" id="clErr" role="alert"></div><div class="cl-row"><button class="cl-btn" id="clGo">다음</button></div>');
+    o.querySelector("#clGo").onclick=()=>{ const url=o.querySelector("#clUrl").value.trim().replace(/\/+$/,""), key=o.querySelector("#clKey").value.trim();
+      if(!/^https:\/\/.+/.test(url)||key.length<20){ o.querySelector("#clErr").textContent="주소와 키를 확인해 주세요."; return; }
+      LS.set("sbUrl",url); LS.set("sbKey",key); o.remove(); res({url,key}); };
+  }); }
+  function showLogin(sb){ return new Promise(res=>{
+    const o=ovl('<h2>로그인</h2><p>Supabase에서 만든 내 계정으로 로그인합니다. 기기마다 한 번만 하면 유지돼요.</p>'+
+      '<label for="clEm">이메일</label><input id="clEm" type="email" autocomplete="username">'+
+      '<label for="clPw">비밀번호</label><input id="clPw" type="password" autocomplete="current-password">'+
+      '<div class="cl-err" id="clErr" role="alert"></div><div class="cl-row"><button class="cl-btn" id="clGo">로그인</button><button class="cl-btn sec" id="clReset">연결 정보 다시 입력</button></div>');
+    const go=async()=>{ const e=o.querySelector("#clErr"); e.textContent="로그인 중…";
+      const {data,error}=await sb.auth.signInWithPassword({email:o.querySelector("#clEm").value.trim(),password:o.querySelector("#clPw").value});
+      if(error){ e.textContent="로그인 실패: "+(/Invalid login/i.test(error.message)?"이메일 또는 비밀번호가 맞지 않아요.":error.message); return; }
+      o.remove(); res(data.session); };
+    o.querySelector("#clGo").onclick=go; o.querySelector("#clPw").addEventListener("keydown",ev=>{if(ev.key==="Enter")go();});
+    o.querySelector("#clReset").onclick=()=>{ LS.del("sbUrl"); LS.del("sbKey"); location.reload(); };
+  }); }
+  function makeSupaDb(sb, uid){
+    const T="docs", L=[];
+    const split=p=>{const i=p.indexOf("/");return [p.slice(0,i),p.slice(i+1)];};
+    const newId=()=>{const a="abcdefghijklmnopqrstuvwxyz0123456789",b=crypto.getRandomValues(new Uint8Array(20));let s="";b.forEach(x=>s+=a[x%36]);return s;};
+    async function qCol(col){ const {data,error}=await sb.from(T).select("id,data").eq("collection",col); if(error)throw error; return {docs:data.map(r=>({id:r.id,data:()=>r.data}))}; }
+    async function qDoc(col,id){ const {data,error}=await sb.from(T).select("data").eq("collection",col).eq("id",id).maybeSingle(); if(error)throw error; return {id,exists:!!data,data:()=>data?data.data:null}; }
+    async function fire(l){ try{ l.cb(l.id==null?await qCol(l.col):await qDoc(l.col,l.id)); }catch(e){ if(l.err)l.err(e); } }
+    const notify=col=>Promise.all(L.filter(l=>l.col===col).map(fire));
+    async function put(col,id,data){ const {error}=await sb.from(T).upsert({owner:uid,collection:col,id,data,updated_at:new Date().toISOString()},{onConflict:"owner,collection,id"}); if(error)throw error; notify(col); }
+    const listen=(col,id,cb,err)=>{ const l={col,id,cb,err}; L.push(l); fire(l); return ()=>{const i=L.indexOf(l); if(i>=0)L.splice(i,1);}; };
+    // 다른 기기에서 바꾼 내용: 앱으로 돌아올 때 다시 읽기
+    document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") [...new Set(L.map(l=>l.col))].forEach(notify); });
+    return {
+      sb, uid,
+      collection(col){ return { onSnapshot:(cb,err)=>listen(col,null,cb,err), async add(obj){ const id=newId(); await put(col,id,obj); return {id}; } }; },
+      doc(path){ const [col,id]=split(path); return {
+        onSnapshot:(cb,err)=>listen(col,id,cb,err),
+        set:obj=>put(col,id,obj),
+        async update(obj){ const cur=await qDoc(col,id); await put(col,id,Object.assign({},cur.data()||{},obj)); },
+        async delete(){ const {error}=await sb.from(T).delete().eq("collection",col).eq("id",id); if(error)throw error; notify(col); } }; },
+      async bulkPut(rows){ for(let i=0;i<rows.length;i+=200){ const {error}=await sb.from(T).upsert(rows.slice(i,i+200).map(r=>({owner:uid,collection:r.collection,id:r.id,data:r.data,updated_at:new Date().toISOString()})),{onConflict:"owner,collection,id"}); if(error)throw error; } [...new Set(rows.map(r=>r.collection))].forEach(notify); },
+      async dumpAll(){ const {data,error}=await sb.from(T).select("collection,id,data"); if(error)throw error; return data; }
+    };
+  }
+  async function initCloud(){
+    if(!window.supabase||!supabase.createClient) throw new Error("supabase-js를 불러오지 못했어요 (인터넷 확인).");
+    let url=LS.get("sbUrl")||CONFIG.SUPABASE_URL, key=LS.get("sbKey")||CONFIG.SUPABASE_ANON_KEY;
+    if(!url||!key) ({url,key}=await showSetup());
+    const sb=supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true}});
+    let {data:{session}}=await sb.auth.getSession();
+    if(!session) session=await showLogin(sb);
+    return makeSupaDb(sb, session.user.id);
+  }
+
+  /* ---- 가민 · Intervals.icu 동기화 ---- */
+  const ICU_SPORT={Run:"run",TrailRun:"run",VirtualRun:"run",Ride:"bike",VirtualRide:"bike",GravelRide:"bike",MountainBikeRide:"bike",EBikeRide:"bike",Swim:"swim",OpenWaterSwim:"swim",WeightTraining:"strength"};
+  function icuCfg(){ return {aid:LS.get("icuAid")||"0", key:LS.get("icuKey")||""}; }
+  async function icuGet(path){ const c=icuCfg(); const r=await fetch("https://intervals.icu/api/v1/athlete/"+encodeURIComponent(c.aid)+path,{headers:{Authorization:"Basic "+btoa("API_KEY:"+c.key)}});
+    if(r.status===401||r.status===403) throw new Error("API 키 또는 선수 ID를 확인해 주세요 (HTTP "+r.status+")"); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
+  function icuMap(a){ const sp=ICU_SPORT[a.type]; const dt=String(a.start_date_local||"").slice(0,10); if(!sp||!dt) return null;
+    const s={date:dt,sport:sp,dist:Math.round((+a.distance||0)/10)/100,durationMin:Math.round((+a.moving_time||+a.elapsed_time||0)/6)/10,mhr:Math.round(+a.average_heartrate||0),src:"icu:"+a.id,name:String(a.name||"").slice(0,60)};
+    if(+a.max_heartrate>0) s.maxHr=Math.round(+a.max_heartrate); if(+a.icu_average_watts>0||+a.average_watts>0) s.power=Math.round(+a.icu_average_watts||+a.average_watts); return s; }
+  function icuWell(w){ const n=v=>(v==null||v==="")?null:+v; const o={date:String(w.id||"").slice(0,10),rhr:n(w.restingHR),hrv:n(w.hrv),sleepH:w.sleepSecs?Math.round(w.sleepSecs/360)/10:null,sleepScore:n(w.sleepScore),weight:n(w.weight),readiness:n(w.readiness)};
+    return (o.date&&[o.rhr,o.hrv,o.sleepH,o.sleepScore,o.weight,o.readiness].some(v=>v!=null))?o:null; }
+  let _icuBusy=false;
+  function icuStatus(t){ const e=document.getElementById("icuStatus"); if(e) e.textContent=t; }
+  function icuStatusIdle(){ const last=+LS.get("icuLastSync")||0, g=state.garmins||[];
+    icuStatus(!icuCfg().key?"연결 전 — ⚙ 연동에서 Intervals.icu API 키를 넣으면 자동 동기화돼요.":
+      ("가민 활동 "+g.length+"건"+(last?(" · 마지막 동기화 "+new Date(last).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"})):"")+" · 앱을 열 때 자동 동기화")); }
+  async function icuSync(manual){
+    if(_icuBusy) return; if(!icuCfg().key){ if(manual) openCloudSettings(); icuStatusIdle(); return; }
+    if(!state.db){ icuStatus("클라우드 연결 후 동기화할 수 있어요."); return; }
+    _icuBusy=true; icuStatus("가민 기록 동기화 중…");
+    try{
+      const newest=dkey(TODAY), o=new Date(TODAY); o.setDate(o.getDate()-45); const oldest=dkey(o);
+      const acts=await icuGet("/activities?oldest="+oldest+"&newest="+newest);
+      const got=(Array.isArray(acts)?acts:[]).map(icuMap).filter(Boolean), fetched=new Set(got.map(s=>s.src));
+      const before=state.garmins||[], had=new Set(before.map(s=>s.src));
+      // 45일 창 안에서 Intervals.icu에서 지운 활동은 앱에서도 제거, 창 밖 과거 기록은 보존
+      const keep=before.filter(s=>s.date<oldest||fetched.has(s.src)), m=new Map(keep.map(s=>[s.src,s])); got.forEach(s=>m.set(s.src,s));
+      const sessions=[...m.values()].sort((a,b)=>a.date<b.date?-1:1);
+      let wellness=state.wellness||[];
+      try{ const wo=new Date(TODAY); wo.setDate(wo.getDate()-21); const w=await icuGet("/wellness?oldest="+dkey(wo)+"&newest="+newest);
+        const wm=new Map(wellness.map(x=>[x.date,x])); (Array.isArray(w)?w:[]).map(icuWell).filter(Boolean).forEach(x=>wm.set(x.date,x));
+        const cut=new Date(TODAY); cut.setDate(cut.getDate()-120); wellness=[...wm.values()].filter(x=>x.date>=dkey(cut)).sort((a,b)=>a.date<b.date?-1:1); }catch(e){}
+      await state.db.doc("imports/garmin").set({sessions,wellness,updated:new Date().toISOString(),source:"intervals.icu"});
+      LS.set("icuLastSync",String(Date.now()));
+      const nNew=got.filter(s=>!had.has(s.src)).length; _icuBusy=false; icuStatusIdle();
+      if(manual) icuStatus(document.getElementById("icuStatus").textContent+" — 신규 "+nNew+"건");
+    }catch(e){ _icuBusy=false; icuStatus("동기화 실패: "+e.message); }
+  }
+  function renderWellness(){ const el=document.getElementById("wellCard"); if(!el) return; const w=(state.wellness||[]).slice(-7);
+    if(!w.length){ el.innerHTML='<div style="color:var(--muted);font-size:13px">가민 웰니스(안정시 심박·HRV·수면)가 들어오면 여기에 표시돼요.</div>'; return; }
+    const t=w[w.length-1], avg=k=>{const v=w.map(x=>x[k]).filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;};
+    const cell=(lab,v,u,a)=>'<div style="flex:1;min-width:84px"><div style="font-size:11.5px;color:var(--muted)">'+lab+'</div><div style="font-size:18px;font-weight:700">'+(v==null?'—':(v+u))+'</div>'+(a!=null?('<div style="font-size:11px;color:var(--muted)">7일 평균 '+Math.round(a*10)/10+u+'</div>'):'')+'</div>';
+    el.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:6px">'+esc(t.date)+' 기준 · 가민</div><div style="display:flex;gap:10px;flex-wrap:wrap">'+
+      cell("안정시 심박",t.rhr,"",avg("rhr"))+cell("HRV",t.hrv,"ms",avg("hrv"))+cell("수면",t.sleepH,"h",avg("sleepH"))+(t.readiness!=null?cell("준비도",t.readiness,"",null):"")+'</div>'; }
+
+  /* ---- 연동 설정 창 ---- */
+  function openCloudSettings(){
+    const c=icuCfg(), db=state.db;
+    const o=ovl('<h2>연동 · 데이터</h2>'+
+      '<h3>가민 (Intervals.icu)</h3><p>Intervals.icu → Settings → Developer Settings의 API 키. 이 기기에만 저장돼요.</p>'+
+      '<label for="icuAid">선수 ID</label><input id="icuAid" value="'+esc(c.aid)+'" autocomplete="off">'+
+      '<label for="icuKey">API 키</label><input id="icuKey" type="password" value="'+esc(c.key)+'" autocomplete="off">'+
+      '<div class="cl-row"><button class="cl-btn" id="icuSave">저장 후 동기화</button></div>'+
+      '<h3>데이터</h3><div class="cl-row"><button class="cl-btn sec" id="clImp">기존 앱 데이터 가져오기 (JSON)</button><button class="cl-btn sec" id="clBak">전체 백업 다운로드</button></div>'+
+      '<input type="file" id="clImpFile" accept=".json,application/json" hidden>'+
+      '<h3>계정</h3><div class="cl-row"><button class="cl-btn sec" id="clOut">로그아웃</button><button class="cl-btn sec" id="clClose">닫기</button></div>'+
+      '<div class="cl-err" id="clMsg" role="status"></div>');
+    const msg=t=>o.querySelector("#clMsg").textContent=t;
+    o.addEventListener("click",e=>{ if(e.target===o) o.remove(); });
+    o.querySelector("#clClose").onclick=()=>o.remove();
+    o.querySelector("#icuSave").onclick=()=>{ LS.set("icuAid",o.querySelector("#icuAid").value.trim()||"0"); const k=o.querySelector("#icuKey").value.trim(); if(k)LS.set("icuKey",k); else LS.del("icuKey"); o.remove(); icuSync(true); };
+    o.querySelector("#clOut").onclick=async()=>{ if(!db)return; if(!confirm("로그아웃할까요? (데이터는 클라우드에 그대로 남아요)"))return; await db.sb.auth.signOut(); location.reload(); };
+    o.querySelector("#clBak").onclick=async()=>{ if(!db){msg("클라우드 연결 후 사용할 수 있어요.");return;} try{ const rows=await db.dumpAll();
+      const blob=new Blob([JSON.stringify({format:"training-hub-migrate",exported:dkey(TODAY),docs:rows},null,1)],{type:"application/json"});
+      const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="training-hub-backup-"+dkey(TODAY)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); msg("백업 파일을 내려받았어요 ("+rows.length+"개 문서)."); }catch(e){ msg("백업 실패: "+e.message); } };
+    o.querySelector("#clImp").onclick=()=>o.querySelector("#clImpFile").click();
+    o.querySelector("#clImpFile").onchange=async ev=>{ const f=ev.target.files[0]; if(!f||!db)return; try{ const j=JSON.parse(await f.text()); const rows=(j&&j.docs)||[];
+      if(j.format!=="training-hub-migrate"||!rows.length) throw new Error("이 앱의 이전·백업 파일이 아니에요.");
+      const cnt={}; rows.forEach(r=>cnt[r.collection]=(cnt[r.collection]||0)+1);
+      if(!confirm("가져올까요?\n"+Object.entries(cnt).map(([k,v])=>k+" "+v).join(" · ")+"\n(같은 ID는 덮어쓰고, 나머지 기록은 유지)")) return;
+      msg("가져오는 중…"); await db.bulkPut(rows.filter(r=>r.collection&&r.id&&r.collection!=="analysis")); msg("가져오기 완료 ✓ "+rows.length+"개 문서"); }catch(e){ msg("가져오기 실패: "+e.message); } finally{ ev.target.value=""; } };
+  }
+
+  /* init + db */
+  const note=document.getElementById("statusNote"),noteT=document.getElementById("statusText");
+  renderAll();
+  (async function(){
+    let db=null; try{db=await initCloud();}catch(e){db=null; console.error(e); noteT.textContent="클라우드 연결 실패: "+e.message;}
+    if(!db){if(!/실패/.test(noteT.textContent))noteT.textContent="로컬 미리보기 모드 — 변경이 이 브라우저에만 임시 반영됩니다.";const sn=document.getElementById("snapNote");if(sn)sn.querySelector("span:last-child").textContent="로컬 모드 — 클라우드 저장 시 코워크 분석 가능";return;}
+    state.db=db; note.classList.add("live"); noteT.textContent="클라우드(Supabase) 자동 저장 중 — 휴대폰·PC 어디서 열어도 같은 기록입니다.";
+    db.collection("races").onSnapshot(s=>{const r=s.docs.map(d=>Object.assign({id:d.id},d.data()));state.records=r.length?r:INITIAL.slice();renderAll();},()=>{});
+    db.collection("plan").onSnapshot(s=>{const m={};s.docs.forEach(d=>{const v=d.data()||{};const st=v.status||(v.done?"done":null);if(st)m[d.id]={status:st,note:v.note||"",waived:!!v.waived};});state.slot=m;renderWeeks();},()=>{});
+    db.collection("sessions").onSnapshot(s=>{state.sessions=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderLoad();renderTargets();},()=>{});
+    db.doc("imports/samsung").onSnapshot(d=>{const v=d.exists?d.data():null;state.imports=(v&&Array.isArray(v.sessions))?v.sessions:[];renderLoad();renderTargets();},()=>{});
+    db.doc("imports/bryton").onSnapshot(d=>{const v=d.exists?d.data():null;state.brytons=(v&&Array.isArray(v.sessions))?v.sessions:[];renderLoad();renderTargets();},()=>{});
+    db.collection("cal_races").onSnapshot(s=>{state.calRaces=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderCal();renderHomeRaces();},()=>{});
+    db.collection("custom_plan").onSnapshot(s=>{state.customs=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderCustom();},()=>{});
+    db.collection("gear").onSnapshot(s=>{state.gear=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderGear();},()=>{});
+    db.doc("settings/plan").onSnapshot(d=>{const v=d.exists?d.data():null; state.adaptOff=!!(v&&v.adaptOff); renderWeeks();},()=>{});
+    db.doc("tri/inputs").onSnapshot(d=>{state.tri=d.exists?(d.data()||{}):{};renderTri();},()=>{});
+    let _icuFirst=true;
+    db.doc("imports/garmin").onSnapshot(d=>{const v=d.exists?d.data():null;state.garmins=(v&&Array.isArray(v.sessions))?v.sessions:[];state.wellness=(v&&Array.isArray(v.wellness))?v.wellness:[];renderLoad();renderTargets();renderWellness();icuStatusIdle();
+      if(_icuFirst){_icuFirst=false; if(Date.now()-(+LS.get("icuLastSync")||0)>10*60*1000) icuSync(false);} },()=>{});
+    document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&Date.now()-(+LS.get("icuLastSync")||0)>10*60*1000) icuSync(false); });
+  })();
+})();
+</script>
+
+</body></html>
