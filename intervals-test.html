@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intervals.icu 브라우저 직접 연결 테스트</title>
+<style>
+  :root{--bg:#f3f5f4;--ink:#16211d;--muted:#5d6b66;--line:#cfd8d4;--ok:#1f7a4d;--bad:#b3261e;--warn:#8a5a00;--acc:#0b5d6b;}
+  @media (prefers-color-scheme:dark){:root{--bg:#121816;--ink:#e6eeeb;--muted:#9aa8a3;--line:#2c3834;--ok:#5fcf93;--bad:#ff8a80;--warn:#f0c060;--acc:#6cc7d6;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+  main{max-width:640px;margin:0 auto;padding:24px 18px 48px}
+  h1{font-size:21px;margin:0 0 4px}
+  p.lead{color:var(--muted);margin:0 0 20px}
+  label{display:block;font-weight:600;margin:14px 0 4px}
+  input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font:inherit}
+  .hint{color:var(--muted);font-size:13px;margin-top:4px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  button{padding:11px 16px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+  button.sec{background:transparent;color:var(--acc)}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+  #verdict{margin-top:22px;padding:14px;border-radius:10px;border:2px solid var(--line);font-weight:700;display:none}
+  #verdict.ok{border-color:var(--ok);color:var(--ok)} #verdict.bad{border-color:var(--bad);color:var(--bad)} #verdict.warn{border-color:var(--warn);color:var(--warn)}
+  ol{padding-left:20px;margin:16px 0 0} ol li{margin:8px 0}
+  .st{font-weight:700} .st.ok{color:var(--ok)} .st.bad{color:var(--bad)} .st.warn{color:var(--warn)}
+  pre{white-space:pre-wrap;word-break:break-all;background:rgba(127,127,127,.08);padding:10px;border-radius:8px;font-size:12.5px;max-height:260px;overflow:auto}
+</style>
+</head>
+<body>
+<main>
+  <h1>Intervals.icu 브라우저 직접 연결 테스트</h1>
+  <p class="lead">훈련 앱이 서버 없이 Intervals.icu 데이터를 바로 읽을 수 있는지 확인합니다. API 키는 이 기기 밖으로 보내지 않고, Intervals.icu에만 전송됩니다.</p>
+
+  <label for="aid">선수 ID</label>
+  <input id="aid" value="0" autocomplete="off">
+  <div class="hint">0 = API 키 주인. 안 되면 Intervals.icu 주소의 i12345 형식 ID를 넣으세요.</div>
+
+  <label for="key">API 키</label>
+  <input id="key" type="password" autocomplete="off" placeholder="설정 → Developer Settings에서 발급">
+  <div class="hint">키는 저장되지 않습니다. 테스트가 끝나면 재발급해도 됩니다.</div>
+
+  <div class="row">
+    <button id="run">테스트 실행</button>
+    <button id="noauth" class="sec">키 없이 연결만 확인</button>
+  </div>
+
+  <div id="verdict" role="status" aria-live="polite"></div>
+  <ol id="steps"></ol>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const BASE="https://intervals.icu/api/v1/athlete/";
+const d=n=>{const t=new Date(Date.now()-n*864e5);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+function step(title){const li=document.createElement("li");li.innerHTML='<span class="st">…</span> '+title+'<pre hidden></pre>';$("steps").appendChild(li);
+  return {set(cls,txt,detail){const s=li.querySelector(".st");s.className="st "+cls;s.textContent=txt;if(detail){const p=li.querySelector("pre");p.hidden=false;p.textContent=detail;}}};}
+function verdict(cls,txt){const v=$("verdict");v.style.display="block";v.className=cls;v.textContent=txt;}
+async function call(path,key){
+  const h={}; if(key) h.Authorization="Basic "+btoa("API_KEY:"+key);
+  try{const r=await fetch(BASE+path,{headers:h});let body="";try{body=await r.text();}catch(e){}return {ok:true,status:r.status,body};}
+  catch(e){return {ok:false,err:String(e)};}
+}
+$("noauth").onclick=async()=>{
+  $("steps").innerHTML="";$("verdict").style.display="none";
+  const s=step("키 없이 요청 (응답을 읽을 수 있는지)");
+  const r=await call(encodeURIComponent($("aid").value.trim()||"0")+"/activities?oldest="+d(7)+"&newest="+d(0));
+  if(!r.ok){s.set("bad","차단",r.err);verdict("bad","응답을 읽지 못했습니다. 인터넷 연결을 확인하고, 계속 같으면 브라우저 직접 연결은 막혀 있습니다.");return;}
+  s.set("ok","응답 읽음 (HTTP "+r.status+")",r.body.slice(0,400));
+  verdict("warn","기본 연결은 됩니다. API 키를 넣고 '테스트 실행'으로 인증 요청까지 확인하세요 — 인증 요청은 브라우저가 별도 사전 확인을 하므로 결과가 다를 수 있습니다.");
+};
+$("run").onclick=async()=>{
+  $("steps").innerHTML="";$("verdict").style.display="none";
+  const key=$("key").value.trim(), aid=encodeURIComponent($("aid").value.trim()||"0");
+  if(!key){verdict("warn","API 키를 입력하세요.");$("key").focus();return;}
+  const tests=[["최근 14일 활동",aid+"/activities?oldest="+d(14)+"&newest="+d(0)],["최근 7일 웰니스 (수면·HRV·안정시 심박)",aid+"/wellness?oldest="+d(7)+"&newest="+d(0)],["선수 프로필",aid]];
+  let blocked=0, authFail=0, pass=0, summary="";
+  for(const [t,p] of tests){
+    const s=step(t); const r=await call(p,key);
+    if(!r.ok){blocked++;s.set("bad","차단 (브라우저가 응답을 막음)",r.err);continue;}
+    if(r.status===401||r.status===403){authFail++;s.set("warn","연결됨 · 인증 실패 (HTTP "+r.status+")",r.body.slice(0,300));continue;}
+    if(r.status>=400){s.set("warn","연결됨 · 오류 (HTTP "+r.status+")",r.body.slice(0,300));continue;}
+    pass++;
+    let info=r.body.slice(0,600);
+    try{const j=JSON.parse(r.body);if(Array.isArray(j)){info=j.length+"건\n"+JSON.stringify(j.slice(0,2),null,1).slice(0,600);if(t.startsWith("최근 14일"))summary=j.length+"건 활동";}}catch(e){}
+    s.set("ok","성공",info);
+  }
+  if(blocked===tests.length) verdict("bad","실패 — 브라우저 직접 연결이 막혀 있습니다. 방식 B는 불가, 대안(커스텀 커넥터)으로 갑니다.");
+  else if(pass===tests.length) verdict("ok","성공 — 방식 B 가능합니다"+(summary?(" ("+summary+" 확인)"):"")+". 이 화면을 캡처해서 보내주세요.");
+  else if(authFail&&!blocked) verdict("warn","연결은 됩니다(방식 B 가능). 인증만 실패했으니 API 키와 선수 ID를 확인하고 다시 실행하세요.");
+  else verdict("warn","일부만 성공했습니다. 각 항목 결과를 캡처해서 보내주세요.");
+};
+</script>
+</body>
+</html>
