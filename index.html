@@ -918,7 +918,7 @@
     if(s.kind&&K[s.kind]) return K[s.kind];
     if(s.slot){ const sl=findSlot(s.slot); const k=sl&&slotKind(sl); if(k&&K[k]) return K[k]; }
     if(s.sport==="run") return (+s.dist>=12)?"롱런":"이지런";
-    if(s.sport==="bike") return ((+s.dist||0)<=10||(+s.durationMin||0)<=20)?"출퇴근":"지구력"; // 유형 미지정 라이딩(임포트 등): 10km 이하 또는 20분 이하 = 출퇴근
+    if(s.sport==="bike") return ((+s.dist||0)<=5||(+s.durationMin||0)<=20)?"출퇴근":"지구력"; // 유형 미지정 라이딩(임포트 등): 5km 이하 또는 20분 이하 = 출퇴근
     if(s.sport==="swim") return "자유"; return "";
   }
   function sessEmoji(s){ return SPORT_EMOJI[s.sport]||"•"; }
@@ -1817,7 +1817,7 @@
     const showLower=(sport==="run")&&T&&T.sub&&T.sub.kind==="lower";
     $s("sRepsRow").hidden=!showReps; $s("sStrRow").hidden=!showStr; $s("sLowerRow").hidden=!showLower; $s("sRowSub").hidden=!(showReps||showStr||showLower);
     $s("sRepsLbl").textContent="반복 횟수"+(T&&T.main&&T.main.reps?(" (목표 "+T.main.reps+")"):""); $s("sStrLbl").textContent="스트라이드 횟수"+(T&&T.sub&&T.sub.kind==="stride"?(" (목표 "+T.sub.n+")"):"");
-    $s("sHint").innerHTML=sport==="bike"?'실외 라이딩만. <b>10km 이하 또는 20분 이하는 자동으로 출퇴근</b>(훈련 제외·부하 미반영)으로 분류(레이스 제외). 부하는 평균심박(TRIMP), 없으면 RPE.':sport==="strength"?'근력은 <b>시간 + 메모</b>만 기록합니다(예: 스쿼트 60kg 5×5 · 런지 · 카프). 부하는 시간×RPE로 계산.':'<b>부하는 평균 심박(TRIMP)</b>으로 계산하고, 심박이 없으면 시간×강도²(RPE)로 계산합니다. 거리를 넣어야 페이스·EF·누적이 정확해집니다.';
+    $s("sHint").innerHTML=sport==="bike"?'실외 라이딩만. <b>5km 이하 또는 20분 이하는 자동으로 출퇴근</b>(훈련 제외·부하 미반영)으로 분류(레이스 제외). 부하는 평균심박(TRIMP), 없으면 RPE.':sport==="strength"?'근력은 <b>시간 + 메모</b>만 기록합니다(예: 스쿼트 60kg 5×5 · 런지 · 카프). 부하는 시간×RPE로 계산.':'<b>부하는 평균 심박(TRIMP)</b>으로 계산하고, 심박이 없으면 시간×강도²(RPE)로 계산합니다. 거리를 넣어야 페이스·EF·누적이 정확해집니다.';
   }
   $s("sSport").addEventListener("change",syncSessFields); $s("sKind").addEventListener("change",syncSessFields);
   function openSess(){sessEdit=null;$s("sTitle").textContent="운동 세션 기록";sessLink=null;$s("sLink").hidden=true;$s("sDate").value=new Date().toISOString().slice(0,10);clearSessFields();$s("sSport").value="run";syncSessFields();sov.classList.add("open");}
@@ -1856,7 +1856,7 @@
     let dist=+$s("sDist").value||0; if(sport==="swim") dist=dist/1000; // 수영은 m 입력 → km 저장
     if(!date||!dur||dur<=0){alert("날짜와 시간(분)을 입력해주세요.");return;}
     const s={date,sport,durationMin:dur,rpe}; if(mhr>40)s.mhr=mhr; if(maxhr>40)s.maxhr=maxhr; if(dist>0)s.dist=Math.round(dist*1000)/1000; if(cad>0&&sport==="run")s.cad=cad; if(note)s.note=note;
-    let kind=$s("sKind").value; if(sport==="bike"&&kind!=="race"&&((dist>0&&dist<=10)||(dur>0&&dur<=20))) kind="commute"; // 규칙: 10km 이하 또는 20분 이하 라이딩 = 출퇴근(훈련 제외)
+    let kind=$s("sKind").value; if(sport==="bike"&&kind!=="race"&&((dist>0&&dist<=5)||(dur>0&&dur<=20))) kind="commute"; // 규칙: 5km 이하 또는 20분 이하 라이딩 = 출퇴근(훈련 제외)
     if(kind&&!$s("sKindRow").hidden) s.kind=kind;
     if(!$s("sRepsRow").hidden&&+$s("sReps").value>0) s.reps=+$s("sReps").value;
     if(!$s("sStrRow").hidden&&+$s("sStr").value>0) s.strides=+$s("sStr").value;
