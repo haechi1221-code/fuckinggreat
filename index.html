@@ -149,6 +149,9 @@
   .chk{flex:none; width:24px; height:24px; border-radius:7px; border:2px solid var(--axis); background:var(--surface); cursor:pointer; display:grid; place-items:center; margin-top:1px; color:transparent; font-size:14px; font-weight:900;}
   .chk.on{background:var(--good); border-color:var(--good); color:#fff;}
   .chk.pt{background:var(--warn); border-color:var(--warn); color:#fff;}
+  .chk.sb{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .week .wsum{display:flex; flex-wrap:wrap; gap:4px 12px; padding:0 15px 11px; margin-top:-5px; font-size:11.5px; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums; cursor:pointer;}
+  .week .wsum b{color:var(--ink); font-weight:800;}
   .chk.sk{background:var(--surface-3); border-color:var(--axis); color:var(--ink-2);}
   .carry-chip{display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--warn-soft); color:var(--ink); margin:3px 4px 0 0;}
   .memo-box{margin:8px 2px 4px; padding:10px 11px; background:var(--warn-soft); border-radius:11px;}
@@ -608,7 +611,7 @@
     {seg:"7~10km",pace:"4:12~4:16/km",note:"남은 힘 모두 · 마지막 1km 스퍼트(PB 42:55 도전 구간)"},
   ];
 
-  const state={records:INITIAL.slice(),sessions:[],imports:[],brytons:[],customs:[],gear:[],calRaces:[],garmins:[],wellness:[],tri:{},db:null,done:new Set(),slot:{},adaptOff:false};
+  const state={records:INITIAL.slice(),sessions:[],imports:[],brytons:[],customs:[],gear:[],calRaces:[],calRests:[],gEdits:{},garmins:[],wellness:[],tri:{},db:null,done:new Set(),slot:{},adaptOff:false};
   function dkey(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
   // 슬롯 상태: 완료/부분/건너뜀. state.slot[id]={status,note}. 수동 완료 = status 'done'.
   function slotStatusOf(id){ return state.slot[id]?state.slot[id].status:null; }
@@ -846,7 +849,7 @@
       const hardDone=wkRun.filter(x=>sessIntensity(x)>=0.85).length;
       const hardCap=(tsb<-10&&tsb>=-30&&within10)?1:2; let hardBudget=Math.max(0,hardCap-hardDone);
       const row=atp.find(r=>r.id===w.id); const over=cur&&row&&row.target>0&&row.actual>row.target*1.15;
-      const unf=w.sess.filter(s=>!s.date&&kinds[s.id]!=="rest"&&!(slotDone(s.id)||f.has(s.id))&&slotStatusOf(s.id)!=="skip");
+      const unf=w.sess.filter(s=>!s.date&&kinds[s.id]!=="rest"&&!(slotDone(s.id)||f.has(s.id))&&slotStatusOf(s.id)!=="skip"&&slotStatusOf(s.id)!=="sub");
       unf.forEach(s=>{
         const set=(txt,tag,reason,rule)=>{ adj[s.id]={t:"↔ "+txt,tag,reason,orig:s.t}; log.push({week:w.label,from:s.t,to:txt,reason,rule}); };
         const k=kinds[s.id];
@@ -866,7 +869,7 @@
       });
       // 이번 주(없으면 다가오는 첫 주) 남은 권장 순서
       if(cur || (!anyCur && stK>today && remaining.length===0)){
-        w.sess.forEach(s=>{ if(kinds[s.id]==="rest"||s.date)return; if(slotDone(s.id))return; const a=adj[s.id]; remaining.push(a?("↔ "+a.t.replace(/^↔ /,"")):s.t); });
+        w.sess.forEach(s=>{ if(kinds[s.id]==="rest"||s.date)return; if(slotDone(s.id)||slotStatusOf(s.id)==="sub")return; const a=adj[s.id]; remaining.push(a?("↔ "+a.t.replace(/^↔ /,"")):s.t); });
       }
     });
     return {adj,log,remaining,carry};
@@ -904,7 +907,7 @@
   /* ---- 종목별 유형 · 이모지 · 라벨 ----
      러닝: 이지런/롱런/인터벌/템포/스트라이드/레이스/기타 · 사이클(실외만): 업힐/지구력/레이스 · 수영: 레슨/야외/자유 · 근력: 유형 없음(메모) */
   const SESS_KINDS={
-    run:{easy:"이지런",long:"롱런",interval:"인터벌",tempo:"템포",stride:"스트라이드",race:"레이스",other:"기타"},
+    run:{easy:"이지런",long:"롱런",interval:"인터벌",threshold:"역치",tempo:"템포",stride:"스트라이드",race:"레이스",other:"기타"},
     bike:{endurance:"지구력",uphill:"업힐",commute:"출퇴근",race:"레이스"},
     swim:{free:"자유",lesson:"레슨",open:"야외"} };
   const SPORT_EMOJI={run:"🏃🏽‍♂️",bike:"🚴🏽‍♀️",swim:"🏊🏽‍♂️",strength:"🏋🏽‍♂️",hike:"🥾",other:"🤸🏽‍♂️"};
@@ -944,7 +947,8 @@
   // 달성률·잔여 계산 (연결 기록 합계 vs 목표). 상태 변경은 하지 않음(수동).
   function slotProgress(s){
     const T=parseTarget(s); if(!T) return null;
-    const recs=allSessions().filter(x=>x.slot===s.id);
+    const act=allSessions().filter(x=>x.slot===s.id);
+    const recs=act.concat(manualReplaced().filter(x=>x.slot===s.id&&!act.some(r=>r.date===x.date)).map(x=>Object.assign({},x,{_rep:1})));
     const same=recs.filter(x=>x.sport===T.sport);
     const km=Math.round(same.reduce((a,r)=>a+(+r.dist||0),0)*100)/100, min=same.reduce((a,r)=>a+(+r.durationMin||0),0);
     const reps=same.reduce((a,r)=>a+(+r.reps||0),0), strides=same.reduce((a,r)=>a+(+r.strides||0),0);
@@ -990,10 +994,36 @@
   // 펼침 상태(세션 중 유지): 기본값 — 끝난 주차 접기, 완료(✓) 슬롯 실제기록 접기. 사용자가 누르면 그 상태 유지.
   const foldState={};
   function isOpen(key,def){ return (key in foldState)?foldState[key]:def; }
+  // 주차 헤더 합계: 러닝 거리(실제/계획) · 부하(실제/주간 목표) · 계획 달성률(✓=100%, ◐=주항목 달성률, ↔대체·미체크=0%, 휴식 슬롯 포함)
+  function slotPlanKm(s){ if(slotSport(s)!=="run") return null;
+    if(s.tag==="레이스"){ const t=s.t; if(/풀코스|풀 /.test(t)) return {km:42.2}; if(/하프/.test(t)) return {km:21.1}; const m=t.match(/(\d+)\s*K/i); return m?{km:+m[1]}:null; }
+    const T=parseTarget(s); if(!T||!T.main) return null;
+    if(T.main.reps){ const m=String(T.main.unit||"").match(/([\d.]+)(m|km)/); return m?{km:T.main.reps*(m[2]==="m"?(+m[1])/1000:+m[1]),est:true}:null; }
+    return T.main.km?{km:T.main.km,est:!!T.main.kmEst}:null; }
+  function weekSummary(w,atp){ const st=weekStart(w), en=weekEnd(w); const o={km:0,planKm:0,est:false,load:0,planLoad:0,pct:0}; if(!st) return o;
+    const a=dkey(st), b=dkey(en);
+    o.km=Math.round(allSessions().filter(s=>s.sport==="run"&&s.date>=a&&s.date<=b).reduce((x,s)=>x+(+s.dist||0),0)*10)/10;
+    let pk=0; w.sess.forEach(s=>{ const r=slotPlanKm(s); if(r){ pk+=r.km; if(r.est) o.est=true; } }); o.planKm=Math.round(pk);
+    if(atp){ o.load=Math.round(atp.actual); o.planLoad=Math.round(atp.target); }
+    const items=w.sess.slice(); let sum=0; // 휴식 슬롯도 계획의 일부로 포함(✓=100%)
+    items.forEach(s=>{ const stt=slotStatusOf(s.id); if(stt==="done") sum+=1; else if(stt==="partial"){ const P=slotProgress(s); sum+=(P&&P.mainPct!=null)?Math.min(1,P.mainPct):0.5; } });
+    o.pct=items.length?Math.round(sum/items.length*1000)/10:0; return o; }
+  // 슬롯에 가민 기록 연결 버튼: 그 주 같은 종목의 미연결 가민 기록
+  function gLinkBtns(s,w,a,b){ const sp=slotSport(s); if(!a||sp==="rest") return "";
+    const T=parseTarget(s), wantStr=T&&T.sub&&T.sub.kind==="lower";
+    const c=garminActive().filter(g=>!g.slot&&g.date>=a&&g.date<=b&&(g.sport===sp||(wantStr&&g.sport==="strength"))).sort((x,y)=>x.date<y.date?-1:1);
+    return c.map(g=>'<button class="rec-mini good" style="margin:4px 6px 0 0" data-glink="'+esc(g.gid)+'" data-gslot="'+esc(s.id)+'" data-gwk="'+esc(w.label)+'">＋ 가민 연결: '+shortDate(g.date)+' '+sessEmoji(g)+esc(sessKindLabel(g))+(fmtDist(g)?(' '+fmtDist(g)):'')+'</button>').join(""); }
+  // 가민 기록 덧씌우기 저장 (patch 병합, 빈 값은 삭제)
+  async function saveGEdit(gid,patch,replace){ const k=gEditKey(gid); const o=Object.assign({},replace?{}:(state.gEdits[k]||{}),patch,{src:gid,ts:Date.now()});
+    Object.keys(o).forEach(x=>{ if(o[x]===""||o[x]==null) delete o[x]; }); state.gEdits[k]=o; renderAll();
+    if(state.db){try{ await state.db.doc("garmin_edit/"+k).set(o); }catch(e){alert("저장 실패.");}} }
+  function gUnlink(gid){ if(!confirm("계획 연결을 해제할까요? (가민 기록은 유지)"))return; saveGEdit(gid,{slot:"",wk:""}); }
+  function gHide(gid,on){ if(on&&!confirm("이 가민 기록을 앱에서 숨길까요?\n(부하·통계에서 빠짐 · Intervals.icu 원본은 유지 · 달력에서 되돌리기 가능)"))return; saveGEdit(gid,{hidden:on?1:""}); }
   function renderWeeks(){
     const wrap=document.getElementById("weeks"); if(!wrap)return; wrap.innerHTML="";
     const today=dkey(TODAY);
     const res=adaptPlan(); const ADJ=res.adj;
+    const ATPM={}; (atpTable()||[]).forEach(r=>ATPM[r.id]=r);
     WEEKS.forEach((w,i)=>{
       const f=planFulfill(w);
       const total=w.sess.length, done=w.sess.filter(s=>isDone(w,s,f)).length;
@@ -1001,23 +1031,31 @@
       const st=weekStart(w), en=weekEnd(w), isCur=st&&TODAY>=st&&TODAY<=en, isPast=en&&dkey(en)<today;
       const card=document.createElement("div"); const wkKey="wk:"+w.label; card.className="week card"+(isOpen(wkKey,!isPast&&(isCur||i<2))?" open":"");
       let head='<div class="wh"><span class="wn">'+w.label+(isCur?' <span class="tag">이번 주</span>':'')+'</span><span class="wd">'+w.range+' · '+esc(w.focus)+'</span><span class="prog">'+done+'/'+total+(comp.due?(' · 준수 '+comp.pct+'%'):'')+'</span><span class="chev">›</span></div>';
+      const sm=weekSummary(w,ATPM[w.id]);
+      const wsum='<div class="wsum"><span>🏃🏽‍♂️ 거리 <b>'+sm.km+'</b>/'+(sm.planKm?((sm.est?'≈':'')+sm.planKm):'—')+'km</span><span>부하 <b>'+sm.load+'</b>/'+(sm.planLoad||'—')+'</span><span>계획 <b>'+sm.pct.toFixed(1)+'%</b></span></div>';
       let body='<div class="wbody">';
       w.sess.forEach(s=>{const stat=slotStatusOf(s.id); const on=stat==="done";
-        const missed=isPast&&!on&&stat!=="partial"&&slotSport(s)!=="rest"&&!s.date;
-        const glyph=stat==="done"?"✓":stat==="partial"?"◐":"";
-        const chkc=stat==="done"?"chk on":stat==="partial"?"chk pt":"chk";
+        const missed=isPast&&!on&&stat!=="partial"&&stat!=="sub"&&slotSport(s)!=="rest"&&!s.date;
+        const glyph=stat==="done"?"✓":stat==="partial"?"◐":stat==="sub"?"↔":"";
+        const chkc=stat==="done"?"chk on":stat==="partial"?"chk pt":stat==="sub"?"chk sb":"chk";
         const a=ADJ[s.id]; const txt=a?a.t:enrichSlot(s.t,s.tag), tag=a?a.tag:s.tag;
-        const badge=(stat==="partial")?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">부분</span>':'';
-        body+='<div class="sess'+(on?" done":"")+'"><button class="'+chkc+'" data-sess="'+s.id+'" aria-label="상태 변경">'+glyph+'</button><div class="st">'+esc(txt)+(tag?' <span class="tag">'+esc(tag)+'</span>':"")+badge+(a?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">조정</span>':'')+(missed?' <span class="tag" style="color:var(--muted);background:var(--surface-3)">미완료</span>':'')+
+        const badge=(stat==="partial")?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">부분</span>':(stat==="sub")?' <span class="tag">대체 · 준수율 미인정</span>':'';
+        body+='<div class="sess'+(on?" done":"")+'"><button class="'+chkc+'" data-sess="'+s.id+'" aria-label="상태 변경">'+glyph+'</button><div class="st">'+esc(txt)+(tag?' <span class="tag">'+esc(tag)+'</span>':"")+badge+(a?' <span class="tag" style="color:var(--warn);background:var(--warn-soft)">조정</span>':'')+(missed?' <span class="tag" style="color:var(--muted);background:var(--surface-3)">미완료</span>':'')+((on&&slotSport(s)==="rest"&&restDateOf(s.id))?' <span class="tag">😴 '+esc(shortDate(restDateOf(s.id)))+'</span>':'')+
           (a?'<div style="font-size:11.5px;color:var(--muted);margin-top:2px"><s>'+esc(a.orig)+'</s> · '+esc(a.reason)+'</div>':'')+'</div></div>';});
       // 완료(✓)·부분(◐) 슬롯: 주차 하단에 실제 기록 목록 + 달성률·잔여 + 2택(소멸 / 2차 기록) + 메모
       const weekRemain=[];
-      w.sess.forEach(s=>{ const st=slotStatusOf(s.id); if(st!=="done"&&st!=="partial")return;
+      const wStK=st?dkey(st):"", wEnK=en?dkey(en):"";
+      w.sess.forEach(s=>{ const st=slotStatusOf(s.id); if(st!=="done"&&st!=="partial"&&st!=="sub")return;
+        if(slotSport(s)==="rest"){ const rs=s.t.replace(/^[①-⑦＋]\s*/,"").split(" — ")[0].slice(0,24);
+          body+='<div class="memo-box" data-mbox="'+esc(s.id)+'"><div class="memo-h"><span>✓ 😴 '+esc(rs)+' — 휴식한 날</span></div><div class="mb-body">'+
+            '<label class="memo-row"><span class="memo-lbl">날짜</span><input type="date" class="memo-inp" data-restdate="'+esc(s.id)+'" value="'+esc(restDateOf(s.id))+'" max="'+dkey(TODAY)+'"></label>'+
+            '<label class="memo-row"><span class="memo-lbl">메모</span><input class="memo-inp" data-note="'+esc(s.id)+'" value="'+esc(slotNoteOf(s.id))+'" placeholder="컨디션·특이사항"></label>'+
+            '<div class="prog-line" style="color:var(--muted)">지난 날짜로 바꿔도 돼요 — 달력에 그 날짜로 😴 표시</div></div></div>'; return; }
         const short=s.t.replace(/^[①-⑦＋]\s*/,"").split(" — ")[0].slice(0,24);
         const P=slotProgress(s); const recs=(P?P.recs:allSessions().filter(x=>x.slot===s.id)).slice().sort((a,b)=>a.date<b.date?-1:1);
         const waived=!!(state.slot[s.id]&&state.slot[s.id].waived);
         let prog="";
-        if(P){
+        if(P&&st!=="sub"){
           const parts=[]; if(P.mainPct!=null) parts.push("달성 "+Math.min(999,Math.round(P.mainPct*100))+"% ("+P.mainTxt+")"); if(P.subTxt) parts.push(P.subTxt);
           prog='<div class="prog-line">'+esc(parts.join(" · "))+'</div>';
           if(P.full){ prog+='<div class="prog-line" style="color:var(--good)">목표 달성'+(st==="partial"?'':' ✓')+'</div>'+(st==="partial"?'<button class="rec-mini good" data-fin="'+esc(s.id)+'">✓ 완료로 변경</button>':''); }
@@ -1030,21 +1068,24 @@
           }
         }
         const recOpen=isOpen("rec:"+s.id, st!=="done");
-        body+='<div class="memo-box'+(recOpen?'':' fold')+'" data-mbox="'+esc(s.id)+'"><div class="memo-h tg" data-mtog="'+esc(s.id)+'"><span>'+(st==="done"?"✓":"◐")+' '+esc(short)+' — 실제 기록'+(P&&P.km>0?(' · 합계 '+P.km+'km'):'')+(recs.length?(' · '+recs.length+'건'):'')+'</span><span class="mchev">›</span></div><div class="mb-body">'+
-          recs.map(r=>'<div class="rec-line"><span>'+shortDate(r.date)+' · '+sessEmoji(r)+sessKindLabel(r)+(fmtDist(r)?(' '+fmtDist(r)):'')+' · '+(+r.durationMin||0)+'분'+(+r.reps>0?(' · 반복 '+r.reps):'')+(+r.strides>0?(' · 스트라이드 '+r.strides+'회'):'')+(+r.lower>0?' · 하체보강':'')+(+r.mhr>60?(' · '+r.mhr+'bpm'):'')+' · 부하 '+Math.round(sessLoad(r))+(r.note?(' · 📝'+esc(r.note)):'')+'</span><button class="del" data-sedit="'+esc(r.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-rdel="'+esc(r.id)+'" aria-label="삭제">✕</button></div>').join("")+
+        body+='<div class="memo-box'+(recOpen?'':' fold')+'" data-mbox="'+esc(s.id)+'"><div class="memo-h tg" data-mtog="'+esc(s.id)+'"><span>'+(st==="done"?"✓":st==="sub"?"↔":"◐")+' '+esc(short)+' — '+(st==="sub"?'대체한 기록':'실제 기록')+(P&&P.km>0?(' · 합계 '+P.km+'km'):'')+(recs.length?(' · '+recs.length+'건'):'')+'</span><span class="mchev">›</span></div><div class="mb-body">'+
+          recs.map(r=>{ const key=r.id||("g:"+r.gid); return '<div class="rec-line"'+(r._rep?' style="opacity:.55"':'')+'><span>'+shortDate(r.date)+' · '+sessEmoji(r)+sessKindLabel(r)+(fmtDist(r)?(' '+fmtDist(r)):'')+' · '+(+r.durationMin||0)+'분'+(+r.reps>0?(' · 반복 '+r.reps):'')+(+r.strides>0?(' · 스트라이드 '+r.strides+'회'):'')+(+r.lower>0?' · 하체보강':'')+(+r.mhr>60?(' · '+r.mhr+'bpm'):'')+' · 부하 '+Math.round(sessLoad(r))+(r.note?(' · 📝'+esc(r.note)):'')+(r._rep?' · 가민으로 대체':'')+'</span><button class="del" data-sedit="'+esc(key)+'" aria-label="수정" title="수정">✎</button><button class="del" data-rdel="'+esc(key)+'" aria-label="'+(r.gid?'연결 해제':'삭제')+'" title="'+(r.gid?'연결 해제':'삭제')+'">✕</button></div>'; }).join("")+
           prog+
-          '<label class="memo-row"><span class="memo-lbl">메모</span><input class="memo-inp" data-note="'+esc(s.id)+'" value="'+esc(slotNoteOf(s.id))+'" placeholder="컨디션·특이사항"></label>'+
-          '<button class="rec-add" data-recslot="'+esc(s.id)+'" data-recwk="'+esc(w.label)+'" data-recsport="'+slotSport(s)+'" data-rectext="'+esc(short)+'">'+(recs.length?'＋ 2차 기록 추가 (잔여분 실시)':'＋ 실제 기록 입력 (거리·시간 · 심박 선택)')+'</button>'+
+          '<label class="memo-row"><span class="memo-lbl">메모</span><input class="memo-inp" data-note="'+esc(s.id)+'" value="'+esc(slotNoteOf(s.id))+'" placeholder="'+(st==="sub"?'무엇으로 대체했는지 (예: 역치 20k)':'컨디션·특이사항')+'"></label>'+
+          gLinkBtns(s,w,wStK,wEnK)+
+          '<button class="rec-add" data-recslot="'+esc(s.id)+'" data-recwk="'+esc(w.label)+'" data-recsport="'+slotSport(s)+'" data-rectext="'+esc(short)+'">'+(st==="sub"?'＋ 대체 기록 직접 입력':recs.length?'＋ 2차 기록 추가 (잔여분 실시)':'＋ 실제 기록 입력 (거리·시간 · 심박 선택)')+'</button>'+
           '</div></div>'; });
       if(weekRemain.length) body+='<div class="week-remain">이번 주 잔여: '+esc(weekRemain.join(" · "))+' <span style="color:var(--muted)">— 다른 날 실시 후 해당 슬롯에 2차 기록</span></div>';
-      body+='</div>'; card.innerHTML=head+body;
-      card.querySelector(".wh").addEventListener("click",e=>{if(e.target.closest(".chk"))return; card.classList.toggle("open"); foldState[wkKey]=card.classList.contains("open");});
+      body+='</div>'; card.innerHTML=head+wsum+body;
+      card.querySelectorAll(".wh,.wsum").forEach(x=>x.addEventListener("click",e=>{if(e.target.closest(".chk"))return; card.classList.toggle("open"); foldState[wkKey]=card.classList.contains("open");}));
       wrap.appendChild(card);});
     wrap.querySelectorAll(".chk").forEach(b=>b.addEventListener("click",()=>toggleSess(b.getAttribute("data-sess"))));
     wrap.querySelectorAll("[data-mtog]").forEach(t=>t.addEventListener("click",()=>{ const id=t.getAttribute("data-mtog"), box=t.closest(".memo-box"); box.classList.toggle("fold"); foldState["rec:"+id]=!box.classList.contains("fold"); }));
-    wrap.querySelectorAll(".memo-inp").forEach(inp=>{ inp.addEventListener("change",()=>saveSlotNote(inp.getAttribute("data-note"),inp.value)); inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.blur();}); });
+    wrap.querySelectorAll("[data-restdate]").forEach(inp=>inp.addEventListener("change",()=>setRestDate(inp.getAttribute("data-restdate"),inp.value)));
+    wrap.querySelectorAll(".memo-inp[data-note]").forEach(inp=>{ inp.addEventListener("change",()=>saveSlotNote(inp.getAttribute("data-note"),inp.value)); inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.blur();}); });
     wrap.querySelectorAll("[data-recslot]").forEach(b=>b.addEventListener("click",()=>openSessForSlot(b.getAttribute("data-recslot"),b.getAttribute("data-recwk"),b.getAttribute("data-recsport"),b.getAttribute("data-rectext"))));
-    wrap.querySelectorAll(".del[data-rdel]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-rdel"))));
+    wrap.querySelectorAll(".del[data-rdel]").forEach(b=>b.addEventListener("click",()=>{ const k=b.getAttribute("data-rdel"); if(k.indexOf("g:")===0) gUnlink(k.slice(2)); else removeSession(k); }));
+    wrap.querySelectorAll("[data-glink]").forEach(b=>b.addEventListener("click",()=>saveGEdit(b.getAttribute("data-glink"),{slot:b.getAttribute("data-gslot"),wk:b.getAttribute("data-gwk")})));
     wrap.querySelectorAll("[data-sedit]").forEach(b=>b.addEventListener("click",()=>openSessEdit(b.getAttribute("data-sedit"))));
     wrap.querySelectorAll("[data-waive]").forEach(b=>b.addEventListener("click",()=>setSlotWaived(b.getAttribute("data-waive"),true)));
     wrap.querySelectorAll("[data-unwaive]").forEach(b=>b.addEventListener("click",()=>setSlotWaived(b.getAttribute("data-unwaive"),false)));
@@ -1077,16 +1118,19 @@
   function isCommute(s){ return s.sport==="bike"&&s.kind!=="race"&&sessKindLabel(s)==="출퇴근"; }
   function allSessions(){ return allSessionsRaw().filter(s=>!isCommute(s)); }
   function allSessionsRaw(){
-    const bry=state.brytons.slice();
-    const man=state.sessions.slice();
-    const sam=state.imports.filter(s=>!bry.some(b=>_dupMatch(b,s)));
-    // 가민(Intervals.icu): 같은 날 같은 종목을 직접 기록했으면 그날 그 종목은 직접 기록 우선(이중 계산 방지), Bryton과 겹치는 라이딩도 제외
-    const manDay=new Set(man.map(s=>s.date+"|"+s.sport));
-    const gar=(state.garmins||[]).filter(g=>!manDay.has(g.date+"|"+g.sport)&&!bry.some(b=>_dupMatch(b,g)));
-    const garDay=new Set(gar.map(s=>s.date+"|"+s.sport));
-    const sam2=sam.filter(s=>!garDay.has(s.date+"|"+s.sport));
-    return bry.concat(man, gar, sam2);
+    // 가민 우선(2026-09-27): 가민 기록이 있는 날·종목은 가민만 반영(심박·거리 정확). 같은 날·종목 직접 기록은 '가민으로 대체'(부하 미반영, 표시만).
+    // Bryton과 겹치는 라이딩은 Bryton 우선. 삼성헬스는 가민·Bryton과 겹치지 않는 과거 기록만.
+    const bry=state.brytons.slice(), gar=garminActive(), garDay=garDaySet();
+    const man=state.sessions.filter(s=>!garDay.has(s.date+"|"+s.sport));
+    const sam=state.imports.filter(s=>!bry.some(b=>_dupMatch(b,s))&&!garDay.has(s.date+"|"+s.sport));
+    return bry.concat(gar, man, sam);
   }
+  // 가민 기록 + 앱에서 고친 내용(db garmin_edit: 유형·계획 연결·메모·숨김). 원본(imports/garmin)은 그대로.
+  function gEditKey(src){ return String(src).replace(/[^A-Za-z0-9_-]/g,"_"); }
+  function garminAll(){ return (state.garmins||[]).map(g=>{ const e=state.gEdits[gEditKey(g.src)]; const o=Object.assign({},g,e||{}); o.gid=g.src; delete o.id; return o; }); }
+  function garminActive(){ const bry=state.brytons; return garminAll().filter(g=>!g.hidden&&!bry.some(b=>_dupMatch(b,g))); }
+  function garDaySet(){ return new Set(garminActive().map(s=>s.date+"|"+s.sport)); }
+  function manualReplaced(){ const gd=garDaySet(); return state.sessions.filter(s=>gd.has(s.date+"|"+s.sport)); }
   function dailyLoads(){
     const map={};
     // 대회는 최대 노력 ≈ Z5 TRIMP(k≈1.9). 같은 날 삼성 세션과 겹치면 이중 계산이 될 수 있어, 그 날 러닝 세션이 있으면 대회 부하는 생략.
@@ -1384,19 +1428,22 @@
     wireRowActs(el);
   }
   // 일지 한 줄: 🏃🏽‍♂️이지런 · 4.5km · 30분 · 6:40/km · ST 4회 · 159bpm · 부하 38 · 📝메모 · [W1 ④]
-  function diaryRow(s){
+  function diaryRow(s,rep){
     const km=fmtDist(s)?(' · '+fmtDist(s)):''; const hr=+s.mhr>60?(' · '+s.mhr+'bpm'):''; const pace=(+s.dist>0&&+s.durationMin>0&&s.sport==="run")?(' · '+fmtPace(s.durationMin*60,s.dist)):'';
     const ex=(+s.reps>0?(' · 반복 '+s.reps):'')+(+s.strides>0?(' · 스트라이드 '+s.strides+'회'):'')+(+s.lower>0?' · 하체보강':'');
     const link=s.slot?(' <span class="tag" style="font-size:10.5px">'+esc(s.wk||"")+' '+esc((findSlot(s.slot)||{t:""}).t.slice(0,1))+'</span>'):'';
     const manual=!!s.id; // 직접 입력 세션만 수정·삭제 (삼성/브라이튼 임포트는 제외)
-    const btns=manual?('<span class="row-act"><button class="del" data-sedit="'+esc(s.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-sdel="'+esc(s.id)+'" aria-label="삭제" title="삭제">✕</button></span>'):'';
-    const cm=isCommute(s)?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">훈련 제외</span>':'';
-    return '<div class="cal-row'+(cm?'" style="opacity:.6':'')+'"><span>'+sessEmoji(s)+esc(sessKindLabel(s))+km+' · '+(+s.durationMin||0)+'분'+pace+ex+hr+' · 부하 '+Math.round(sessLoad(s))+(s.note?(' · 📝'+esc(s.note)):'')+link+cm+'</span>'+btns+'</div>';
+    const btns=s.gid?('<span class="row-act"><button class="del" data-sedit="g:'+esc(s.gid)+'" aria-label="수정" title="유형·계획연결·메모 수정">✎</button><button class="del" data-ghide="'+esc(s.gid)+'" aria-label="숨기기" title="앱에서 숨기기">✕</button></span>'):manual?('<span class="row-act"><button class="del" data-sedit="'+esc(s.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-sdel="'+esc(s.id)+'" aria-label="삭제" title="삭제">✕</button></span>'):'';
+    const teB=s.teAe?(' <span class="tag" style="font-size:10.5px">효과 '+s.teAe+(s.teAn?('/'+s.teAn):'')+'</span>'):'';
+    const cm=rep?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">가민으로 대체 · 부하 미반영</span>':isCommute(s)?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">훈련 제외</span>':'';
+    return '<div class="cal-row'+(cm?'" style="opacity:.6':'')+'"><span>'+sessEmoji(s)+esc(sessKindLabel(s))+km+' · '+(+s.durationMin||0)+'분'+pace+ex+hr+' · 부하 '+Math.round(sessLoad(s))+(s.note?(' · 📝'+esc(s.note)):'')+link+teB+cm+'</span>'+btns+'</div>';
   }
   // diaryRow를 넣은 컨테이너에 수정·삭제 버튼 연결
   function wireRowActs(el){ if(!el)return;
     el.querySelectorAll("[data-sedit]").forEach(b=>b.addEventListener("click",()=>openSessEdit(b.getAttribute("data-sedit"))));
-    el.querySelectorAll("[data-sdel]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-sdel")))); }
+    el.querySelectorAll("[data-sdel]").forEach(b=>b.addEventListener("click",()=>removeSession(b.getAttribute("data-sdel"))));
+    el.querySelectorAll("[data-ghide]").forEach(b=>b.addEventListener("click",()=>gHide(b.getAttribute("data-ghide"),true)));
+    el.querySelectorAll("[data-gshow]").forEach(b=>b.addEventListener("click",()=>gHide(b.getAttribute("data-gshow"),false))); }
 
   /* ---- 훈련 달력 (훈련 탭 상단) ----
      훈련한 날: 종목 이모지 + 분류(🏃🏽‍♂️이지런 · 🚴🏽‍♀️지구력 · 🏊🏽‍♂️레슨 · 🏋🏽‍♂️하체). 대회일 🏁. 날짜 탭 → 그 날 상세, 더보기 → 월 전체 날짜별 상세. */
@@ -1404,7 +1451,7 @@
   function raceDates(){ const m={}; WEEKS.forEach(w=>w.sess.forEach(s=>{ if(s.date) m[s.date]=s.t; })); return m; }
   // 달력 셀: 같은 날 같은 종목 여러 세션이면 가장 긴 거리 세션의 분류 + (복합) + 합계 거리(거리 없으면 합계 시간)
   // 대표 세션 = 고강도 유형 우선(레이스 > 인터벌 > 템포 > 롱런 > 이지런 …), 같은 등급이면 긴 거리
-  const KIND_RANK={"레이스":9,"인터벌":8,"템포":7,"업힐":6,"롱런":5,"지구력":4,"야외":4,"레슨":3,"자유":3,"하체":3,"이지런":2,"스트라이드":1,"기타":1,"근력":2,"출퇴근":0};
+  const KIND_RANK={"레이스":9,"인터벌":8,"역치":7.5,"템포":7,"업힐":6,"롱런":5,"지구력":4,"야외":4,"레슨":3,"자유":3,"하체":3,"이지런":2,"스트라이드":1,"기타":1,"근력":2,"출퇴근":0};
   function kindRank(s){ const r=KIND_RANK[sessKindLabel(s)]; return r==null?1:r; }
   function calCellItems(list){
     const by={}, order=[]; list.forEach(s=>{ if(!by[s.sport]){by[s.sport]=[];order.push(s.sport);} by[s.sport].push(s); });
@@ -1423,13 +1470,14 @@
     const first=new Date(y,mo-1,1), last=new Date(y,mo,0), todayK=dkey(TODAY);
     const byDate={}; allSessions().forEach(s=>{ if(s.date&&s.date.slice(0,7)===(y+"-"+pad(mo))) (byDate[s.date]=byDate[s.date]||[]).push(s); });
     const races=raceDates(); const calRaces={}; (state.calRaces||[]).forEach(r=>{ (calRaces[r.date]=calRaces[r.date]||[]).push(r); });
+    const rests=restByDate(), gHid={}, gOff={}; manualReplaced().forEach(m=>(gHid[m.date]=gHid[m.date]||[]).push(m)); garminAll().filter(g=>g.hidden).forEach(g=>(gOff[g.date]=gOff[g.date]||[]).push(g));
     const startOff=(first.getDay()+6)%7; // 월요일 시작
     let g='<div class="cal-g">'+["월","화","수","목","금","토","일"].map(d=>'<div class="cal-dow">'+d+'</div>').join("");
     for(let i=0;i<startOff;i++){ const d=new Date(y,mo-1,1-startOff+i); g+='<div class="cal-c mute"><div class="dn">'+d.getDate()+'</div></div>'; }
     for(let d=1; d<=last.getDate(); d++){
       const k=y+"-"+pad(mo)+"-"+pad(d); const list=byDate[k]||[];
       const cls="cal-c"+(k===todayK?" today":"")+(calState.sel===k?" sel":"")+((races[k]||calRaces[k])?" race":"");
-      g+='<div class="'+cls+'" data-cal="'+k+'"><div class="dn">'+d+'</div>'+(calRaces[k]||[]).map(r=>'<div class="ev" style="color:var(--accent)">'+esc(r.name.slice(0,8))+'</div>').join("")+(it=>it.slice(0,3).map(t=>'<div class="ev">'+t+'</div>').join("")+(it.length>3?'<div class="ev" style="color:var(--muted)">+'+(it.length-3)+'</div>':''))(calCellItems(list))+'</div>';
+      g+='<div class="'+cls+'" data-cal="'+k+'"><div class="dn">'+d+'</div>'+(calRaces[k]||[]).map(r=>'<div class="ev" style="color:var(--accent)">'+esc(r.name.slice(0,8))+'</div>').join("")+(rests[k]?'<div class="ev" style="color:var(--muted)">😴휴식</div>':'')+(it=>it.slice(0,3).map(t=>'<div class="ev">'+t+'</div>').join("")+(it.length>3?'<div class="ev" style="color:var(--muted)">+'+(it.length-3)+'</div>':''))(calCellItems(list))+'</div>';
     }
     const tail=(7-((startOff+last.getDate())%7))%7; for(let i=1;i<=tail;i++) g+='<div class="cal-c mute"><div class="dn">'+i+'</div></div>';
     g+='</div>';
@@ -1443,8 +1491,12 @@
         '<select id="crPri"><option value="">우선순위</option><option value="1">1순위</option><option value="2">2순위</option><option value="3">3순위</option><option value="4">4순위</option><option value="5">5순위</option></select>'+
         '<div style="display:flex;gap:6px"><button class="rec-mini good" data-crsave="'+d+'">저장</button><button class="rec-mini" data-crcancel="1">취소</button></div></div>')
       :('<button class="rec-mini" data-cradd="'+d+'" style="margin:4px 0 2px">＋ 이 날 대회 추가</button>');
-    const detail=d=>'<div class="cal-day"><div class="dh">'+shortDate(d)+(races[d]?(' <span class="tag">🏁 '+esc(races[d].replace(/^[^\]]*\]\s*/,"").split(" — ")[0])+'</span>'):'')+'</div>'+(calRaces[d]||[]).map(raceRow).join("")+(byDate[d]||[]).map(diaryRow).join("")+((byDate[d]||[]).length||(calRaces[d]||[]).length?'':'<div class="cal-row" style="color:var(--muted)">기록 없음</div>')+raceForm(d)+'</div>';
-    if(calState.more){ const ds=Object.keys(Object.assign({},byDate,calRaces)).sort((a,b)=>a<b?1:-1); html+=ds.length?ds.map(detail).join(""):'<div class="cal-day"><div class="cal-row" style="color:var(--muted)">이 달 기록 없음</div></div>'; }
+    const restRow=r=>'<div class="cal-row"><span>😴 <b>휴식</b>'+(r.label?(' · '+esc(r.label)):'')+'</span><span class="row-act"><button class="del" data-rsdel="'+esc(r.kind+":"+r.id)+'" aria-label="휴식 삭제" title="삭제">✕</button></span></div>';
+    const gRow=m=>diaryRow(m,true).replace('<div class="cal-row','<div style="opacity:.55" class="cal-row');
+    const offRow=g=>'<div class="cal-row" style="opacity:.55"><span>'+sessEmoji(g)+'숨긴 가민 기록 '+(fmtDist(g)?(fmtDist(g)+' · '):'')+(+g.durationMin||0)+'분</span><span class="row-act"><button class="rec-mini" data-gshow="'+esc(g.gid)+'">되돌리기</button></span></div>';
+    const restBtn=d=>(rests[d]||d>todayK)?'':'<button class="rec-mini" data-rsadd="'+d+'" style="margin:4px 6px 2px 0">＋ 이 날 휴식</button>';
+    const detail=d=>'<div class="cal-day"><div class="dh">'+shortDate(d)+(races[d]?(' <span class="tag">🏁 '+esc(races[d].replace(/^[^\]]*\]\s*/,"").split(" — ")[0])+'</span>'):'')+'</div>'+(calRaces[d]||[]).map(raceRow).join("")+(rests[d]||[]).map(restRow).join("")+(byDate[d]||[]).map(diaryRow).join("")+(gHid[d]||[]).map(gRow).join("")+(gOff[d]||[]).map(offRow).join("")+((byDate[d]||[]).length||(calRaces[d]||[]).length||(rests[d]||[]).length||(gOff[d]||[]).length||(gHid[d]||[]).length?'':'<div class="cal-row" style="color:var(--muted)">기록 없음</div>')+restBtn(d)+raceForm(d)+'</div>';
+    if(calState.more){ const ds=Object.keys(Object.assign({},byDate,calRaces,Object.fromEntries(Object.keys(rests).filter(k=>k.slice(0,7)===(y+"-"+pad(mo))).map(k=>[k,1])))).sort((a,b)=>a<b?1:-1); html+=ds.length?ds.map(detail).join(""):'<div class="cal-day"><div class="cal-row" style="color:var(--muted)">이 달 기록 없음</div></div>'; }
     else if(calState.sel&&calState.sel.slice(0,7)===(y+"-"+pad(mo))) html+=detail(calState.sel);
     html+='</div>'; el.innerHTML=html;
     el.querySelectorAll("[data-calnav]").forEach(b=>b.addEventListener("click",()=>{ let yy=Math.floor(calState.ym/100), mm=calState.ym%100+ +b.getAttribute("data-calnav"); if(mm<1){mm=12;yy--;} if(mm>12){mm=1;yy++;} calState.ym=yy*100+mm; calState.sel=null; renderCal(); }));
@@ -1454,9 +1506,28 @@
     el.querySelectorAll("[data-crsave]").forEach(b=>b.addEventListener("click",()=>{ const name=(document.getElementById("crName").value||"").trim(); if(!name){alert("대회명을 입력해주세요.");return;}
       addCalRace({date:b.getAttribute("data-crsave"),name,cat:document.getElementById("crCat").value,goal:(document.getElementById("crGoal").value||"").trim(),pri:+document.getElementById("crPri").value||null,ts:Date.now()}); }));
     el.querySelectorAll("[data-crdel]").forEach(b=>b.addEventListener("click",()=>removeCalRace(b.getAttribute("data-crdel"))));
+    el.querySelectorAll("[data-rsadd]").forEach(b=>b.addEventListener("click",()=>addRestOn(b.getAttribute("data-rsadd"))));
+    el.querySelectorAll("[data-rsdel]").forEach(b=>b.addEventListener("click",()=>removeRest(b.getAttribute("data-rsdel"))));
     el.querySelectorAll("[data-cal]").forEach(c=>c.addEventListener("click",()=>{ const k=c.getAttribute("data-cal"); calState.sel=(calState.sel===k)?null:k; calState.more=false; calState.addRace=null; renderCal(); }));
     wireRowActs(el);
   }
+  // 휴식일: 계획 휴식 슬롯(✓, plan.date) + 달력에서 직접 추가한 휴식(db cal_rests)
+  function restByDate(){ const m={};
+    WEEKS.forEach(w=>w.sess.forEach(s=>{ if(slotSport(s)!=="rest"||slotStatusOf(s.id)!=="done")return; const d=restDateOf(s.id); if(d)(m[d]=m[d]||[]).push({kind:"slot",id:s.id,label:w.label+" "+s.t.replace(/^[①-⑦＋]\s*/,"").split(/[—(]/)[0].trim().slice(0,16)}); }));
+    (state.calRests||[]).forEach(r=>{ if(r.date)(m[r.date]=m[r.date]||[]).push({kind:"free",id:r.id,label:r.note||""}); });
+    return m; }
+  // 같은 날 같은 종목을 직접 기록해서 가려진 가민 활동(참고 표시용)
+  // 달력 '＋ 이 날 휴식': 그 날이 속한 주의 미체크 휴식 슬롯이 있으면 그 슬롯을 ✓(날짜=그 날), 없으면 자유 휴식으로 저장
+  async function addRestOn(d){
+    const w=WEEKS.find(x=>{ const st=weekStart(x), en=weekEnd(x); return st&&dkey(st)<=d&&d<=dkey(en); });
+    const s=w&&w.sess.find(x=>slotSport(x)==="rest"&&slotStatusOf(x.id)!=="done");
+    if(s){ await setSlotStatus(s.id,"done",d); return; }
+    const r={date:d,ts:Date.now()};
+    if(state.db){try{await state.db.collection("cal_rests").add(r);return;}catch(e){alert("저장 실패.");return;}} r.id="local-"+Date.now(); state.calRests.push(r); renderCal(); }
+  async function removeRest(key){ const i=key.indexOf(":"), kind=key.slice(0,i), id=key.slice(i+1);
+    if(kind==="slot"){ if(!confirm("휴식 체크를 해제할까요?"))return; await setSlotStatus(id,null); return; }
+    if(!confirm("이 휴식을 삭제할까요?"))return;
+    if(state.db&&!String(id).startsWith("local-")){try{await state.db.doc("cal_rests/"+id).delete();}catch(e){alert("삭제 실패.");}} else {state.calRests=state.calRests.filter(x=>x.id!==id); renderCal();} }
   // 달력에서 추가한 대회 (db cal_races) — 달력 🏁 + 홈 대회 목록에 함께 표시
   async function addCalRace(r){ calState.addRace=null; if(state.db){try{await state.db.collection("cal_races").add(r);return;}catch(e){alert("저장 실패.");return;}} r.id="local-"+Date.now(); state.calRaces.push(r); renderCal(); renderHomeRaces(); }
   async function removeCalRace(id){ const r=state.calRaces.find(x=>x.id===id); if(!r||!confirm("대회를 삭제할까요?\n"+r.date+" "+r.name))return;
@@ -1485,15 +1556,21 @@
   // 탭 순환: 없음 → 완료(✓) → 부분(◐) → 없음. 부분이면 주차 하단 메모칸이 나타남(팝업 없음).
   async function toggleSess(id){
     const cur=slotStatusOf(id);
-    const nx = (cur==null)?"done":(cur==="done"?"partial":null);
+    // 없음 → 완료(✓) → 부분(◐) → 대체(↔, 준수율 미인정) → 없음. 휴식은 없음 ↔ 완료
+    const nx = isRestSlot(id) ? (cur==null?"done":null) : (cur==null?"done":cur==="done"?"partial":cur==="partial"?"sub":null);
     await setSlotStatus(id,nx);
   }
-  function slotDoc(id){ const v=state.slot[id]; return {status:v.status,note:v.note||"",waived:!!v.waived,ts:Date.now()}; }
+  function slotDoc(id){ const v=state.slot[id]; const o={status:v.status,note:v.note||"",waived:!!v.waived,ts:Date.now()}; if(v.date) o.date=v.date; return o; }
+  // 휴식 슬롯: 체크 시 휴식한 날짜(date)를 함께 저장 — 기본 오늘, 나중에 다른 날로 변경 가능(예: 23일에 21일 휴식 입력)
+  function isRestSlot(id){ const s=findSlot(id); return !!s&&slotSport(s)==="rest"; }
+  function restDateOf(id){ const v=state.slot[id]; if(!v) return ""; return v.date||(v.ts?dkey(new Date(v.ts)):""); }
+  async function setRestDate(id,date){ if(!state.slot[id]||!/^\d{4}-\d{2}-\d{2}$/.test(date||""))return; state.slot[id].date=date; renderWeeks(); renderCal();
+    if(state.db){try{ await state.db.doc("plan/"+id).set(slotDoc(id)); }catch(e){alert("저장 실패.");}} }
   // 상태 변경(수동). 메모·잔여소멸 플래그는 유지, 기록(sessions.slot)은 상태와 무관하게 남음 → 부분→완료 전환 시 누락 없음
-  async function setSlotStatus(id,nx){
+  async function setSlotStatus(id,nx,date){
     const prev=state.slot[id]||{};
-    if(nx==null){ delete state.slot[id]; } else { state.slot[id]={status:nx,note:prev.note||"",waived:!!prev.waived}; }
-    renderWeeks();
+    if(nx==null){ delete state.slot[id]; } else { state.slot[id]={status:nx,note:prev.note||"",waived:!!prev.waived}; const dt=date||prev.date||(isRestSlot(id)?dkey(TODAY):""); if(dt) state.slot[id].date=dt; }
+    renderWeeks(); renderCal();
     if(state.db){try{ if(nx==null) await state.db.doc("plan/"+id).delete(); else await state.db.doc("plan/"+id).set(slotDoc(id)); }catch(e){}}
   }
   // 잔여 소멸(2택 중 하나): 상태는 그대로(◐ 유지), 잔여 계산에서 제외
@@ -1749,7 +1826,7 @@
       custom_plan_pending:customsPending,
       tri_inputs:state.tri||{},
       safety_rule:"주간 부하 증가 +10% 상한, TSB<-10 고강도 1회 제한, TSB<-30 회복만",
-      data_source_policy:"가민 포러너 265 → Intervals.icu → 앱 자동 동기화(2026-09 이후 기본). 같은 날 같은 종목을 직접 기록했으면 직접 기록 우선. Bryton FIT 라이딩 우선. 삼성헬스는 과거 기록(가져오기 완료분)",
+      data_source_policy:"가민 포러너 570 → Intervals.icu → 앱 자동 동기화(2026-09 이후 기본). 가민 우선: 같은 날 같은 종목에 가민 기록이 있으면 가민만 반영(직접 기록은 대체 표시), 유형·계획연결은 가민 기록에 덧씌움(garmin_edit). 러닝 유형은 가민 훈련효과(TrainingEffectSelect) 자동 분류. Bryton FIT 라이딩 우선. 삼성헬스는 과거 기록(가져오기 완료분)",
       wellness_recent:(state.wellness||[]).slice(-14),
       garmin_sessions:(state.garmins||[]).length,
     };
@@ -1812,7 +1889,7 @@
     $s("sDistLbl").textContent=sport==="swim"?"거리(m)":"거리(km)"; $s("sDist").placeholder=sport==="swim"?"예: 1500":"예: 10.0"; $s("sDist").step=sport==="swim"?"50":"0.1";
     // 보조 항목: 연결 슬롯 목표(반복/스트라이드/하체보강) 또는 유형(인터벌/스트라이드)에 따라 표시
     const T=sessLink&&sessLink.target; const kind=sel.value;
-    const showReps=sport==="run"&&((T&&T.main&&T.main.reps)||kind==="interval"||kind==="tempo");
+    const showReps=sport==="run"&&((T&&T.main&&T.main.reps)||kind==="interval"||kind==="threshold"||kind==="tempo");
     const showStr=sport==="run"&&((T&&T.sub&&T.sub.kind==="stride")||kind==="stride");
     const showLower=(sport==="run")&&T&&T.sub&&T.sub.kind==="lower";
     $s("sRepsRow").hidden=!showReps; $s("sStrRow").hidden=!showStr; $s("sLowerRow").hidden=!showLower; $s("sRowSub").hidden=!(showReps||showStr||showLower);
@@ -1824,12 +1901,13 @@
   // 슬롯에서 열기: sport 지정 가능(하체보강 → strength). 유형은 슬롯 태그로 자동 선택.
   // 기존 기록 수정: 모달에 값 채우고 저장 시 같은 문서 갱신(슬롯 연결 유지)
   function openSessEdit(id){
-    const r=state.sessions.find(x=>x.id===id); if(!r){alert("직접 입력한 세션만 수정할 수 있어요.");return;}
-    sessEdit=id; $s("sTitle").textContent="기록 수정";
+    const isG=String(id).indexOf("g:")===0;
+    const r=isG?garminAll().find(x=>x.gid===id.slice(2)):state.sessions.find(x=>x.id===id); if(!r){alert("수정할 기록을 찾지 못했어요.");return;}
+    sessEdit=id; $s("sTitle").textContent=isG?"가민 기록 수정 (유형·계획연결·메모)":"기록 수정";
     const slot=r.slot?findSlot(r.slot):null; sessLink=r.slot?{slotId:r.slot, wk:r.wk||"", target:slot?parseTarget(slot):null}:null;
     clearSessFields(); $s("sDate").value=r.date||new Date().toISOString().slice(0,10); $s("sSport").value=SPORT_KO[r.sport]?r.sport:"other"; syncSessFields();
     if(r.kind&&SESS_KINDS[r.sport]&&SESS_KINDS[r.sport][r.kind]){ $s("sKind").value=r.kind; syncSessFields(); }
-    $s("sDur").value=r.durationMin||""; $s("sRpe").value=String(r.rpe||5); $s("sMhr").value=r.mhr||""; $s("sMaxhr").value=r.maxhr||""; $s("sCad").value=r.cad||""; $s("sNote").value=r.note||"";
+    $s("sDur").value=r.durationMin||""; $s("sRpe").value=String(r.rpe||5); $s("sMhr").value=r.mhr||""; $s("sMaxhr").value=r.maxhr||r.maxHr||""; $s("sCad").value=r.cad||""; $s("sNote").value=r.note||"";
     $s("sDist").value=r.dist?(r.sport==="swim"?Math.round(r.dist*1000):r.dist):"";
     if(r.reps){ $s("sRepsRow").hidden=false; $s("sRowSub").hidden=false; $s("sReps").value=r.reps; }
     if(r.strides){ $s("sStrRow").hidden=false; $s("sRowSub").hidden=false; $s("sStr").value=r.strides; }
@@ -1862,7 +1940,8 @@
     if(!$s("sStrRow").hidden&&+$s("sStr").value>0) s.strides=+$s("sStr").value;
     if(!$s("sLowerRow").hidden&&$s("sLower").checked) s.lower=1;
     if(sessLink){ s.slot=sessLink.slotId; s.wk=sessLink.wk; }
-    if(sessEdit) updateSession(sessEdit,s); else addSession(s);
+    if(sessEdit&&sessEdit.indexOf("g:")===0){ const base={kind:"",reps:"",strides:"",lower:"",note:"",slot:"",wk:"",mhr:"",maxhr:""}; saveGEdit(sessEdit.slice(2),Object.assign(base,s),false); }
+    else if(sessEdit) updateSession(sessEdit,s); else addSession(s);
     closeSess();});
   document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("samFile").click());
   document.getElementById("samFile").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f)importSamsung(f);e.target.value="";});
@@ -1973,7 +2052,15 @@
     if(r.status===401||r.status===403) throw new Error("API 키 또는 선수 ID를 확인해 주세요 (HTTP "+r.status+")"); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
   function icuMap(a){ const sp=ICU_SPORT[a.type]; const dt=String(a.start_date_local||"").slice(0,10); if(!sp||!dt) return null;
     const s={date:dt,sport:sp,dist:Math.round((+a.distance||0)/10)/100,durationMin:Math.round((+a.moving_time||+a.elapsed_time||0)/6)/10,mhr:Math.round(+a.average_heartrate||0),src:"icu:"+a.id,name:String(a.name||"").slice(0,60)};
+    // 가민 훈련 효과(Primary Benefit): Intervals.icu 사용자 필드 TrainingEffectSelect(FIT 188) — 숫자 1~7 또는 선택지 이름
+    const te=icuTE(a.TrainingEffectSelect); if(te){ s.te=te.ko; if(sp==="run") s.kind=te.run(s); }
+    if(+a.AerobicEffect>0) s.teAe=Math.round(+a.AerobicEffect*10)/10; if(+a.AnaerobicEffect>0) s.teAn=Math.round(+a.AnaerobicEffect*10)/10;
     if(+a.max_heartrate>0) s.maxHr=Math.round(+a.max_heartrate); if(+a.icu_average_watts>0||+a.average_watts>0) s.power=Math.round(+a.icu_average_watts||+a.average_watts); return s; }
+  const ICU_TE=[null,
+    {en:"recovery",ko:"회복",run:s=>"easy"},{en:"base",ko:"기초",run:s=>(+s.dist>=12?"long":"easy")},{en:"tempo",ko:"템포",run:s=>"tempo"},
+    {en:"threshold",ko:"역치",run:s=>"threshold"},{en:"vo2",ko:"VO2 최대",run:s=>"interval"},{en:"anaerobic",ko:"무산소",run:s=>"interval"},{en:"sprint",ko:"스프린트",run:s=>"interval"}];
+  function icuTE(v){ if(v==null||v==="")return null; const n=Math.round(+v); if(n>=1&&n<=7) return ICU_TE[n];
+    const t=String(v).toLowerCase().replace(/\s+/g,""); return ICU_TE.find(x=>x&&t.indexOf(x.en)===0)||null; }
   function icuWell(w){ const n=v=>(v==null||v==="")?null:+v; const o={date:String(w.id||"").slice(0,10),rhr:n(w.restingHR),hrv:n(w.hrv),sleepH:w.sleepSecs?Math.round(w.sleepSecs/360)/10:null,sleepScore:n(w.sleepScore),weight:n(w.weight),readiness:n(w.readiness)};
     return (o.date&&[o.rhr,o.hrv,o.sleepH,o.sleepScore,o.weight,o.readiness].some(v=>v!=null))?o:null; }
   let _icuBusy=false;
@@ -2046,10 +2133,12 @@
     if(!db){if(!/실패/.test(noteT.textContent))noteT.textContent="로컬 미리보기 모드 — 변경이 이 브라우저에만 임시 반영됩니다.";const sn=document.getElementById("snapNote");if(sn)sn.querySelector("span:last-child").textContent="로컬 모드 — 클라우드 저장 시 코워크 분석 가능";return;}
     state.db=db; note.classList.add("live"); noteT.textContent="클라우드(Supabase) 자동 저장 중 — 휴대폰·PC 어디서 열어도 같은 기록입니다.";
     db.collection("races").onSnapshot(s=>{const r=s.docs.map(d=>Object.assign({id:d.id},d.data()));state.records=r.length?r:INITIAL.slice();renderAll();},()=>{});
-    db.collection("plan").onSnapshot(s=>{const m={};s.docs.forEach(d=>{const v=d.data()||{};const st=v.status||(v.done?"done":null);if(st)m[d.id]={status:st,note:v.note||"",waived:!!v.waived};});state.slot=m;renderWeeks();},()=>{});
+    db.collection("plan").onSnapshot(s=>{const m={};s.docs.forEach(d=>{const v=d.data()||{};const st=v.status||(v.done?"done":null);if(st)m[d.id]={status:st,note:v.note||"",waived:!!v.waived,date:v.date||"",ts:+v.ts||0};});state.slot=m;renderWeeks();},()=>{});
     db.collection("sessions").onSnapshot(s=>{state.sessions=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderLoad();renderTargets();},()=>{});
     db.doc("imports/samsung").onSnapshot(d=>{const v=d.exists?d.data():null;state.imports=(v&&Array.isArray(v.sessions))?v.sessions:[];renderLoad();renderTargets();},()=>{});
     db.doc("imports/bryton").onSnapshot(d=>{const v=d.exists?d.data():null;state.brytons=(v&&Array.isArray(v.sessions))?v.sessions:[];renderLoad();renderTargets();},()=>{});
+    db.collection("garmin_edit").onSnapshot(s=>{const m={};s.docs.forEach(d=>{m[d.id]=d.data()||{};});state.gEdits=m;renderAll();},()=>{});
+    db.collection("cal_rests").onSnapshot(s=>{state.calRests=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderCal();},()=>{});
     db.collection("cal_races").onSnapshot(s=>{state.calRaces=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderCal();renderHomeRaces();},()=>{});
     db.collection("custom_plan").onSnapshot(s=>{state.customs=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderCustom();},()=>{});
     db.collection("gear").onSnapshot(s=>{state.gear=s.docs.map(d=>Object.assign({id:d.id},d.data()));renderGear();},()=>{});
