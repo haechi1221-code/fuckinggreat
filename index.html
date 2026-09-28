@@ -1005,6 +1005,8 @@
     o.km=Math.round(allSessions().filter(s=>s.sport==="run"&&s.date>=a&&s.date<=b).reduce((x,s)=>x+(+s.dist||0),0)*10)/10;
     let pk=0; w.sess.forEach(s=>{ const r=slotPlanKm(s); if(r){ pk+=r.km; if(r.est) o.est=true; } }); o.planKm=Math.round(pk);
     if(atp){ o.load=Math.round(atp.actual); o.planLoad=Math.round(atp.target); }
+    // 강도 분포(가민 원본 라벨 기준): 회복·기초=저 / 템포·역치·VO2·무산소·스프린트=고 · 대회는 고로 집계
+    o.low=0; o.hard=0; allSessions().filter(s=>s.sport==="run"&&s.date>=a&&s.date<=b).forEach(s=>{ const t=teInfo(s); if(s.kind==="race"||(t&&t.hard)) o.hard++; else if(t) o.low++; });
     const items=w.sess.slice(); let sum=0; // 휴식 슬롯도 계획의 일부로 포함(✓=100%)
     items.forEach(s=>{ const stt=slotStatusOf(s.id); if(stt==="done") sum+=1; else if(stt==="partial"){ const P=slotProgress(s); sum+=(P&&P.mainPct!=null)?Math.min(1,P.mainPct):0.5; } });
     o.pct=items.length?Math.round(sum/items.length*1000)/10:0; return o; }
@@ -1032,7 +1034,7 @@
       const card=document.createElement("div"); const wkKey="wk:"+w.label; card.className="week card"+(isOpen(wkKey,!isPast&&(isCur||i<2))?" open":"");
       let head='<div class="wh"><span class="wn">'+w.label+(isCur?' <span class="tag">이번 주</span>':'')+'</span><span class="wd">'+w.range+' · '+esc(w.focus)+'</span><span class="prog">'+done+'/'+total+(comp.due?(' · 준수 '+comp.pct+'%'):'')+'</span><span class="chev">›</span></div>';
       const sm=weekSummary(w,ATPM[w.id]);
-      const wsum='<div class="wsum"><span>🏃🏽‍♂️ 거리 <b>'+sm.km+'</b>/'+(sm.planKm?((sm.est?'≈':'')+sm.planKm):'—')+'km</span><span>부하 <b>'+sm.load+'</b>/'+(sm.planLoad||'—')+'</span><span>계획 <b>'+sm.pct.toFixed(1)+'%</b></span></div>';
+      const wsum='<div class="wsum"><span>🏃🏽‍♂️ 거리 <b>'+sm.km+'</b>/'+(sm.planKm?((sm.est?'≈':'')+sm.planKm):'—')+'km</span><span>부하 <b>'+sm.load+'</b>/'+(sm.planLoad||'—')+'</span><span>계획 <b>'+sm.pct.toFixed(1)+'%</b></span>'+((sm.low+sm.hard)>0?('<span title="가민 훈련효과 라벨 기준 (회복·기초=저 / 템포·역치·VO2·무산소·스프린트·대회=고)">강도 저 <b>'+sm.low+'</b> · 고 <b style="'+(sm.hard>2?'color:var(--warn)':'')+'">'+sm.hard+'</b>'+(sm.hard>2?' ⚠':'')+'</span>'):'')+'</div>';
       let body='<div class="wbody">';
       w.sess.forEach(s=>{const stat=slotStatusOf(s.id); const on=stat==="done";
         const missed=isPast&&!on&&stat!=="partial"&&stat!=="sub"&&slotSport(s)!=="rest"&&!s.date;
@@ -1127,7 +1129,9 @@
   }
   // 가민 기록 + 앱에서 고친 내용(db garmin_edit: 유형·계획 연결·메모·숨김). 원본(imports/garmin)은 그대로.
   function gEditKey(src){ return String(src).replace(/[^A-Za-z0-9_-]/g,"_"); }
-  function garminAll(){ return (state.garmins||[]).map(g=>{ const e=state.gEdits[gEditKey(g.src)]; const o=Object.assign({},g,e||{}); o.gid=g.src; delete o.id; return o; }); }
+  function garminAll(){ return (state.garmins||[]).map(g=>{ const e=state.gEdits[gEditKey(g.src)]; const o=Object.assign({},g,e||{}); o.gid=g.src; delete o.id;
+    if(o.sport==="run"){ if(runRaceDay(o.date)) o.kind="race"; else if(!(e&&e.kind)) o.kind=garminRunKind(g)||o.kind; else if(o.kind==="threshold") o.kind="tempo"; }
+    return o; }); }
   function garminActive(){ const bry=state.brytons; return garminAll().filter(g=>!g.hidden&&!bry.some(b=>_dupMatch(b,g))); }
   function garDaySet(){ return new Set(garminActive().map(s=>s.date+"|"+s.sport)); }
   function manualReplaced(){ const gd=garDaySet(); return state.sessions.filter(s=>gd.has(s.date+"|"+s.sport)); }
@@ -1434,7 +1438,8 @@
     const link=s.slot?(' <span class="tag" style="font-size:10.5px">'+esc(s.wk||"")+' '+esc((findSlot(s.slot)||{t:""}).t.slice(0,1))+'</span>'):'';
     const manual=!!s.id; // 직접 입력 세션만 수정·삭제 (삼성/브라이튼 임포트는 제외)
     const btns=s.gid?('<span class="row-act"><button class="del" data-sedit="g:'+esc(s.gid)+'" aria-label="수정" title="유형·계획연결·메모 수정">✎</button><button class="del" data-ghide="'+esc(s.gid)+'" aria-label="숨기기" title="앱에서 숨기기">✕</button></span>'):manual?('<span class="row-act"><button class="del" data-sedit="'+esc(s.id)+'" aria-label="수정" title="수정">✎</button><button class="del" data-sdel="'+esc(s.id)+'" aria-label="삭제" title="삭제">✕</button></span>'):'';
-    const teB=s.teAe?(' <span class="tag" style="font-size:10.5px">효과 '+s.teAe+(s.teAn?('/'+s.teAn):'')+'</span>'):'';
+    const ti=teInfo(s); const teMis=!!(ti&&s.sport==="run"&&s.kind!=="race"&&s.kind!==ti.run(s)&&!(s.kind==="long"&&!ti.hard)&&!(s.kind==="easy"&&!ti.hard));
+    const teB=(ti?(' <span class="tag" style="font-size:10.5px'+(teMis?';color:var(--warn);background:var(--warn-soft)':'')+'" title="가민 훈련효과 원본 라벨">가민 '+esc(ti.ko)+'</span>'):'')+(s.teAe?(' <span class="tag" style="font-size:10.5px">효과 '+s.teAe+(s.teAn?('/'+s.teAn):'')+'</span>'):'');
     const cm=rep?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">가민으로 대체 · 부하 미반영</span>':isCommute(s)?' <span class="tag" style="font-size:10.5px;color:var(--muted);background:var(--surface-3)">훈련 제외</span>':'';
     return '<div class="cal-row'+(cm?'" style="opacity:.6':'')+'"><span>'+sessEmoji(s)+esc(sessKindLabel(s))+km+' · '+(+s.durationMin||0)+'분'+pace+ex+hr+' · 부하 '+Math.round(sessLoad(s))+(s.note?(' · 📝'+esc(s.note)):'')+link+teB+cm+'</span>'+btns+'</div>';
   }
@@ -1826,7 +1831,7 @@
       custom_plan_pending:customsPending,
       tri_inputs:state.tri||{},
       safety_rule:"주간 부하 증가 +10% 상한, TSB<-10 고강도 1회 제한, TSB<-30 회복만",
-      data_source_policy:"가민 포러너 570 → Intervals.icu → 앱 자동 동기화(2026-09 이후 기본). 가민 우선: 같은 날 같은 종목에 가민 기록이 있으면 가민만 반영(직접 기록은 대체 표시), 유형·계획연결은 가민 기록에 덧씌움(garmin_edit). 러닝 유형은 가민 훈련효과(TrainingEffectSelect) 자동 분류. Bryton FIT 라이딩 우선. 삼성헬스는 과거 기록(가져오기 완료분)",
+      data_source_policy:"가민 포러너 570 → Intervals.icu → 앱 자동 동기화(2026-09 이후 기본). 가민 우선: 같은 날 같은 종목에 가민 기록이 있으면 가민만 반영(직접 기록은 대체 표시), 유형·계획연결은 가민 기록에 덧씌움(garmin_edit). 러닝 유형은 가민 훈련효과(TrainingEffectSelect) 라벨을 앱 6유형으로 변환(회복·기초→이지런/≥12km 롱런, 템포·역치→템포, VO2·무산소·스프린트→인터벌, 대회일→레이스 고정). 원본 라벨(te)은 보존해 일지 병기·주간 강도 분포 점검. Bryton FIT 라이딩 우선. 삼성헬스는 과거 기록(가져오기 완료분)",
       wellness_recent:(state.wellness||[]).slice(-14),
       garmin_sessions:(state.garmins||[]).length,
     };
@@ -2053,12 +2058,20 @@
   function icuMap(a){ const sp=ICU_SPORT[a.type]; const dt=String(a.start_date_local||"").slice(0,10); if(!sp||!dt) return null;
     const s={date:dt,sport:sp,dist:Math.round((+a.distance||0)/10)/100,durationMin:Math.round((+a.moving_time||+a.elapsed_time||0)/6)/10,mhr:Math.round(+a.average_heartrate||0),src:"icu:"+a.id,name:String(a.name||"").slice(0,60)};
     // 가민 훈련 효과(Primary Benefit): Intervals.icu 사용자 필드 TrainingEffectSelect(FIT 188) — 숫자 1~7 또는 선택지 이름
-    const te=icuTE(a.TrainingEffectSelect); if(te){ s.te=te.ko; if(sp==="run") s.kind=te.run(s); }
+    const te=icuTE(a.TrainingEffectSelect); if(te){ s.te=te.ko; } if(sp==="run"){ const k=garminRunKind(s); if(k) s.kind=k; }
     if(+a.AerobicEffect>0) s.teAe=Math.round(+a.AerobicEffect*10)/10; if(+a.AnaerobicEffect>0) s.teAn=Math.round(+a.AnaerobicEffect*10)/10;
     if(+a.max_heartrate>0) s.maxHr=Math.round(+a.max_heartrate); if(+a.icu_average_watts>0||+a.average_watts>0) s.power=Math.round(+a.icu_average_watts||+a.average_watts); return s; }
+  /* 가민 라벨 → 앱 러닝 유형 변환표(2026-09-28 확정): 회복·기초→이지런(≥12km는 롱런) · 템포·역치→템포 · VO2·무산소·스프린트→인터벌 · 대회일→레이스 고정.
+     가민 원본 라벨은 s.te에 보존 → 일지에 병기, 주간 강도 분포(80/20·고강도 상한) 점검은 원본 라벨 기준. */
   const ICU_TE=[null,
-    {en:"recovery",ko:"회복",run:s=>"easy"},{en:"base",ko:"기초",run:s=>(+s.dist>=12?"long":"easy")},{en:"tempo",ko:"템포",run:s=>"tempo"},
-    {en:"threshold",ko:"역치",run:s=>"threshold"},{en:"vo2",ko:"VO2 최대",run:s=>"interval"},{en:"anaerobic",ko:"무산소",run:s=>"interval"},{en:"sprint",ko:"스프린트",run:s=>"interval"}];
+    {en:"recovery",ko:"회복",hard:false,run:s=>(+s.dist>=12?"long":"easy")},{en:"base",ko:"기초",hard:false,run:s=>(+s.dist>=12?"long":"easy")},{en:"tempo",ko:"템포",hard:true,run:s=>"tempo"},
+    {en:"threshold",ko:"역치",hard:true,run:s=>"tempo"},{en:"vo2",ko:"VO2 최대",hard:true,run:s=>"interval"},{en:"anaerobic",ko:"무산소",hard:true,run:s=>"interval"},{en:"sprint",ko:"스프린트",hard:true,run:s=>"interval"}];
+  const TE_BY_KO={}; ICU_TE.forEach(x=>{ if(x) TE_BY_KO[x.ko]=x; });
+  function teInfo(s){ return s&&s.te?TE_BY_KO[s.te]||null:null; }
+  // 대회일(러닝 레이스 슬롯 날짜)이면 유형은 항상 레이스
+  function runRaceDay(date){ const t=raceDates()[date]; return !!t&&t.indexOf("🚴")<0; }
+  // 가민 러닝 유형 확정: 대회일→race, 그 외 변환표(라벨 없으면 기존 kind 유지)
+  function garminRunKind(s){ if(runRaceDay(s.date)) return "race"; const t=teInfo(s); if(t) return t.run(s); return s.kind==="threshold"?"tempo":s.kind; }
   function icuTE(v){ if(v==null||v==="")return null; const n=Math.round(+v); if(n>=1&&n<=7) return ICU_TE[n];
     const t=String(v).toLowerCase().replace(/\s+/g,""); return ICU_TE.find(x=>x&&t.indexOf(x.en)===0)||null; }
   function icuWell(w){ const n=v=>(v==null||v==="")?null:+v; const o={date:String(w.id||"").slice(0,10),rhr:n(w.restingHR),hrv:n(w.hrv),sleepH:w.sleepSecs?Math.round(w.sleepSecs/360)/10:null,sleepScore:n(w.sleepScore),weight:n(w.weight),readiness:n(w.readiness)};
