@@ -657,9 +657,10 @@
     const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
     const B=k(base); const c28=new Date(base); c28.setDate(c28.getDate()-28); const c56=new Date(base); c56.setDate(c56.getDate()-56);
     const K28=k(c28), K56=k(c56); let wk=0, longest=0;
-    allSessions().forEach(s=>{ if(s.sport!=="run"||s.date>B)return; const km=+s.dist||0;
+    const runDays=new Set(); // 대회 당일 러닝 세션이 있으면 대회 기록 거리는 중복 합산하지 않음
+    allSessions().forEach(s=>{ if(s.sport!=="run"||s.date>B)return; const km=+s.dist||0; runDays.add(s.date);
       if(s.date>=K28) wk+=km; if(s.date>=K56 && km>longest) longest=km; });
-    state.records.forEach(r=>{ if(["10k","half","full"].indexOf(r.sport)<0||r.date>B)return; const km=SPORTS[r.sport].dist;
+    state.records.forEach(r=>{ if(["10k","half","full"].indexOf(r.sport)<0||r.date>B||runDays.has(r.date))return; const km=SPORTS[r.sport].dist;
       if(r.date>=K28) wk+=km; if(r.date>=K56 && km>longest) longest=km; });
     return { weeklyKm: wk/4, longestRun: longest };
   }
@@ -1376,7 +1377,7 @@
     mt+='<tr style="background:var(--surface-2)"><td class="z">'+Y+' 합계</td>'+sports.map(c=>'<td class="p" style="text-align:right">'+k1(tot[c[0]]||0)+'</td>').join("")+'<td class="p" style="text-align:right">'+k1(ysum)+'</td></tr></tbody></table>';
     el.innerHTML='<div class="card" style="margin-bottom:12px"><div class="phead"><h3 style="font-size:14px">연도별 누적 (km)</h3></div><div class="tbl-scroll">'+yt+'</div></div>'+
       '<div class="card"><div class="phead"><h3 style="font-size:14px">월별 누적 (km)</h3></div><div class="ychips">'+years.slice().reverse().map(y=>'<button class="ychip'+(y===Y?' on':'')+'" data-y="'+y+'">'+y+'</button>').join("")+'</div><div class="tbl-scroll">'+mt+'</div>'+
-      '<div style="font-size:11.5px;color:var(--muted);padding:4px 12px 10px">세션 데이터 기준(삼성헬스·Bryton·직접 입력, 중복 제거). 대회 기록은 삼성헬스에 이미 포함되므로 별도 합산하지 않음.</div></div>';
+      '<div style="font-size:11.5px;color:var(--muted);padding:4px 12px 10px">세션 데이터 기준(가민·삼성헬스·Bryton·직접 입력, 중복 제거). 대회는 당일 세션 거리로 집계되며 대회 기록을 별도 합산하지 않음.</div></div>';
     el.querySelectorAll(".ychip").forEach(b=>b.addEventListener("click",()=>{state.cumYear=b.getAttribute("data-y");renderCumul();}));
   }
 
