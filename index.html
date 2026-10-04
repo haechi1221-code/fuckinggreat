@@ -342,7 +342,7 @@
     <div class="sec-h">내가 추가한 훈련 <span class="s">직접 입력 · 체크·삭제 가능</span></div>
     <button class="inline-add" id="addCustom">＋ 내 훈련 추가</button>
     <div class="card recent" id="customList" style="margin-top:12px"></div>
-    <div class="sec-h">레이스 데이 페이싱 <span class="s">A레이스 10K 43:00 = 4:18/km</span></div>
+    <div class="sec-h">레이스 데이 페이싱 <span class="s">하프 10/11 · 플랜A 1:34:53</span></div>
     <div class="card pad" id="pacing"></div>
   </section>
 
@@ -552,7 +552,7 @@
 
   const TARGETS=[
     {pri:1,sp:"10k",name:"런유어웨이 10K",date:"2026-10-04",cat:"10km",goal:"43:00",goalSec:2580,cvar:"--s-10k",verdict:"A레이스. 목표 43:00(4:18/km) — PB 42:55 수준이라 현재 체력으로 현실적. 후반 여유 있으면 PB 도전. 전날 폰도는 매우 이지하게 타서 다리 아끼기.",vico:"🎯"},
-    {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 6일 후 · B레이스. 컨트롤드(4:32~4:38)로 운영, 컨디션 좋으면 sub-1:35.",vico:"↗"},
+    {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 7일 후 · B레이스. 전날 아침 HRV 70↑·안정시심박 48↓·다리 가벼우면 플랜A(1~3km 4:35 → 4~15km 4:30 → 16km~ 4:27 = 1:34:53), 아니면 플랜B(4:35 이븐 ≈1:36:40). 3km에 심박 172 넘으면 즉시 플랜B.",vico:"↗"},
     {pri:3,sp:"cycle",name:"충주 메디오 폰도",date:"2026-10-03",cat:"사이클 ~100km*",goal:"완주",goalSec:null,cvar:"--s-cycle",verdict:"10K 전날 → 완주·사교 페이스로 다리 아끼고 보급 연습. 하드하게 타면 다음 날 A레이스 10K가 손해.",vico:"✔"},
     {pri:4,sp:"full",name:"JTBC 마라톤 풀코스",date:"2026-11-01",cat:"42.195km",goal:"3:40:00",goalSec:13200,cvar:"--s-full",verdict:"목표 3:40:00(5:13/km) — PB 3:49:50 대비 약 10분 단축. 10K 중심 블록이라 롱런·마라톤페이스(MP) 축적이 과제 → 하프 이후 롱런 후반에 MP 5:10~5:15 구간을 넣고, 레이스는 전반 5:15로 보수적 이븐 운영.",vico:"↗"},
   ];
@@ -583,20 +583,21 @@
       {id:"w3d",t:"③ 이지런 30분",tag:"이지"},{id:"w3e",t:"④ 레이스 D-2~전날: 완전 휴식 (or 이지 20분 + 스트라이드 4)",tag:"휴식"},
       {id:"w3f",t:"🚴 [10/3·토] 충주 메디오 폰도 — 매우 이지/사교 페이스, 다리 아끼기·보급 연습",tag:"레이스",date:"2026-10-03"},
       {id:"w3g",t:"🏃 [10/4·일] 런유어웨이 10K — A레이스 전력 (목표 4:18/km, 43:00)",tag:"레이스",date:"2026-10-04"}]},
-    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 + 하프(B레이스) · 하프만 날짜 고정",sess:[
-      {id:"w4a",t:"① 10K 직후 2~3일: 완전 휴식/회복",tag:"휴식"},{id:"w4b",t:"② 이지런 30~40분 회복",tag:"이지"},
-      {id:"w4c",t:"③ 이지런 40분",tag:"이지"},{id:"w4d",t:"④ 이지런 40분 + 스트라이드 4",tag:"이지"},
-      {id:"w4f",t:"⑤ 하프 전날: 이지 20분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
-      {id:"w4g",t:"🏃 [10/11·일] 서울레이스 하프 — 컨트롤드 (4:32~4:38)",tag:"레이스",date:"2026-10-11"}]},
-    {id:"w5",label:"W5",range:"10/12~10/18",focus:"리커버리 & 지구력 복귀 · 순서 유동",sess:[
-      {id:"w5b",t:"① 이지런 40~50분 (회복성)",tag:"이지"},{id:"w5c",t:"② 이지런 45분",tag:"이지"},
-      {id:"w5d",t:"③ 이지런 50분 + 하체보강",tag:"이지"},{id:"w5e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
-      {id:"w5f",t:"⑤ 롱런 90~110분 (~17km, 편안) — 시간 여유 있는 날",tag:"롱런"},{id:"w5g",t:"⑥ 이지런 40~50분 (회복성)",tag:"이지"},
-      {id:"w5a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
-    {id:"w6",label:"W6",range:"10/19~10/25",focus:"풀 완주용 피크 롱런 · 순서 유동",sess:[
+    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 최우선 + 하프(B레이스) · 롱런 없음 · 하프만 날짜 고정",sess:[
+      {id:"w4a",t:"① 완전 휴식 (10K 다음 날) — 걷기·스트레칭만",tag:"휴식"},{id:"w4h",t:"② 완전 휴식 (2일차)",tag:"휴식"},
+      {id:"w4b",t:"③ 회복 조깅 20~30분 (심박 140 이하)",tag:"이지"},{id:"w4c",t:"④ 이지런 8km + 스트라이드 4 (5:30~6:00 페이스, 여유 있으면 10km까지)",tag:"이지"},
+      {id:"w4d",t:"⑤ 완전 휴식 (하프 D-2)",tag:"휴식"},{id:"w4f",t:"⑥ 하프 전날: 이지 20분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
+      {id:"w4g",t:"🏃 [10/11·일] 서울레이스 하프 — 플랜A 4:35→4:30→4:27 (1:34:53) · 플랜B 4:35 이븐",tag:"레이스",date:"2026-10-11"}]},
+    {id:"w5",label:"W5",range:"10/12~10/18",focus:"하프 회복 → 풀 대비 최장 롱런(주 후반) · 순서 유동",sess:[
+      {id:"w5a",t:"① 완전 휴식 (하프 다음 날)",tag:"휴식"},{id:"w5b",t:"② 회복 조깅 30분 (심박 140 이하)",tag:"이지"},
+      {id:"w5c",t:"③ 이지런 45분",tag:"이지"},{id:"w5d",t:"④ 이지런 50분 + 하체보강",tag:"이지"},
+      {id:"w5e",t:"⑤ 이지런 35분 + 스트라이드 6",tag:"폼"},
+      {id:"w5f",t:"⑥ 최장 롱런 150분 (~24km, 6:00~6:20 편안하게) · 30~40분마다 보급 — 10/17~18, 다리 무거우면 20km",tag:"롱런"},
+      {id:"w5h",t:"＋ 완전 휴식 1일 (롱런 전날 권장)",tag:"휴식"}]},
+    {id:"w6",label:"W6",range:"10/19~10/25",focus:"MP 감각 롱런 + 감량 시작 · 순서 유동",sess:[
       {id:"w6b",t:"① 이지런 45~50분 (회복성)",tag:"이지"},{id:"w6c",t:"② 이지런 50분 (+선택 템포 2km)",tag:"이지"},
       {id:"w6d",t:"③ 이지런 45분 + 하체보강",tag:"이지"},{id:"w6e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
-      {id:"w6f",t:"⑤ 피크 롱런 26~30km · 마지막 8~10km MP(5:10~5:15) · 30~40분마다 보급 — 컨디션 좋은 날",tag:"롱런"},{id:"w6g",t:"⑥ 이지런 30~40분 매우 가볍게 (롱런 회복)",tag:"이지"},
+      {id:"w6f",t:"⑤ MP 롱런 110분 (~19km) · 마지막 6km MP(5:10~5:15) · 보급 리허설 — 10/24~25",tag:"롱런"},{id:"w6g",t:"⑥ 이지런 30~40분 매우 가볍게 (롱런 회복)",tag:"이지"},
       {id:"w6a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
     {id:"w7",label:"W7",range:"10/26~11/1",focus:"테이퍼 + 풀 3:40 · 풀만 날짜 고정",sess:[
       {id:"w7b",t:"① 이지런 30분 가볍게",tag:"이지"},{id:"w7c",t:"② 이지런 40분 중 마라톤페이스(5:13) 3km 감각",tag:"이지"},
@@ -606,9 +607,9 @@
   ];
 
   const PACING=[
-    {seg:"0~2km",pace:"4:20~4:22/km",note:"초반 오버페이스 금지 · 몸 열기"},
-    {seg:"2~7km",pace:"4:17~4:19/km",note:"목표 페이스로 리듬 안정"},
-    {seg:"7~10km",pace:"4:12~4:16/km",note:"남은 힘 모두 · 마지막 1km 스퍼트(PB 42:55 도전 구간)"},
+    {seg:"0~3km",pace:"4:35/km",note:"심박 170 이하 확인 · 172 넘으면 플랜B(4:35 이븐)로 전환"},
+    {seg:"3~15km",pace:"4:30/km",note:"통과 5km 22:45 · 10km 45:15 · 15km 1:07:45 · 10km 전후 젤 1개"},
+    {seg:"15km~",pace:"4:27/km 이하",note:"20km 1:30:00 통과 · 남은 힘 모두 → 1:34:53"},
   ];
 
   const state={records:INITIAL.slice(),sessions:[],imports:[],brytons:[],customs:[],gear:[],calRaces:[],calRests:[],gEdits:{},garmins:[],wellness:[],tri:{},db:null,done:new Set(),slot:{},adaptOff:false};
@@ -810,7 +811,7 @@
   }
 
   /* ---- 주간 부하 목표 (TrainingPeaks ATP 층): 페이즈 배수 × (기준 CTL×7) vs 실제 주간 부하 ---- */
-  const ATP_PHASE={w1:["베이스+스피드",1.05],w2:["피크 퀄리티",1.10],w3:["테이퍼+레이스",0.75],w4:["회복+레이스",0.70],w5:["회복·재구축",0.95],w6:["피크 롱런",1.10],w7:["테이퍼+풀",0.65]};
+  const ATP_PHASE={w1:["베이스+스피드",1.05],w2:["피크 퀄리티",1.10],w3:["테이퍼+레이스",0.75],w4:["회복+레이스",0.70],w5:["회복→최장 롱런",1.05],w6:["MP 롱런·감량",0.95],w7:["테이퍼+풀",0.65]};
   function atpTable(){
     const series=pmc(); if(!series.length) return [];
     const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
@@ -1096,7 +1097,7 @@
     if(typeof renderAdapt==="function") renderAdapt(res);
   }
   function renderPacing(){
-    document.getElementById("pacing").innerHTML=PACING.map(p=>'<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;width:78px;flex:none">'+p.seg+'</div><div><div style="font-family:Archivo;font-weight:700">'+p.pace+'</div><div style="font-size:12px;color:var(--ink-2)">'+esc(p.note)+'</div></div></div>').join("")+'<div style="font-size:12.5px;color:var(--ink-2);margin-top:10px">🎯 A레이스. <b>폴백:</b> 5km 지점에서 힘들면 4:22/km로 안정시켜 43:30 전후 확보. · 풀코스(11/1)는 목표 3:40 → 5:13/km 이븐: 하프까지 5:15로 보수적, 30km 이후 여유 있으면 5:08~5:10.</div>';
+    document.getElementById("pacing").innerHTML=PACING.map(p=>'<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;width:78px;flex:none">'+p.seg+'</div><div><div style="font-family:Archivo;font-weight:700">'+p.pace+'</div><div style="font-size:12px;color:var(--ink-2)">'+esc(p.note)+'</div></div></div>').join("")+'<div style="font-size:12.5px;color:var(--ink-2);margin-top:10px">🎯 B레이스. <b>플랜A 조건:</b> 전날 아침 HRV 70↑·안정시심박 48↓·다리 가벼움. <b>플랜B:</b> 4:35/km 이븐(≈1:36:40), 16km 이후 여력 있으면 가속. · 풀코스(11/1)는 목표 3:40 → 5:13/km 이븐: 하프까지 5:15로 보수적, 30km 이후 여유 있으면 5:08~5:10.</div>';
   }
 
   /* ---- LOAD / PMC ---- */
@@ -1823,7 +1824,7 @@
       goals_2027:{"10k":"sub 40:00","half":"sub 1:30","full":"sub 3:30","triathlon":"하프코스(70.3) 완주","cycle":"그란폰도 완주"},
       target_races:races,
       priority_order:"1)10K(10/4, A레이스) 2)하프(10/11) 3)폰도(10/3) 4)풀(11/1, 3:40). 이전의 풀코스 1순위에서 반전됨.",
-      schedule_conflict:"10/3 폰도(토)→10/4 10K(일) 백투백: 10K가 A레이스이므로 폰도는 매우 이지/사교 페이스로 다리 아끼고 10K 전력. 10K(10/4)→하프(10/11) 6일: 회복 후 하프는 컨트롤드. 풀(11/1)은 4순위·목표 3:40(5:13/km). 10K 중심 블록 특성상 롱런·MP 축적이 과제 → 하프 이후 롱런 후반 MP 구간으로 보완.",
+      schedule_conflict:"10/3 폰도→10/4 10K 백투백 결과: 폰도 96.6km·획득 1,073m를 평균심박 136(계획 125)·업힐 150~160으로 소화, 10K 44:43(목표 43:00)·평균심박 182 — 다리 피로가 주원인. 10/5~6 완전 휴식, 하프 주간 롱런 없음. 하프(10/11)는 조건부 플랜A(1:34:53)/플랜B(4:35 이븐). 풀(11/1, 3:40) 대비 최장 롱런은 10/17~18(~24km), 10/24~25는 MP 롱런 ~19km로 감량",
       plan_progress:{done:planDone, total:planTotal, compliance:{due:comp.due, hit:comp.hit, pct:comp.pct, note:"지난 날짜의 비휴식 항목 중 수동 체크(✓)된 비율"}},
       weekly_targets:(typeof atpTable==="function")?atpTable().map(r=>({week:r.label,range:r.range,phase:r.phase,target_load:Math.round(r.target),actual_load:Math.round(r.actual),pct:r.pct,rr_adjusted:r.rrAdj})):null,
       plan_model:"주간은 순서(권장 시퀀스)만, 요일 고정 없음(유동). 대회만 날짜 고정. 체크는 수동(✓완료/◐부분). 슬롯별 기록(sessions.slot) 합계로 달성률·잔여 계산, 잔여는 소멸 또는 2차 기록(자동 이관 없음).",
