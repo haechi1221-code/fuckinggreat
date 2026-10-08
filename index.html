@@ -552,9 +552,9 @@
 
   const TARGETS=[
     {pri:1,sp:"10k",name:"런유어웨이 10K",date:"2026-10-04",cat:"10km",goal:"43:00",goalSec:2580,cvar:"--s-10k",verdict:"A레이스. 목표 43:00(4:18/km) — PB 42:55 수준이라 현재 체력으로 현실적. 후반 여유 있으면 PB 도전. 전날 폰도는 매우 이지하게 타서 다리 아끼기.",vico:"🎯"},
-    {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 7일 후 · B레이스. 전날 아침 HRV 70↑·안정시심박 48↓·다리 가벼우면 플랜A(1~3km 4:35 → 4~15km 4:30 → 16km~ 4:27 = 1:34:53), 아니면 플랜B(4:35 이븐 ≈1:36:40). 3km에 심박 172 넘으면 즉시 플랜B.",vico:"↗"},
+    {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 7일 후 · 남은 대회 1순위(10K·폰도 종료로 승격). 전날 아침 HRV 70↑·안정시심박 48↓·다리 가벼우면 플랜A(1~3km 4:35 → 4~15km 4:30 → 16km~ 4:27 = 1:34:53), 아니면 플랜B(4:35 이븐 ≈1:36:40). 3km에 심박 172 넘으면 즉시 플랜B.",vico:"↗"},
     {pri:3,sp:"cycle",name:"충주 메디오 폰도",date:"2026-10-03",cat:"사이클 ~100km*",goal:"완주",goalSec:null,cvar:"--s-cycle",verdict:"10K 전날 → 완주·사교 페이스로 다리 아끼고 보급 연습. 하드하게 타면 다음 날 A레이스 10K가 손해.",vico:"✔"},
-    {pri:4,sp:"full",name:"JTBC 마라톤 풀코스",date:"2026-11-01",cat:"42.195km",goal:"3:40:00",goalSec:13200,cvar:"--s-full",verdict:"목표 3:40:00(5:13/km) — PB 3:49:50 대비 약 10분 단축. 10K 중심 블록이라 롱런·마라톤페이스(MP) 축적이 과제 → 하프 이후 롱런 후반에 MP 5:10~5:15 구간을 넣고, 레이스는 전반 5:15로 보수적 이븐 운영.",vico:"↗"},
+    {pri:4,sp:"full",name:"JTBC 마라톤 풀코스",date:"2026-11-01",cat:"42.195km",goal:"3:40:00",goalSec:13200,cvar:"--s-full",verdict:"현재 2순위 → 하프(10/11) 종료 후 1순위로 자동 승격. 목표 3:40:00(5:13/km) — PB 3:49:50 대비 약 10분 단축. 10K 중심 블록이라 롱런·마라톤페이스(MP) 축적이 과제 → 하프 이후 롱런 후반에 MP 5:10~5:15 구간을 넣고, 레이스는 전반 5:15로 보수적 이븐 운영.",vico:"↗"},
   ];
 
   const ZONES=[
@@ -583,7 +583,7 @@
       {id:"w3d",t:"③ 이지런 30분",tag:"이지"},{id:"w3e",t:"④ 레이스 D-2~전날: 완전 휴식 (or 이지 20분 + 스트라이드 4)",tag:"휴식"},
       {id:"w3f",t:"🚴 [10/3·토] 충주 메디오 폰도 — 매우 이지/사교 페이스, 다리 아끼기·보급 연습",tag:"레이스",date:"2026-10-03"},
       {id:"w3g",t:"🏃 [10/4·일] 런유어웨이 10K — A레이스 전력 (목표 4:18/km, 43:00)",tag:"레이스",date:"2026-10-04"}]},
-    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 최우선 + 하프(B레이스) · 롱런 없음 · 하프만 날짜 고정",sess:[
+    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 최우선 + 하프(1순위) · 롱런 없음 · 하프만 날짜 고정",sess:[
       {id:"w4a",t:"① 완전 휴식 (10K 다음 날) — 걷기·스트레칭만",tag:"휴식"},{id:"w4h",t:"② 완전 휴식 (2일차)",tag:"휴식"},
       {id:"w4b",t:"③ 회복 조깅 20~30분 (심박 140 이하)",tag:"이지"},{id:"w4c",t:"④ 이지런 8km + 스트라이드 4 (5:30~6:00 페이스, 여유 있으면 10km까지)",tag:"이지"},
       {id:"w4d",t:"⑤ 완전 휴식 (하프 D-2)",tag:"휴식"},{id:"w4f",t:"⑥ 하프 전날: 이지 20분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
@@ -702,15 +702,37 @@
       timeReal:predict(distM,realV), timeCeil:predict(distM,PHYSIO.vo2max), timeRace:(vRace!=null?predict(distM,vRace):null) };
   }
 
+  /* ---- 대회 순위 자동 재조정 ----
+     끝난 대회(다음 날부터)는 순위에서 빠지고, 남은 대회를 원래 순위(pri)→날짜 순으로 1부터 다시 매김. 대회 당일까지는 순위 유지. */
+  function rankedRaces(){
+    const all=TARGETS.map(t=>Object.assign({},t,{_tgt:true}))
+      .concat((state.calRaces||[]).map(r=>({name:r.name,date:r.date,cat:r.cat||"",goal:r.goal||"—",pri:r.pri||9,cvar:"--accent",calId:r.id})));
+    const up=all.filter(t=>daysTo(t.date)>=0&&t.pri<9).sort((a,b)=>(a.pri-b.pri)||(a.date<b.date?-1:1));
+    all.forEach(t=>{ t.done=daysTo(t.date)<0; const i=up.indexOf(t); t.rank=i>=0?i+1:null; });
+    return all;
+  }
+  function raceOrder(a,b){ // 남은 대회(순위순) → 순위 없는 남은 대회(날짜순) → 끝난 대회(최근순)
+    if(a.done!==b.done) return a.done?1:-1;
+    if(a.done) return a.date<b.date?1:-1;
+    if((a.rank==null)!==(b.rank==null)) return a.rank==null?1:-1;
+    return (a.rank-b.rank)||(a.date<b.date?-1:1);
+  }
+  function priorityOrderText(){
+    const all=rankedRaces(); const md=d=>(+d.slice(5,7))+"/"+(+d.slice(8,10));
+    const up=all.filter(t=>t.rank).sort(raceOrder).map(t=>t.rank+")"+t.name+"("+md(t.date)+(t.goal&&t.goal!=="—"?", "+t.goal:"")+")");
+    const done=all.filter(t=>t.done&&t._tgt).sort(raceOrder).map(t=>t.name+"("+md(t.date)+", 원래 "+t.pri+"순위)");
+    return "남은 대회 순위(끝난 대회 제외 후 자동 재조정): "+(up.length?up.join(" "):"없음")+(done.length?" · 완료: "+done.join(", "):"");
+  }
+
   /* ---- HOME ---- */
   function renderHomeRaces(){
     const el=document.getElementById("homeRaces"); el.innerHTML="";
-    const ALL=TARGETS.concat((state.calRaces||[]).map(r=>({name:r.name,date:r.date,cat:r.cat||"",goal:r.goal||"—",pri:r.pri||9,cvar:"--accent"})));
-    const up=ALL.filter(t=>daysTo(t.date)>=0).sort((a,b)=>(a.pri-b.pri)||(a.date<b.date?-1:1));
-    (up.length?up:ALL.slice().sort((a,b)=>a.pri-b.pri)).forEach(t=>{
+    const ALL=rankedRaces();
+    const up=ALL.filter(t=>!t.done).sort(raceOrder);
+    (up.length?up:ALL.slice().sort(raceOrder)).forEach(t=>{
       const d=daysTo(t.date),c=cssv(t.cvar);
       const row=document.createElement("div"); row.className="race-row"; row.style.setProperty("--rc",c);
-      row.innerHTML='<div class="pri">'+(t.pri<9?t.pri:'·')+'</div><div class="race-main"><div class="nm">'+esc(t.name)+'</div>'+
+      row.innerHTML='<div class="pri">'+(t.rank?t.rank:(t.done?'✓':'·'))+'</div><div class="race-main"><div class="nm">'+esc(t.name)+'</div>'+
         '<div class="mt">'+mdDate(t.date)+' · '+esc(t.cat)+' · 목표 '+esc(t.goal)+'</div></div>'+
         '<div class="race-dday"><div class="d">'+(d>=0?"D-"+d:"완료")+'</div><div class="l">'+shortDate(t.date)+'</div></div>';
       el.appendChild(row);});
@@ -746,8 +768,8 @@
       nd.innerHTML='<b>예측 방식:</b> 속도엔진 VDOT ~'+Math.round(vSp)+'(10K·하프 기록)에서 <b>거리·훈련량 지구력 감쇠</b>를 적용하고, <b>VO₂max '+PHYSIO.vo2max+'</b>를 생리 상한으로 사용. '+(fv?('마라톤 기록 VDOT ~'+Math.round(fv)+' — 지구력이 병목. '):'')+(vol.weeklyKm>0.5?('최근 주 '+Math.round(vol.weeklyKm)+'km·최장 '+Math.round(vol.longestRun)+'km 반영.'):'훈련량 데이터가 없어 지금은 기록 기반(세션 import 시 훈련량 반영).');
     } else nd.textContent="러닝 기록이 쌓이면 예측을 표시합니다.";
     const el=document.getElementById("targets"); el.innerHTML="";
-    TARGETS.slice().sort((a,b)=>a.pri-b.pri).forEach(t=>{
-      const c=cssv(t.cvar),d=daysTo(t.date);
+    rankedRaces().filter(t=>t._tgt).sort(raceOrder).forEach(t=>{
+      const c=t.done?cssv("--muted"):cssv(t.cvar),d=daysTo(t.date);
       let estHtml, goalHtml, refHtml="";
       if(t.sp&&SPORTS[t.sp].dist&&t.goalSec){
         const pm=predictMulti(t.sp), goalV=vdot(SPORTS[t.sp].dist*1000,t.goalSec);
@@ -760,7 +782,7 @@
         estHtml='<div class="mini est"><div class="k">현재</div><div class="v">완주 가능</div></div>';
       }
       const box=document.createElement("div"); box.className="tgt";
-      box.innerHTML='<div class="top"><span class="pribadge" style="background:'+c+'">'+t.pri+'순위</span><span class="nm">'+esc(t.name)+'</span>'+
+      box.innerHTML='<div class="top"><span class="pribadge" style="background:'+c+'">'+(t.rank?t.rank+'순위':'완료')+'</span><span class="nm">'+esc(t.name)+'</span>'+
         '<span class="when">'+mdDate(t.date)+' · '+(d>=0?"D-"+d:"완료")+'</span></div>'+
         '<div class="cmp">'+goalHtml+estHtml+'</div>'+
         '<div class="verdict"><span class="ic">'+t.vico+'</span><span>'+esc(t.verdict)+'</span></div>'+refHtml;
@@ -1139,8 +1161,8 @@
   function manualReplaced(){ const gd=garDaySet(); return state.sessions.filter(s=>gd.has(s.date+"|"+s.sport)); }
   function dailyLoads(){
     const map={};
-    // 대회는 최대 노력 ≈ Z5 TRIMP(k≈1.9). 같은 날 삼성 세션과 겹치면 이중 계산이 될 수 있어, 그 날 러닝 세션이 있으면 대회 부하는 생략.
-    const sessDays=new Set(allSessions().filter(s=>s.sport==="run").map(s=>s.date));
+    // 대회는 최대 노력 ≈ Z5 TRIMP(k≈1.9). 그 날 실제 세션 기록(종목 무관 — 가민·브라이튼·삼성·직접)이 있으면 그 세션 부하로 이미 계산되므로 대회 부하는 생략(이중 계산 방지).
+    const sessDays=new Set(allSessions().map(s=>s.date));
     state.records.forEach(r=>{if(r.timeSec>0&&!sessDays.has(r.date)){const l=(r.timeSec/60)*1.9; map[r.date]=(map[r.date]||0)+l;}});
     allSessions().forEach(s=>{const l=sessLoad(s); map[s.date]=(map[s.date]||0)+l;});
     return map;
@@ -1791,7 +1813,7 @@
     const recent=allSessions().filter(s=>s.date>=cutKey);
     const ov=overallVDOT();
     const pbObj={}; ORDER.forEach(k=>{const b=pb(bySport(k)); if(b)pbObj[k]={time:fmt(b.timeSec),sec:b.timeSec,event:b.event,date:b.date};});
-    const races=TARGETS.slice().sort((a,b)=>a.pri-b.pri).map(t=>{
+    const races=rankedRaces().filter(t=>t._tgt).sort(raceOrder).map(t=>{
       let est=null,goalV=null,curV=null,est_ceiling=null,endurance_pct=null,basis=null;
       let cal_corr=null;
       if(t.sp&&SPORTS[t.sp]&&SPORTS[t.sp].dist&&t.goalSec){const dm=SPORTS[t.sp].dist*1000;const pm=predictMulti(t.sp);
@@ -1799,7 +1821,7 @@
         if(pm){ est=fmt(pm.timeReal); curV=Math.round(pm.realV); est_ceiling=fmt(pm.timeCeil);
           endurance_pct=pm.hasVol?Math.round(pm.EF*100):null; cal_corr=pm.calibrated?+pm.corr.toFixed(1):null;
           basis=(pm.hasVol?"기록+생리+훈련량":"기록 기반(훈련량 데이터 부족)")+(pm.calibrated?"+레이스보정":""); }}
-      return {name:t.name,date:t.date,d_day:daysTo(t.date),priority:t.pri,cat:t.cat,
+      return {name:t.name,date:t.date,d_day:daysTo(t.date),priority:t.rank,original_priority:t.pri,status:t.done?"완료":"예정",cat:t.cat,
         goal:t.goal,est,est_ceiling_vo2max:est_ceiling,goal_vdot:goalV,current_vdot:curV,endurance_pct,race_calibration_vdot:cal_corr,basis,verdict:t.verdict};});
     const planTotal=WEEKS.reduce((a,w)=>a+w.sess.length,0);
     const planDone=WEEKS.reduce((a,w)=>{const f=planFulfill(w);return a+w.sess.filter(s=>isDone(w,s,f)).length;},0);
@@ -1818,13 +1840,13 @@
         gap_note:"속도엔진 VDOT와 마라톤 VDOT 격차 = 지구력(롱런 볼륨) 개선 여지"},
       pb:pbObj,
       training_load:{ctl:Math.round(last.ctl*10)/10, atl:Math.round(last.atl*10)/10, tsb:Math.round(last.tsb*10)/10,
-        status:st.t, recommendation:st.r, scale:"TRIMP zonal(평균HR 기반, GC 계수 .50/.92/1.17/1.33/2.00 선형보간) 우선, 심박 없으면 RPE 폴백(시간×(RPE/10)²×1.6). 대회=분×1.9(같은 날 러닝 세션 있으면 생략)"},
+        status:st.t, recommendation:st.r, scale:"TRIMP zonal(평균HR 기반, GC 계수 .50/.92/1.17/1.33/2.00 선형보간) 우선, 심박 없으면 RPE 폴백(시간×(RPE/10)²×1.6). 대회=분×1.9(같은 날 세션 기록 있으면 생략)"},
       volume_4wk:{sessions:recent.length, hours:Math.round(recent.reduce((a,s)=>a+(+s.durationMin||0),0)/60*10)/10,
         km:Math.round(recent.reduce((a,s)=>a+(+s.dist||0),0)), by_sport:(()=>{const o={};recent.forEach(s=>o[s.sport]=(o[s.sport]||0)+1);return o;})()},
       total_sessions:allSessions().length,
       goals_2027:{"10k":"sub 40:00","half":"sub 1:30","full":"sub 3:30","triathlon":"하프코스(70.3) 완주","cycle":"그란폰도 완주"},
       target_races:races,
-      priority_order:"1)10K(10/4, A레이스) 2)하프(10/11) 3)폰도(10/3) 4)풀(11/1, 3:40). 이전의 풀코스 1순위에서 반전됨.",
+      priority_order:priorityOrderText(),
       schedule_conflict:"10/3 폰도→10/4 10K 백투백 결과: 폰도 96.6km·획득 1,073m를 평균심박 136(계획 125)·업힐 150~160으로 소화, 10K 44:43(목표 43:00)·평균심박 182 — 다리 피로가 주원인. 10/5~6 완전 휴식, 하프 주간 롱런 없음. 하프(10/11)는 조건부 플랜A(1:34:53)/플랜B(4:35 이븐). 풀(11/1, 3:40) 대비 최장 롱런은 10/17~18(~24km), 10/24~25는 MP 롱런 ~19km로 감량",
       plan_progress:{done:planDone, total:planTotal, compliance:{due:comp.due, hit:comp.hit, pct:comp.pct, note:"지난 날짜의 비휴식 항목 중 수동 체크(✓)된 비율"}},
       weekly_targets:(typeof atpTable==="function")?atpTable().map(r=>({week:r.label,range:r.range,phase:r.phase,target_load:Math.round(r.target),actual_load:Math.round(r.actual),pct:r.pct,rr_adjusted:r.rrAdj})):null,
