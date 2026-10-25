@@ -2149,7 +2149,7 @@
     if(!state.db){ icuStatus("클라우드 연결 후 동기화할 수 있어요."); return; }
     _icuBusy=true; icuStatus("가민 기록 동기화 중…");
     try{
-      const NOW=new Date(), nx=new Date(NOW); nx.setDate(nx.getDate()+1); const newest=dkey(nx), o=new Date(NOW); o.setDate(o.getDate()-45); const oldest=dkey(o); // 앱을 켜 둔 채 날짜가 바뀌어도 오늘 기록을 받도록 매번 현재 시각 기준(+1일 여유)
+      const NOW=new Date(); const newest=dkey(NOW), o=new Date(NOW); o.setDate(o.getDate()-45); const oldest=dkey(o); // 앱을 켜 둔 채 날짜가 바뀌어도 오늘 기록을 받도록 매번 현재 시각 기준
       const acts=await icuGet("/activities?oldest="+oldest+"&newest="+newest);
       const got=(Array.isArray(acts)?acts:[]).map(icuMap).filter(Boolean), fetched=new Set(got.map(s=>s.src));
       const before=state.garmins||[], had=new Set(before.map(s=>s.src));
@@ -2164,7 +2164,7 @@
       LS.set("icuLastSync",String(Date.now()));
       const nNew=got.filter(s=>!had.has(s.src)).length; _icuBusy=false; icuStatusIdle();
       if(manual) icuStatus(document.getElementById("icuStatus").textContent+" — 신규 "+nNew+"건");
-    }catch(e){ _icuBusy=false; icuStatus("동기화 실패: "+e.message); }
+    }catch(e){ _icuBusy=false; icuStatus("동기화 실패: "+(/fetch/i.test(e.message)?"Intervals.icu에 연결하지 못했어요 (인터넷·광고차단·Intervals.icu 점검 여부 확인 후 잠시 뒤 다시 시도)":e.message)); }
   }
   /* 컨디션 경고: 최신 웰니스(오늘·어제)를 직전 7일 평균과 비교. 안정시심박 +7↑ 주의, +10↑ 경고 · HRV 20%↓ 주의 · 수면 5.5h↓ 참고 */
   function wellAlert(){
