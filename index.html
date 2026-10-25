@@ -2149,7 +2149,7 @@
     if(!state.db){ icuStatus("클라우드 연결 후 동기화할 수 있어요."); return; }
     _icuBusy=true; icuStatus("가민 기록 동기화 중…");
     try{
-      const newest=dkey(TODAY), o=new Date(TODAY); o.setDate(o.getDate()-45); const oldest=dkey(o);
+      const NOW=new Date(), nx=new Date(NOW); nx.setDate(nx.getDate()+1); const newest=dkey(nx), o=new Date(NOW); o.setDate(o.getDate()-45); const oldest=dkey(o); // 앱을 켜 둔 채 날짜가 바뀌어도 오늘 기록을 받도록 매번 현재 시각 기준(+1일 여유)
       const acts=await icuGet("/activities?oldest="+oldest+"&newest="+newest);
       const got=(Array.isArray(acts)?acts:[]).map(icuMap).filter(Boolean), fetched=new Set(got.map(s=>s.src));
       const before=state.garmins||[], had=new Set(before.map(s=>s.src));
@@ -2157,9 +2157,9 @@
       const keep=before.filter(s=>s.date<oldest||fetched.has(s.src)), m=new Map(keep.map(s=>[s.src,s])); got.forEach(s=>m.set(s.src,s));
       const sessions=[...m.values()].sort((a,b)=>a.date<b.date?-1:1);
       let wellness=state.wellness||[];
-      try{ const wo=new Date(TODAY); wo.setDate(wo.getDate()-21); const w=await icuGet("/wellness?oldest="+dkey(wo)+"&newest="+newest);
+      try{ const wo=new Date(NOW); wo.setDate(wo.getDate()-21); const w=await icuGet("/wellness?oldest="+dkey(wo)+"&newest="+newest);
         const wm=new Map(wellness.map(x=>[x.date,x])); (Array.isArray(w)?w:[]).map(icuWell).filter(Boolean).forEach(x=>wm.set(x.date,x));
-        const cut=new Date(TODAY); cut.setDate(cut.getDate()-120); wellness=[...wm.values()].filter(x=>x.date>=dkey(cut)).sort((a,b)=>a.date<b.date?-1:1); }catch(e){}
+        const cut=new Date(NOW); cut.setDate(cut.getDate()-120); wellness=[...wm.values()].filter(x=>x.date>=dkey(cut)).sort((a,b)=>a.date<b.date?-1:1); }catch(e){}
       await state.db.doc("imports/garmin").set({sessions,wellness,updated:new Date().toISOString(),source:"intervals.icu"});
       LS.set("icuLastSync",String(Date.now()));
       const nNew=got.filter(s=>!had.has(s.src)).length; _icuBusy=false; icuStatusIdle();
@@ -2255,8 +2255,8 @@
     db.doc("tri/inputs").onSnapshot(d=>{state.tri=d.exists?(d.data()||{}):{};renderTri();},()=>{});
     let _icuFirst=true;
     db.doc("imports/garmin").onSnapshot(d=>{const v=d.exists?d.data():null;state.garmins=(v&&Array.isArray(v.sessions))?v.sessions:[];state.wellness=(v&&Array.isArray(v.wellness))?v.wellness:[];renderLoad();renderTargets();renderWellness();renderToday();icuStatusIdle();
-      if(_icuFirst){_icuFirst=false; if(Date.now()-(+LS.get("icuLastSync")||0)>10*60*1000) icuSync(false);} },()=>{});
-    document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&Date.now()-(+LS.get("icuLastSync")||0)>10*60*1000) icuSync(false); });
+      if(_icuFirst){_icuFirst=false; if(Date.now()-(+LS.get("icuLastSync")||0)>2*60*1000) icuSync(false);} },()=>{});
+    document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&Date.now()-(+LS.get("icuLastSync")||0)>2*60*1000) icuSync(false); });
   })();
 })();
 </script>
