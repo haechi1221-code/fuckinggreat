@@ -723,8 +723,8 @@
   function rankedRaces(){
     const all=TARGETS.map(t=>Object.assign({},t,{_tgt:true}))
       .concat((state.calRaces||[]).map(r=>({name:r.name,date:r.date,cat:r.cat||"",goal:r.goal||"—",pri:r.pri||9,cvar:"--accent",calId:r.id})));
-    const up=all.filter(t=>daysTo(t.date)>=0&&t.pri<9).sort((a,b)=>(a.pri-b.pri)||(a.date<b.date?-1:1));
-    all.forEach(t=>{ t.done=daysTo(t.date)<0; const i=up.indexOf(t); t.rank=i>=0?i+1:null; });
+    const up=all.filter(t=>daysTo(t.date)>=0&&t.pri<9&&!(t._tgt&&raceResult(t))).sort((a,b)=>(a.pri-b.pri)||(a.date<b.date?-1:1));
+    all.forEach(t=>{ t.done=daysTo(t.date)<0||(!!t._tgt&&!!raceResult(t)); /* 대회 당일이라도 결과 기록이 있으면 완료 */ const i=up.indexOf(t); t.rank=i>=0?i+1:null; });
     return all;
   }
   function raceOrder(a,b){ // 남은 대회(순위순) → 순위 없는 남은 대회(날짜순) → 끝난 대회(최근순)
