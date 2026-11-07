@@ -350,15 +350,16 @@
     <div id="cal" style="margin-bottom:12px"></div>
     <div class="sec-h">페이스 존 <span class="s">현재 블록 기준 · 탭하면 펼침</span></div>
     <div class="card week fold-card" id="zonesWrap" style="padding:0"><div class="wh"><div style="min-width:0"><div class="wn" id="zonesSub" style="font-size:13px">현재 존</div><div class="sum" id="zonesKey"></div></div><span class="chev" style="margin-left:auto">›</span></div><div class="wbody" style="padding:0 0 4px"><table class="ztbl" id="zones"></table><div id="zonesHist"></div></div></div>
-    <div class="sec-h">주간 훈련 계획 (7주, 월~일) <span class="s">10K → 하프 → 풀 블록 · 체크하면 저장됨</span></div>
-    <p class="lead" style="margin-bottom:12px"><b>요일 고정 없이 순서(①→⑥)만</b> — 날씨·일정에 맞춰 유동 배치하세요. 대회(폰도·10K·하프·풀)만 날짜 고정. 체크는 수동: 탭 → ✓완료 → ◐부분 → 해제. 체크한 슬롯은 주 하단에서 <b>실제 기록(거리·시간, 심박 선택)</b>을 입력하면 달성률·잔여가 계산되고, 잔여는 <b>소멸</b> 또는 <b>2차 기록</b>으로 처리(자동 이관 없음). 원칙: 하드 사이 1일 이상 이지/휴식, 롱런은 다리 신선할 때, 고강도 주 2회 상한. 사이클은 시즌 마감 후 재개. 남은 대회: JTBC 풀(11/1) 하나 — 24km 롱런(10/17~18)이 이번 블록의 핵심.</p>
+    <div class="sec-h">주간 훈련 계획 (겨울 베이스 12주) <span class="s">11/9~1/31 · 러닝 ①~⑥ + 🏊 수영 A/B · 체크하면 저장됨</span></div>
+    <div class="note info" style="margin-bottom:12px"><span class="ic">❄️</span><div><b>겨울 원칙</b> · 3주 빌드 + 1주 회복 · 고강도 주 2회 상한 · 영하 5℃ 이하·빙판이면 퀄리티는 트레드밀(경사 1%)로 · 🏊 수영은 이지런 날 더블 OK · 사이클은 휴지(3월 재개) · ⌚ 포러너570: 아침 <b>HRV 상태·트레이닝 레디니스</b>가 낮으면 ②④ 퀄리티를 하루 미루기.</div></div>
+    <p class="lead" style="margin-bottom:12px"><b>요일 고정 없이 순서(①→⑥)만</b> — 날씨·일정에 맞춰 유동 배치하세요. 대회만 날짜 고정. 체크는 수동: 탭 → ✓완료 → ◐부분 → 해제. 체크한 슬롯은 주 하단에서 <b>실제 기록(거리·시간, 심박 선택)</b>을 입력하면 달성률·잔여가 계산되고, 잔여는 <b>소멸</b> 또는 <b>2차 기록</b>으로 처리(자동 이관 없음). 원칙: 하드 사이 1일 이상 이지/휴식, 롱런은 다리 신선할 때, 고강도 주 2회 상한. 이번 블록 핵심: ② 퀄리티 + ⑥ 롱런(주 1회씩) · 🏊 수영 A는 필수, B는 선택→W3부터 권장. W5 5km 측정·W12 후 2월 10K 테스트로 3월 목표 확정.</p>
     <div id="adaptCard" style="margin-bottom:12px"></div>
     <div id="atp" style="margin-bottom:12px"></div>
     <div id="weeks"></div>
     <div class="sec-h">내가 추가한 훈련 <span class="s">직접 입력 · 체크·삭제 가능</span></div>
     <button class="inline-add" id="addCustom">＋ 내 훈련 추가</button>
     <div class="card recent" id="customList" style="margin-top:12px"></div>
-    <div class="sec-h">레이스 데이 페이싱 <span class="s">JTBC 풀 11/1 · 목표 3:40:00</span></div>
+    <div class="sec-h">레이스 데이 페이싱 <span class="s">3월 10K · 목표 42:00 (초안)</span></div>
     <div class="card pad" id="pacing"></div>
   </section>
 
@@ -498,7 +499,7 @@
       <div class="field"><label for="cDur">예정 시간(분, 선택)</label><input type="number" id="cDur" placeholder="60" inputmode="numeric" min="1"></div>
       <div class="field"><label for="cNote">메모(선택)</label><input type="text" id="cNote" placeholder="목표 페이스 등"></div>
     </div>
-    <div class="hint">제시된 7주 계획과 별개로 내가 정한 훈련을 넣어두고 체크할 수 있어요.</div>
+    <div class="hint">제시된 주간 계획과 별개로 내가 정한 훈련을 넣어두고 체크할 수 있어요.</div>
     <div class="mfoot"><button class="btn-ghost" id="cCancel">취소</button><button class="btn-primary" id="cSave">추가</button></div>
   </div>
 </div>
@@ -542,10 +543,10 @@
   const TODAY=new Date();
 
   const SPORTS={
-    "10k":{label:"러닝 · 10K",short:"10K",dist:10,cvar:"--s-10k",goalSec:2400,goalLabel:"sub 40:00",kind:"time"},
+    "10k":{label:"러닝 · 10K",short:"10K",dist:10,cvar:"--s-10k",goalSec:2520,goalLabel:"sub 42:00",kind:"time"},
     "half":{label:"러닝 · 하프",short:"하프",dist:21.0975,cvar:"--s-half",goalSec:5400,goalLabel:"sub 1:30:00",kind:"time"},
     "full":{label:"러닝 · 풀코스",short:"풀코스",dist:42.195,cvar:"--s-full",goalSec:12600,goalLabel:"sub 3:30:00",kind:"time"},
-    "tri":{label:"철인3종",short:"철인3종",dist:null,cvar:"--s-tri",goalSec:null,goalLabel:"하프코스(70.3) 완주",kind:"complete",goalNote:"올림픽 완주"},
+    "tri":{label:"철인3종",short:"철인3종",dist:null,cvar:"--s-tri",goalSec:null,goalLabel:"올림픽 sub 2:30",kind:"complete",goalNote:"올림픽 완주"},
     "cycle":{label:"사이클 · 그란폰도",short:"그란폰도",dist:null,cvar:"--s-cycle",goalSec:null,goalLabel:"완주",kind:"complete"},
   };
   const ORDER=["10k","half","full","tri","cycle"];
@@ -567,6 +568,12 @@
   ];
 
   const TARGETS=[
+    {pri:1,sp:"full",name:"춘천마라톤 풀코스",date:"2027-10-31",tbd:true,cat:"42.195km",goal:"3:30:00",goalSec:12600,cvar:"--s-full",verdict:"시즌 1순위. 목표 3:30:00(4:58/km) — JTBC 3:38:16 대비 8분 단축. 매년 10월 마지막 주 일요일 개최(2026년 10/25) → 접수 공지 후 날짜 확정. 겨울엔 유산소 볼륨을 키워 '지구력 병목'을 먼저 넓히고, 8~10월 MP 블록으로 마무리.",vico:"🏆"},
+    {pri:2,sp:"10k",name:"3월 10K 대회",date:"2027-03-28",tbd:true,cat:"10km",goal:"42:00",goalSec:2520,cvar:"--s-10k",verdict:"A레이스(스피드). 목표 42:00(4:12/km) — PB 42:55 대비 55초, VDOT +1 수준이라 현실적. 하프 2~3주 뒤에 배치하면 하프로 지구력, 10K로 스피드를 모두 챙길 수 있음.",vico:"🎯"},
+    {pri:3,sp:"half",name:"3월 하프 대회",date:"2027-03-14",tbd:true,cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"최소 목표 1:35:00(PB 1:35:14 경신), 상단 목표 1:30:00. 1:30은 VDOT +3 필요 → 1월 말 테스트 결과로 판단. 10K 전 '튠업' 성격으로 컨트롤드 레이스.",vico:"📈"},
+    {pri:4,sp:"tri",name:"철인3종 올림픽",date:"2027-05-09",tbd:true,cat:"1.5/40/10km",goal:"2:30:00",goalSec:9000,cvar:"--s-tri",verdict:"목표 2:30:00 — 2026 대구 2:34:22 대비 4분 22초. 수영 32:17(2:09/100m)이 최대 개선 여지 → 겨울 수영장 주 2회로 29분대 목표. 10월은 춘천 피크와 겹쳐 5월 권장.",vico:"🏊"},
+    {pri:5,sp:"tri",name:"롯데 아쿠아슬론",date:"2027-07-11",tbd:true,cat:"수영 1.5km + 123층 계단",goal:"완주",goalSec:null,cvar:"--s-tri",verdict:"완주 목표. 석촌호수 수영 1.5km 후 롯데월드타워 2,917계단 — 철인 수영 훈련이 그대로 이어지고, 6월부터 계단·언덕 반복만 추가.",vico:"✔"},
+    {pri:6,sp:"cycle",name:"그란폰도 (연 1회)",date:"2027-06-13",tbd:true,cat:"사이클 ~100km+",goal:"완주",goalSec:null,cvar:"--s-cycle",verdict:"완주 목표. 철인(5월) 뒤 바이크 체력이 올라온 6월이 적기. 겨울엔 사이클 휴지, 3월부터 주 1회 재개.",vico:"🚴"},
     {pri:1,sp:"10k",name:"런유어웨이 10K",date:"2026-10-04",cat:"10km",goal:"43:00",goalSec:2580,cvar:"--s-10k",verdict:"A레이스. 목표 43:00(4:18/km) — PB 42:55 수준이라 현재 체력으로 현실적. 후반 여유 있으면 PB 도전. 전날 폰도는 매우 이지하게 타서 다리 아끼기.",vico:"🎯",review:"전날 폰도 업힐(심박 150~165)로 쌓인 다리 피로가 주원인. 4~6km 구간 손실, 막판 스퍼트 여력은 남음."},
     {pri:2,sp:"half",name:"서울레이스 하프마라톤",date:"2026-10-11",cat:"21.1km",goal:"1:35:00",goalSec:5700,cvar:"--s-half",verdict:"10K 7일 후 · 남은 대회 1순위(10K·폰도 종료로 승격). 전날 아침 HRV 70↑·안정시심박 48↓·다리 가벼우면 플랜A(1~3km 4:35 → 4~15km 4:30 → 16km~ 4:27 = 1:34:53), 아니면 플랜B(4:35 이븐 ≈1:36:40). 3km에 심박 172 넘으면 즉시 플랜B.",vico:"↗",review:"8일간 대회 3연전(폰도·10K·하프) 누적 피로 + 전날 템포 강도 셰이크아웃 + 수면 5.6시간 → 역치심박(172)보다 높은 180으로 101분 지속. 체력 저하보다 그날 컨디션 문제로 판단."},
     {pri:3,sp:"cycle",name:"충주 메디오 폰도",date:"2026-10-03",cat:"사이클 ~100km*",goal:"완주",goalSec:null,cvar:"--s-cycle",verdict:"10K 전날 → 완주·사교 페이스로 다리 아끼고 보급 연습. 하드하게 타면 다음 날 A레이스 10K가 손해.",vico:"✔",review:"완주. 평균심박 136으로 계획(125 이하)보다 강하게 탐 — 업힐 구간 심박 관리가 다음 과제."},
@@ -584,48 +591,125 @@
   /* 주간 계획 = '순서(권장 시퀀스)'. 요일 고정 X — 날씨·일정에 맞춰 유동 배치. 대회만 date로 날짜 고정.
      spacing 원칙: 하드(퀄리티) 사이 최소 1일 이지/휴식 · 롱런은 다리 신선할 때 · 하드 주 2회 상한. */
   const WEEKS=[
-    {id:"w1",label:"W1",range:"9/14~9/20",focus:"스피드 재점화 · 폼 드릴 · 순서 유동",sess:[
+    {id:"w1",blk:"fall",y:2026,label:"W1",range:"9/14~9/20",focus:"스피드 재점화 · 폼 드릴 · 순서 유동",sess:[
       {id:"w1b",t:"① 이지런 40~50분 (회복성 유산소)",tag:"이지"},{id:"w1c",t:"② 인터벌 400m×6 (4:05~4:10) / 조깅 회복 — 주 핵심",tag:"인터벌"},
       {id:"w1d",t:"③ 이지런 45분 + 하체보강 20분",tag:"이지"},{id:"w1e",t:"④ 이지런 35분 + 스트라이드 6×20초",tag:"폼"},
       {id:"w1f",t:"⑤ 롱런 90~100분 (~15km, 이지) — 시간 여유 있는 날",tag:"롱런"},{id:"w1g",t:"⑥ 사이클 60~90분 유산소 (폰도 대비)",tag:"사이클"},
       {id:"w1a",t:"＋ 완전 휴식 1일 (아무 때나)",tag:"휴식"}]},
-    {id:"w2",label:"W2",range:"9/21~9/27",focus:"10K 특이 퀄리티 피크 · 순서 유동",sess:[
+    {id:"w2",blk:"fall",y:2026,label:"W2",range:"9/21~9/27",focus:"10K 특이 퀄리티 피크 · 순서 유동",sess:[
       {id:"w2b",t:"① 이지런 40~50분 (회복성)",tag:"이지"},{id:"w2c",t:"② 크루즈 역치 1km×5 (4:20~4:25) / 조깅 90초 — 주 핵심",tag:"역치"},
       {id:"w2d",t:"③ 이지런 45분 + 하체보강",tag:"이지"},{id:"w2e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
       {id:"w2f",t:"⑤ 롱런 100~110분 (~17km)",tag:"롱런"},{id:"w2g",t:"⑥ 사이클 90~120분 (폰도 리허설, 유산소)",tag:"사이클"},
       {id:"w2a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
-    {id:"w3",label:"W3",range:"9/28~10/4",focus:"테이퍼 + 레이스 주 · 대회는 날짜 고정",sess:[
+    {id:"w3",blk:"fall",y:2026,label:"W3",range:"9/28~10/4",focus:"테이퍼 + 레이스 주 · 대회는 날짜 고정",sess:[
       {id:"w3c",t:"① 10K페이스 1km×3 (4:15~4:18) 짧게 + 워밍/쿨 — 주 초반",tag:"샤프너"},{id:"w3b",t:"② 이지런 30분 가볍게 (or 휴식)",tag:"이지"},
       {id:"w3d",t:"③ 이지런 30분",tag:"이지"},{id:"w3e",t:"④ 레이스 D-2~전날: 완전 휴식 (or 이지 20분 + 스트라이드 4)",tag:"휴식"},
       {id:"w3f",t:"🚴 [10/3·토] 충주 메디오 폰도 — 매우 이지/사교 페이스, 다리 아끼기·보급 연습",tag:"레이스",date:"2026-10-03"},
       {id:"w3g",t:"🏃 [10/4·일] 런유어웨이 10K — A레이스 전력 (목표 4:18/km, 43:00)",tag:"레이스",date:"2026-10-04"}]},
-    {id:"w4",label:"W4",range:"10/5~10/11",focus:"회복 최우선 + 하프(1순위) · 롱런 없음 · 하프만 날짜 고정",sess:[
+    {id:"w4",blk:"fall",y:2026,label:"W4",range:"10/5~10/11",focus:"회복 최우선 + 하프(1순위) · 롱런 없음 · 하프만 날짜 고정",sess:[
       {id:"w4a",t:"① 완전 휴식 (10K 다음 날) — 걷기·스트레칭만",tag:"휴식"},{id:"w4h",t:"② 완전 휴식 (2일차)",tag:"휴식"},
       {id:"w4b",t:"③ 회복 조깅 20~30분 (심박 140 이하)",tag:"이지"},{id:"w4c",t:"④ 이지런 8km + 스트라이드 4 (5:30~6:00 페이스, 여유 있으면 10km까지)",tag:"이지"},
       {id:"w4d",t:"⑤ 완전 휴식 (하프 D-2)",tag:"휴식"},{id:"w4f",t:"⑥ 하프 전날: 이지 20분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
       {id:"w4g",t:"🏃 [10/11·일] 서울레이스 하프 — 플랜A 4:35→4:30→4:27 (1:34:53) · 플랜B 4:35 이븐",tag:"레이스",date:"2026-10-11"}]},
-    {id:"w5",label:"W5",range:"10/12~10/18",focus:"하프 회복 → 풀 대비 최장 롱런(주 후반) · 순서 유동",sess:[
+    {id:"w5",blk:"fall",y:2026,label:"W5",range:"10/12~10/18",focus:"하프 회복 → 풀 대비 최장 롱런(주 후반) · 순서 유동",sess:[
       {id:"w5a",t:"① 완전 휴식 (하프 다음 날)",tag:"휴식"},{id:"w5b",t:"② 회복 조깅 30분 (심박 140 이하)",tag:"이지"},
       {id:"w5c",t:"③ 이지런 45분",tag:"이지"},{id:"w5d",t:"④ 이지런 50분 + 하체보강",tag:"이지"},
       {id:"w5e",t:"⑤ 이지런 35분 + 스트라이드 6",tag:"폼"},
       {id:"w5f",t:"⑥ 최장 롱런 150분 (~24km, 6:00~6:20 편안하게) · 30~40분마다 보급 — 10/17~18, 다리 무거우면 20km",tag:"롱런"},
       {id:"w5h",t:"＋ 완전 휴식 1일 (롱런 전날 권장)",tag:"휴식"}]},
-    {id:"w6",label:"W6",range:"10/19~10/25",focus:"MP 감각 롱런 + 감량 시작 · 순서 유동",sess:[
+    {id:"w6",blk:"fall",y:2026,label:"W6",range:"10/19~10/25",focus:"MP 감각 롱런 + 감량 시작 · 순서 유동",sess:[
       {id:"w6b",t:"① 이지런 45~50분 (회복성)",tag:"이지"},{id:"w6c",t:"② 이지런 50분 (+선택 템포 2km)",tag:"이지"},
       {id:"w6d",t:"③ 이지런 45분 + 하체보강",tag:"이지"},{id:"w6e",t:"④ 이지런 35분 + 스트라이드 6",tag:"폼"},
       {id:"w6f",t:"⑤ MP 롱런 110분 (~19km) · 마지막 6km MP(5:10~5:15) · 보급 리허설 — 10/24~25",tag:"롱런"},{id:"w6g",t:"⑥ 이지런 30~40분 매우 가볍게 (롱런 회복)",tag:"이지"},
       {id:"w6a",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
-    {id:"w7",label:"W7",range:"10/26~11/1",focus:"테이퍼 + 풀 3:40 · 풀만 날짜 고정",sess:[
+    {id:"w7",blk:"fall",y:2026,label:"W7",range:"10/26~11/1",focus:"테이퍼 + 풀 3:40 · 풀만 날짜 고정",sess:[
       {id:"w7b",t:"① 이지런 30분 가볍게",tag:"이지"},{id:"w7c",t:"② 이지런 40분 중 마라톤페이스(5:13) 3km 감각",tag:"이지"},
       {id:"w7d",t:"③ 이지런 30분 + 스트라이드 4",tag:"폼"},{id:"w7f",t:"④ 풀 전날: 이지 20~25분 + 스트라이드 4 (셰이크아웃)",tag:"폼"},
       {id:"w7e",t:"＋ 완전 휴식 (레이스 주 넉넉히)",tag:"휴식"},
       {id:"w7g",t:"🏆 [11/1·일] JTBC 풀코스 — 목표 3:40:00, 5:10~5:15/km 이븐 (전반 보수적)",tag:"레이스",date:"2026-11-01"}]},
+    /* ===== 겨울 베이스 12주 (2026-11-09 ~ 2027-01-31) — 우선순위 풀 > 10K > 하프 > 철인 =====
+       러닝 ①~⑥ 순서만(요일 유동) · 🏊 수영 A/B는 아무 날(이지런 날 더블 권장) · ＋휴식 1일. 3주 빌드 + 1주 회복. */
+    {id:"b01",blk:"winter",y:2026,label:"W1",range:"11/9~11/15",focus:"풀 후 회복 2주차 · 리버스 테이퍼 · 수영 재개",sess:[
+      {id:"b01a",t:"① 이지런 30분 (회복, 심박 140 이하)",tag:"이지"},{id:"b01b",t:"② 이지런 40분",tag:"이지"},
+      {id:"b01c",t:"③ 이지런 40분 + 하체보강 15분 (맨몸, 가볍게)",tag:"이지"},{id:"b01d",t:"④ 이지런 35분 + 스트라이드 4",tag:"폼"},
+      {id:"b01e",t:"⑤ 롱런 60~70분 (~11km, 이지) — 다리 가벼울 때만",tag:"롱런"},
+      {id:"b01s",t:"🏊 수영A 30분 (재적응 · 드릴 위주 1,000m 내외)",tag:"수영"},
+      {id:"b01r",t:"＋ 완전 휴식 1~2일",tag:"휴식"}]},
+    {id:"b02",blk:"winter",y:2026,label:"W2",range:"11/16~11/22",focus:"베이스 1 · 볼륨 복귀 · 힐 스프린트",sess:[
+      {id:"b02a",t:"① 이지런 45분",tag:"이지"},{id:"b02b",t:"② 이지런 45분 + 힐 스프린트 6×10초 (전력 언덕, 걸어 내려오며 회복)",tag:"폼"},
+      {id:"b02c",t:"③ 이지런 45분 + 하체보강 25분",tag:"이지"},{id:"b02d",t:"④ 이지런 40분 + 스트라이드 6",tag:"폼"},
+      {id:"b02e",t:"⑤ 롱런 80분 (~13km)",tag:"롱런"},
+      {id:"b02s",t:"🏊 수영A 40분 (드릴 + 100m 반복, ~1,500m)",tag:"수영"},{id:"b02t",t:"🏊 수영B 40분 (킥·풀부이·호흡 드릴) — 선택",tag:"수영"},
+      {id:"b02r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b03",blk:"winter",y:2026,label:"W3",range:"11/23~11/29",focus:"베이스 2 · 파틀렉 도입",sess:[
+      {id:"b03a",t:"① 이지런 45분",tag:"이지"},{id:"b03b",t:"② 파틀렉 45분 — 1분 빠르게(4:05~4:10) / 1분 조깅 × 8",tag:"인터벌"},
+      {id:"b03c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b03d",t:"④ 이지런 40분 + 스트라이드 6",tag:"폼"},
+      {id:"b03e",t:"⑤ 롱런 90분 (~15km)",tag:"롱런"},{id:"b03f",t:"⑥ 이지런 30분 (선택 · 컨디션 좋을 때)",tag:"이지"},
+      {id:"b03s",t:"🏊 수영A 45분 (드릴 + 100m 반복, ~1,800m)",tag:"수영"},{id:"b03t",t:"🏊 수영B 40분 (기술 · 연속 400m 2회)",tag:"수영"},
+      {id:"b03r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b04",blk:"winter",y:2026,label:"W4",range:"11/30~12/6",focus:"베이스 3 · 역치 맛보기 · 수영 CSS 테스트",sess:[
+      {id:"b04a",t:"① 이지런 50분",tag:"이지"},{id:"b04b",t:"② 크루즈 역치 1km×4 (4:22~4:28) / 조깅 1분 — 주 핵심",tag:"역치"},
+      {id:"b04c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b04d",t:"④ 이지런 40분 + 힐 스프린트 8×10초",tag:"폼"},
+      {id:"b04e",t:"⑤ 롱런 100분 (~16km)",tag:"롱런"},{id:"b04f",t:"⑥ 이지런 35분 (회복)",tag:"이지"},
+      {id:"b04s",t:"🏊 수영A 45분 — CSS 테스트(400m·200m 전력 기록 → 수영 페이스 설정)",tag:"수영"},{id:"b04t",t:"🏊 수영B 40분 (기술)",tag:"수영"},
+      {id:"b04r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b05",blk:"winter",y:2026,label:"W5",range:"12/7~12/13",focus:"회복주 + 5km 기록 측정 → 존 재설정",sess:[
+      {id:"b05a",t:"① 이지런 40분",tag:"이지"},{id:"b05b",t:"② 이지런 35분 + 스트라이드 4",tag:"폼"},
+      {id:"b05c",t:"③ 이지런 40분 + 하체보강 20분",tag:"이지"},{id:"b05d",t:"④ 테스트 전날: 이지런 25분 + 스트라이드 4",tag:"폼"},
+      {id:"b05e",t:"⑤ 5km 기록 측정 (평지·트랙, 워밍업 15분) — 결과로 페이스 존 갱신",tag:"샤프너"},{id:"b05f",t:"⑥ 롱런 70분 (~11km, 이지)",tag:"롱런"},
+      {id:"b05s",t:"🏊 수영A 40분 (CSS 페이스 100m 반복)",tag:"수영"},
+      {id:"b05r",t:"＋ 완전 휴식 2일",tag:"휴식"}]},
+    {id:"b06",blk:"winter",y:2026,label:"W6",range:"12/14~12/20",focus:"스피드 1 · VO₂max + 템포 (고강도 주 2회)",sess:[
+      {id:"b06a",t:"① 이지런 50분",tag:"이지"},{id:"b06b",t:"② 인터벌 1km×5 (4:00~4:05) / 조깅 2분 — 주 핵심",tag:"인터벌"},
+      {id:"b06c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b06d",t:"④ 템포런 40분 (중간 15분 4:25~4:30)",tag:"역치"},
+      {id:"b06e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b06f",t:"⑥ 롱런 100분 (~16km)",tag:"롱런"},
+      {id:"b06s",t:"🏊 수영A 50분 (CSS 100m 8회 · ~2,000m)",tag:"수영"},{id:"b06t",t:"🏊 수영B 45분 (연속 800m + 드릴)",tag:"수영"},
+      {id:"b06r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b07",blk:"winter",y:2026,label:"W7",range:"12/21~12/27",focus:"스피드 2 · 800m 반복 + 템포",sess:[
+      {id:"b07a",t:"① 이지런 45분",tag:"이지"},{id:"b07b",t:"② 인터벌 800m×6 (3:55~4:00) / 조깅 400m — 주 핵심",tag:"인터벌"},
+      {id:"b07c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b07d",t:"④ 템포런 45분 (중간 20분 4:25~4:30)",tag:"역치"},
+      {id:"b07e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b07f",t:"⑥ 롱런 110분 (~18km)",tag:"롱런"},
+      {id:"b07s",t:"🏊 수영A 50분 (CSS 100m 10회)",tag:"수영"},{id:"b07t",t:"🏊 수영B 45분 (연속 1,000m)",tag:"수영"},
+      {id:"b07r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b08",blk:"winter",y:2026,label:"W8",range:"12/28~1/3",focus:"스피드 3 · 연말연시 유동 (못 채우면 롱런·② 우선)",sess:[
+      {id:"b08a",t:"① 이지런 50분",tag:"이지"},{id:"b08b",t:"② 인터벌 1km×6 (4:00~4:05) / 조깅 2분 — 주 핵심",tag:"인터벌"},
+      {id:"b08c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b08d",t:"④ 템포런 50분 (중간 25분 4:22~4:28)",tag:"역치"},
+      {id:"b08e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b08f",t:"⑥ 롱런 120분 (~20km)",tag:"롱런"},
+      {id:"b08s",t:"🏊 수영A 50분 (CSS 200m 5회)",tag:"수영"},{id:"b08t",t:"🏊 수영B 45분 (기술) — 선택",tag:"수영"},
+      {id:"b08r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b09",blk:"winter",y:2027,label:"W9",range:"1/4~1/10",focus:"회복주 · 볼륨 −30%",sess:[
+      {id:"b09a",t:"① 이지런 40분",tag:"이지"},{id:"b09b",t:"② 이지런 40분 + 스트라이드 6",tag:"폼"},
+      {id:"b09c",t:"③ 이지런 45분 + 하체보강 20분",tag:"이지"},{id:"b09d",t:"④ 파틀렉 35분 — 30초 빠르게 / 90초 조깅 × 8 (가볍게)",tag:"폼"},
+      {id:"b09e",t:"⑤ 롱런 80분 (~13km)",tag:"롱런"},
+      {id:"b09s",t:"🏊 수영A 40분 (기술 + CSS 100m 6회)",tag:"수영"},
+      {id:"b09r",t:"＋ 완전 휴식 1~2일",tag:"휴식"}]},
+    {id:"b10",blk:"winter",y:2027,label:"W10",range:"1/11~1/17",focus:"역치 1 · 2km 크루즈 + 400m · 롱런 하프페이스 마무리",sess:[
+      {id:"b10a",t:"① 이지런 50분",tag:"이지"},{id:"b10b",t:"② 크루즈 역치 2km×3 (4:20~4:25) / 조깅 2분 — 주 핵심",tag:"역치"},
+      {id:"b10c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b10d",t:"④ 인터벌 400m×10 (3:50~3:55) / 조깅 200m",tag:"인터벌"},
+      {id:"b10e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b10f",t:"⑥ 롱런 120분 (~20km) · 마지막 3km 하프페이스 4:30",tag:"롱런"},
+      {id:"b10s",t:"🏊 수영A 55분 (CSS 100m 12회)",tag:"수영"},{id:"b10t",t:"🏊 수영B 50분 (연속 1,500m — 올림픽 거리 감각)",tag:"수영"},
+      {id:"b10r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b11",blk:"winter",y:2027,label:"W11",range:"1/18~1/24",focus:"역치 2 · 10K 페이스 감각 · 롱런 MP 마무리",sess:[
+      {id:"b11a",t:"① 이지런 50분",tag:"이지"},{id:"b11b",t:"② 크루즈 역치 2km×4 (4:20~4:25) / 조깅 2분 — 주 핵심",tag:"역치"},
+      {id:"b11c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b11d",t:"④ 10K페이스 1km×6 (4:10~4:12) / 조깅 1분",tag:"인터벌"},
+      {id:"b11e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b11f",t:"⑥ 롱런 130분 (~21km) · 마지막 5km MP 5:00~5:05",tag:"롱런"},
+      {id:"b11s",t:"🏊 수영A 55분 (CSS 200m 6회)",tag:"수영"},{id:"b11t",t:"🏊 수영B 50분 (연속 1,500m)",tag:"수영"},
+      {id:"b11r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
+    {id:"b12",blk:"winter",y:2027,label:"W12",range:"1/25~1/31",focus:"역치 3 · 블록 정점 → 2월 첫 주 회복 + 10K 테스트",sess:[
+      {id:"b12a",t:"① 이지런 50분",tag:"이지"},{id:"b12b",t:"② 템포런 55분 (중간 30분 4:22~4:28 연속) — 주 핵심",tag:"역치"},
+      {id:"b12c",t:"③ 이지런 50분 + 하체보강 25분",tag:"이지"},{id:"b12d",t:"④ 인터벌 1km×6 (3:58~4:03) / 조깅 2분",tag:"인터벌"},
+      {id:"b12e",t:"⑤ 이지런 40분 + 스트라이드 6",tag:"폼"},{id:"b12f",t:"⑥ 롱런 135분 (~22km) · 중간 8km MP 5:00~5:05",tag:"롱런"},
+      {id:"b12s",t:"🏊 수영A 55분 (CSS 100m 12회 · 기록 재측정)",tag:"수영"},{id:"b12t",t:"🏊 수영B 50분 (연속 1,500m 타임 체크)",tag:"수영"},
+      {id:"b12r",t:"＋ 완전 휴식 1일",tag:"휴식"}]},
   ];
+  const CUR_BLK="winter";
+  const BLOCK_INFO={winter:{title:"겨울 베이스 12주",range:"11/9~1/31"},fall:{title:"가을 피킹 7주 (10K·하프·풀)",range:"9/14~11/1"}};
+  function blkOf(id){ const w=WEEKS.find(x=>x.id===id); return w?(w.blk||"fall"):"fall"; }
 
   const PACING=[
-    {seg:"0~5km",pace:"5:18~5:20/km",note:"몸 풀며 출발 · 심박 160 이하 · 5km 통과 26:35"},
-    {seg:"5~30km",pace:"5:12/km",note:"10km 52:35 · 하프 1:50:17 · 30km 2:36:35 · 젤 30~35분마다(출발 전 1개 포함)"},
-    {seg:"30km~",pace:"5:11/km 이하",note:"여력 있으면 5:05~5:08 · 남은 힘 모두 → 3:39:47"},
+    {seg:"0~2km",pace:"4:14~4:16/km",note:"밀집 구간 · 과속 금지 · 2km 통과 8:30"},
+    {seg:"2~8km",pace:"4:11~4:12/km",note:"리듬 유지 · 5km 통과 20:58~21:00 · 심박 175~182"},
+    {seg:"8~10km",pace:"4:05~4:08/km",note:"남은 힘 모두 → 41:45~41:55"},
   ];
 
   const state={records:INITIAL.slice(),sessions:[],imports:[],brytons:[],customs:[],gear:[],calRaces:[],calRests:[],gEdits:{},garmins:[],wellness:[],tri:{},db:null,done:new Set(),slot:{},adaptOff:false};
@@ -642,6 +726,7 @@
   function parseTime(str){if(!str)return null;const p=str.trim().split(":").map(x=>x.trim());if(p.some(v=>v===""||isNaN(Number(v))))return null;let s=0;if(p.length===3)s=+p[0]*3600+ +p[1]*60+ +p[2];else if(p.length===2)s=+p[0]*60+ +p[1];else if(p.length===1)s=+p[0];else return null;return s>0?s:null;}
   function shortDate(iso){const[y,m,d]=iso.split("-");return y.slice(2)+"."+ +m+"."+ +d;}
   function axisDate(iso){const[y,m]=iso.split("-");return y.slice(2)+"."+ +m;}
+  function rWhen(t){ return t.tbd?((+t.date.slice(5,7))+"월 예정"):mdDate(t.date); }
   function mdDate(iso){const[,m,d]=iso.split("-");return +m+"/"+ +d;}
   function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
   function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
@@ -749,8 +834,8 @@
       const d=daysTo(t.date),c=cssv(t.cvar);
       const row=document.createElement("div"); row.className="race-row"; row.style.setProperty("--rc",c);
       row.innerHTML='<div class="pri">'+(t.rank?t.rank:(t.done?'✓':'·'))+'</div><div class="race-main"><div class="nm">'+esc(t.name)+'</div>'+
-        '<div class="mt">'+mdDate(t.date)+' · '+esc(t.cat)+' · 목표 '+esc(t.goal)+'</div></div>'+
-        '<div class="race-dday"><div class="d">'+(d>=0?"D-"+d:"완료")+'</div><div class="l">'+shortDate(t.date)+'</div></div>';
+        '<div class="mt">'+rWhen(t)+' · '+esc(t.cat)+' · 목표 '+esc(t.goal)+'</div></div>'+
+        '<div class="race-dday"><div class="d">'+(d>=0?(t.tbd?"~D-":"D-")+d:"완료")+'</div><div class="l">'+shortDate(t.date)+'</div></div>';
       el.appendChild(row);});
   }
   function renderFitness(){
@@ -804,7 +889,7 @@
         refHtml='<div class="verdict" style="color:var(--muted);font-size:11.5px"><span class="ic">📝</span><span>'+(res.detail?esc(res.detail):'')+(pm?((res.detail?' · ':'')+'레이스 전 예측 '+fmt(pm.timeReal)):'')+'</span></div>'; }
       const box=document.createElement("div"); box.className="tgt";
       box.innerHTML='<div class="top"><span class="pribadge" style="background:'+c+'">'+(t.rank?t.rank+'순위':'완료')+'</span><span class="nm">'+esc(t.name)+'</span>'+
-        '<span class="when">'+mdDate(t.date)+' · '+(d>=0?"D-"+d:"완료")+'</span></div>'+
+        '<span class="when">'+rWhen(t)+' · '+(d>=0?(t.tbd?"약 D-":"D-")+d:"완료")+'</span></div>'+
         '<div class="cmp">'+goalHtml+estHtml+'</div>'+
         '<div class="verdict"><span class="ic">'+(res&&t.review?'🔍':t.vico)+'</span><span>'+esc(res&&t.review?t.review:t.verdict)+'</span></div>'+refHtml;
       el.appendChild(box);});
@@ -839,7 +924,16 @@
     {z:"템포 / 역치",cvar:"--s-tri",pace:"4:30~4:45/km",use:"풀 블록에선 선택(주 1회 이하)"},
     {z:"인터벌",cvar:"--s-cycle",pace:"4:00~4:15/km",use:"풀 대회 전까지 생략"},
   ];
+  const ZONES_WINTER=[
+    {z:"회복 / 이지",cvar:"--s-full",pace:"6:00~6:30/km",use:"HR 135~150 · 주간 거리의 80% 이상",key:1},
+    {z:"롱런",cvar:"--s-10k",pace:"5:45~6:15/km",use:"주 1회 · 1월엔 마지막 구간 MP/하프페이스"},
+    {z:"마라톤페이스(MP)",cvar:"--s-half",pace:"5:00~5:05/km",use:"춘천 3:30 목표(4:58) 감각 · 롱런 후반"},
+    {z:"템포 / 역치",cvar:"--s-tri",pace:"4:20~4:28/km",use:"크루즈 1~2km · 연속 템포 · 하프 1:30~1:35 기반"},
+    {z:"10K / 인터벌",cvar:"--s-cycle",pace:"3:55~4:12/km",use:"800m~1km 반복 · 10K 목표 4:12"},
+    {z:"반복 / 스프린트",cvar:"--s-cycle",pace:"3:50 이하",use:"400m · 스트라이드 · 힐 스프린트(폼·이코노미)"},
+  ];
   const ZONE_HISTORY=[
+    {from:"2026-11-09",label:"겨울 베이스 (VDOT ~48 · W5 5km 측정 후 갱신)",zones:ZONES_WINTER},
     {from:"2026-10-12",label:"풀코스 블록 (목표 3:40 · MP 5:13)",zones:ZONES_FULL},
     {from:"2026-09-12",label:"10K 우선 시즌 (속도엔진 VDOT ~48)",zones:ZONES},
     {from:"2026-01-01",label:"풀코스 sub-3:40 프로젝트 (마라톤 VDOT ~40 기준)",zones:[
@@ -866,7 +960,8 @@
   }
 
   /* ---- 주간 부하 목표 (TrainingPeaks ATP 층): 페이즈 배수 × (기준 CTL×7) vs 실제 주간 부하 ---- */
-  const ATP_PHASE={w1:["베이스+스피드",1.05],w2:["피크 퀄리티",1.10],w3:["테이퍼+레이스",0.75],w4:["회복+레이스",0.70],w5:["회복→최장 롱런",1.05],w6:["MP 롱런·감량",0.95],w7:["테이퍼+풀",0.65]};
+  const ATP_PHASE={w1:["베이스+스피드",1.05],w2:["피크 퀄리티",1.10],w3:["테이퍼+레이스",0.75],w4:["회복+레이스",0.70],w5:["회복→최장 롱런",1.05],w6:["MP 롱런·감량",0.95],w7:["테이퍼+풀",0.65],
+    b01:["풀 후 회복",0.75],b02:["베이스1",1.00],b03:["베이스2",1.05],b04:["베이스3",1.10],b05:["회복+5K 테스트",0.80],b06:["스피드1",1.10],b07:["스피드2",1.12],b08:["스피드3",1.12],b09:["회복",0.80],b10:["역치1",1.10],b11:["역치2",1.12],b12:["역치3",1.12]};
   function atpTable(){
     const series=pmc(); if(!series.length) return [];
     const k=x=>x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate());
@@ -949,7 +1044,7 @@
   }
   async function toggleAdapt(){ state.adaptOff=!state.adaptOff; if(state.db){try{await state.db.doc("settings/plan").set({adaptOff:state.adaptOff});}catch(e){}} renderWeeks(); }
   function renderATP(){
-    const el=document.getElementById("atp"); if(!el)return; const rows=atpTable(); if(!rows.length){el.innerHTML="";return;}
+    const el=document.getElementById("atp"); if(!el)return; const rows=atpTable().filter(r=>blkOf(r.id)===CUR_BLK); if(!rows.length){el.innerHTML="";return;}
     const band=r=>r.pct>150?'var(--crit)':(r.pct>130?'var(--warn)':(r.pct>=80?'var(--good)':(r.past?'var(--warn)':'var(--muted)')));
     const cur=rows.find(r=>r.isCur);
     const sum=cur?('이번 주 '+cur.label+' · 목표 '+Math.round(cur.target)+' · 실제 '+Math.round(cur.actual)+' ('+cur.pct+'%)'):'주간 목표 vs 실제';
@@ -961,7 +1056,7 @@
   /* ---- 계획 vs 실행 자동 매칭 (TrainingPeaks 'planned vs completed' 방식) ----
      각 플랜 항목의 날짜(주 시작일+요일)와 종목을 도출하고, 같은 날 같은 종목 세션이 있으면 자동 완료. 준수율 = 지난 날짜의 비휴식 항목 중 실행된 비율. */
   const PLAN_YEAR=2026;
-  function weekStart(w){ const m=w.range.match(/^(\d+)\/(\d+)/); return m? new Date(PLAN_YEAR, +m[1]-1, +m[2]) : null; }
+  function weekStart(w){ const m=w.range.match(/^(\d+)\/(\d+)/); return m? new Date(w.y||PLAN_YEAR, +m[1]-1, +m[2]) : null; }
   function weekEnd(w){ const st=weekStart(w); if(!st)return null; const e=new Date(st); e.setDate(e.getDate()+6); return e; }
   function slotSport(s){ const tag=s.tag||""; if(tag==="수영")return "swim"; if(tag==="사이클")return "bike"; if(tag==="휴식")return "rest"; if(tag==="레이스")return s.t.indexOf("🚴")>=0?"bike":"run"; return "run"; }
   function findSlot(id){ for(const w of WEEKS){ const s=w.sess.find(x=>x.id===id); if(s) return s; } return null; }
@@ -1087,12 +1182,18 @@
     const today=dkey(TODAY);
     const res=adaptPlan(); const ADJ=res.adj;
     const ATPM={}; (atpTable()||[]).forEach(r=>ATPM[r.id]=r);
+    let arch=null, archBody=null; const oldBlk=WEEKS.filter(x=>(x.blk||"fall")!==CUR_BLK);
+    if(oldBlk.length){ const bi=BLOCK_INFO[oldBlk[0].blk||"fall"]||{title:"지난 블록",range:""}; arch=document.createElement("div"); arch.className="card"; arch.style.cssText="margin-top:12px;padding:0;background:var(--surface-2)";
+      const aOpen=isOpen("archive",false); arch.innerHTML='<button class="arch-h" style="all:unset;box-sizing:border-box;display:flex;width:100%;gap:8px;align-items:center;padding:12px 15px;cursor:pointer;font-size:13px;font-weight:700;color:var(--ink-2)"><span>📦 지난 블록 · '+esc(bi.title)+'</span><span style="color:var(--muted);font-weight:600">'+esc(bi.range)+'</span><span style="margin-left:auto;color:var(--muted)">'+(aOpen?'접기':'펼치기')+'</span></button><div class="arch-b" style="padding:0 8px 4px'+(aOpen?'':';display:none')+'"></div>';
+      archBody=arch.querySelector(".arch-b"); arch.querySelector(".arch-h").addEventListener("click",()=>{ foldState["archive"]=!isOpen("archive",false); renderWeeks(); }); }
+    const firstUpId=((WEEKS.filter(x=>(x.blk||"fall")===CUR_BLK).find(x=>{const e=weekEnd(x);return e&&dkey(e)>=today;}))||{}).id;
     WEEKS.forEach((w,i)=>{
+      const inCur=(w.blk||"fall")===CUR_BLK; if(!inCur&&!isOpen("archive",false)) return;
       const f=planFulfill(w);
       const total=w.sess.length, done=w.sess.filter(s=>isDone(w,s,f)).length;
       const comp=planCompliance([w]);
       const st=weekStart(w), en=weekEnd(w), isCur=st&&TODAY>=st&&TODAY<=en, isPast=en&&dkey(en)<today;
-      const card=document.createElement("div"); const wkKey="wk:"+w.label; card.className="week card"+(isOpen(wkKey,!isPast&&(isCur||i<2))?" open":"");
+      const card=document.createElement("div"); const wkKey="wk:"+w.id; card.className="week card"+(isOpen(wkKey,!isPast&&(isCur||(inCur&&w.id===firstUpId)))?" open":"");
       let head='<div class="wh"><span class="wn">'+w.label+(isCur?' <span class="tag">이번 주</span>':'')+'</span><span class="wd">'+w.range+' · '+esc(w.focus)+'</span><span class="prog">'+done+'/'+total+(comp.due?(' · 준수 '+comp.pct+'%'):'')+'</span><span class="chev">›</span></div>';
       const sm=weekSummary(w,ATPM[w.id]);
       const wsum='<div class="wsum"><span>🏃🏽‍♂️ 거리 <b>'+sm.km+'</b>/'+(sm.planKm?((sm.est?'≈':'')+sm.planKm):'—')+'km</span><span>부하 <b>'+sm.load+'</b>/'+(sm.planLoad||'—')+'</span><span>계획 <b>'+sm.pct.toFixed(1)+'%</b></span>'+((sm.low+sm.hard)>0?('<span title="가민 훈련효과 라벨 기준 (회복·기초=저 / 템포·역치·VO2·무산소·스프린트·대회=고)">강도 저 <b>'+sm.low+'</b> · 고 <b style="'+(sm.hard>2?'color:var(--warn)':'')+'">'+sm.hard+'</b>'+(sm.hard>2?' ⚠':'')+'</span>'):'')+'</div>';
@@ -1141,7 +1242,8 @@
       if(weekRemain.length) body+='<div class="week-remain">이번 주 잔여: '+esc(weekRemain.join(" · "))+' <span style="color:var(--muted)">— 다른 날 실시 후 해당 슬롯에 2차 기록</span></div>';
       body+='</div>'; card.innerHTML=head+wsum+body;
       card.querySelectorAll(".wh,.wsum").forEach(x=>x.addEventListener("click",e=>{if(e.target.closest(".chk"))return; card.classList.toggle("open"); foldState[wkKey]=card.classList.contains("open");}));
-      wrap.appendChild(card);});
+      (inCur?wrap:archBody).appendChild(card);});
+    if(arch) wrap.appendChild(arch);
     wrap.querySelectorAll(".chk").forEach(b=>b.addEventListener("click",()=>toggleSess(b.getAttribute("data-sess"))));
     wrap.querySelectorAll("[data-mtog]").forEach(t=>t.addEventListener("click",()=>{ const id=t.getAttribute("data-mtog"), box=t.closest(".memo-box"); box.classList.toggle("fold"); foldState["rec:"+id]=!box.classList.contains("fold"); }));
     wrap.querySelectorAll("[data-restdate]").forEach(inp=>inp.addEventListener("change",()=>setRestDate(inp.getAttribute("data-restdate"),inp.value)));
@@ -1157,7 +1259,7 @@
     if(typeof renderAdapt==="function") renderAdapt(res);
   }
   function renderPacing(){
-    document.getElementById("pacing").innerHTML=PACING.map(p=>'<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;width:78px;flex:none">'+p.seg+'</div><div><div style="font-family:Archivo;font-weight:700">'+p.pace+'</div><div style="font-size:12px;color:var(--ink-2)">'+esc(p.note)+'</div></div></div>').join("")+'<div style="font-size:12.5px;color:var(--ink-2);margin-top:10px">🎯 <b>플랜A(3:40) 조건:</b> 10/17~18 24km 롱런 마지막 5km를 5:13/km에 심박 165 이하로 소화 · 대회 전날 안정시심박 평소 수준. <b>플랜B:</b> 5:20/km 이븐(≈3:45:02), 32km 이후 여력 있으면 가속. 출발 직후 밀집 구간에서 페이스를 만회하려고 서두르지 않기.</div>';
+    document.getElementById("pacing").innerHTML=PACING.map(p=>'<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)"><div style="font-family:Archivo;font-weight:800;width:78px;flex:none">'+p.seg+'</div><div><div style="font-family:Archivo;font-weight:700">'+p.pace+'</div><div style="font-size:12px;color:var(--ink-2)">'+esc(p.note)+'</div></div></div>').join("")+'<div style="font-size:12.5px;color:var(--ink-2);margin-top:10px">🎯 <b>플랜A(42:00) 조건:</b> 1월 W11 10K페이스 1km×6을 4:10~4:12로 소화 · 2월 10K 테스트 42:30 이내. <b>플랜B:</b> 4:15 이븐(≈42:30) → 8km 이후 여력 있으면 가속. <b>하프(3월 중순)</b>: 1:35 기준 4:30 이븐, 1:30 도전은 1월 말 테스트 결과로 결정.</div>';
   }
 
   /* ---- LOAD / PMC ---- */
@@ -1885,7 +1987,7 @@
       goals_2027:{"10k":"sub 40:00","half":"sub 1:30","full":"sub 3:30","triathlon":"하프코스(70.3) 완주","cycle":"그란폰도 완주"},
       target_races:races,
       priority_order:priorityOrderText(),
-      schedule_conflict:"대회 3연전 종료: 10/3 폰도 완주(96.6km) → 10/4 10K 44:43 → 10/11 하프 1:41:00(평균심박 180, 목표 1:35 미달). 남은 대회는 JTBC 풀(11/1, 3:40) 하나. 10/17~18 24km 롱런 마지막 5km 5:13/km 점검으로 3:40(플랜A) 또는 5:20 이븐(플랜B ≈3:45) 결정. 10/24~25 MP 롱런 ~19km.",
+      schedule_conflict:"2026 시즌 종료(JTBC 풀 3:38:16 PB). 현재 겨울 베이스 12주(11/9~1/31): 3주 빌드+1주 회복, 러닝 ①~⑥ + 수영 주 2회, 사이클 휴지. 2027 대회 순위: 춘천 풀(10월 말, 3:30) > 3월 10K(42:00) > 3월 하프(1:35, 상단 1:30) > 5월 철인 올림픽(2:30) > 7월 롯데 아쿠아슬론·그란폰도(완주). 대회 날짜는 미정(예정일).",
       condition_alert:(()=>{ const a=wellAlert(); return a?{level:a.lv,date:a.t.date,rhr:a.t.rhr,rhr_avg7:a.ra?Math.round(a.ra*10)/10:null,hrv:a.t.hrv,items:a.items.map(i=>i.msg.replace(/<[^>]+>/g,""))}:null; })(),
       plan_progress:{done:planDone, total:planTotal, compliance:{due:comp.due, hit:comp.hit, pct:comp.pct, note:"지난 날짜의 비휴식 항목 중 수동 체크(✓)된 비율"}},
       weekly_targets:(typeof atpTable==="function")?atpTable().map(r=>({week:r.label,range:r.range,phase:r.phase,target_load:Math.round(r.target),actual_load:Math.round(r.actual),pct:r.pct,rr_adjusted:r.rrAdj})):null,
@@ -1914,7 +2016,7 @@
   }
 
   /* tabs */
-  const KICK={home:["홈 · 대시보드","트레이닝 허브"],target:["대회 · 목표","레이스 플랜"],train:["훈련","7주 피킹 플랜"],load:["부하 · 컨디션","트레이닝 로드"],rec:["기록","레이스 로그 · 누적"],guide:["가이드","훈련법 가이드"]};
+  const KICK={home:["홈 · 대시보드","트레이닝 허브"],target:["대회 · 목표","레이스 플랜"],train:["훈련","겨울 베이스 12주"],load:["부하 · 컨디션","트레이닝 로드"],rec:["기록","레이스 로그 · 누적"],guide:["가이드","훈련법 가이드"]};
   function switchView(v){
     document.querySelectorAll(".view").forEach(s=>s.classList.remove("active"));
     document.getElementById("v-"+v).classList.add("active");
